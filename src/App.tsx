@@ -16,36 +16,99 @@
  * @format
  */
 
-import React, {type PropsWithChildren} from 'react';
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import React, {useEffect, type PropsWithChildren} from 'react';
+import {StyleSheet, Text, useColorScheme, View, Button, I18nManager} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import i18n from 'i18n-js';
+import * as RNLocalize from 'react-native-localize';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import AuthPage from './pages/AuthPage';
 import IndexInput from './pages/IndexInput';
+import Login from './pages/Login';
+import Setting from './pages/Setting';
 
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({}) => {
+const translationGetters = {
+  // lazy requires
+  en: () => require('./assets/translations/en.json'),
+  zh: () => require('./assets/translations/zh.json'),
+};
+
+// 缓存
+// const translate = memoize(
+//   (key, config) => i18n.t(key, config),
+//   (key, config) => (config ? key + JSON.stringify(config) : key),
+// );
+
+const setI18nConfig = () => {
+  // 如果没有可用的语言则回退到中文
+  const fallback = {languageTag: 'zh', isRTL: false};
+  // 获取 最佳语言标签及其阅读方向
+  const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || fallback;
+  // 设置语言方向
+  I18nManager.forceRTL(isRTL);
+  // 当前的语言包
+  i18n.translations = {
+    // @ts-ignore
+    [languageTag]: translationGetters[languageTag](),
+  };
+  i18n.locale = languageTag;
+};
+
+const DetailsScreen: React.FC<{navigation: any}> = ({navigation}) => {
   return (
-    <View style={styles.sectionContainer}>
-      <IndexInput />
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Details Screen</Text>
+      <Text>{i18n.t('hello')}</Text>
+      <Button title="Go to Details... again" onPress={() => navigation.push('Details')} />
+      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
     </View>
   );
 };
 
+const Stack = createNativeStackNavigator();
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  // 要在 created 阶段设置。 如果在 didmount 阶段就太晚了。
+  setI18nConfig();
+  useEffect(() => {
+    console.log('mytag APP.tsx componentDidMount ');
+    RNLocalize.addEventListener('change', handleLocalizationChange);
+    return () => {
+      console.log('mytag APP.tsx componentWillUnmount ');
+      RNLocalize.removeEventListener('change', handleLocalizationChange);
+    };
+  }, []);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const handleLocalizationChange = () => {
+    setI18nConfig();
   };
-
   return (
-    <View style={backgroundStyle}>
-      <Section title="Step One11" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Setting"
+          options={{
+            headerShown: false,
+          }}
+          component={Setting}
+        />
+        <Stack.Screen
+          name="Login"
+          options={{
+            headerShown: false,
+          }}
+          component={Login}
+        />
+        <Stack.Screen
+          name="Details"
+          options={{
+            headerShown: false,
+          }}
+          component={DetailsScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

@@ -8,7 +8,6 @@
  */
 
 import React from 'react';
-import {getDeviceID, initSDK} from 'zego_roomkit_reactnative_sdk';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import InputBox from '../components/InputBox';
 class IndexInput extends React.Component<any, any> {
@@ -36,9 +35,6 @@ class IndexInput extends React.Component<any, any> {
 }
 const styles = StyleSheet.create({
   roomkitTitle: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    overflow: 'hidden',
     flexDirection: 'row',
   },
   roomkitText: {
