@@ -61,5 +61,9 @@
   "setting_room_mic_on_when_joining": "Microphone on when entering the room",
   "setting_room_camera_on_when_joining": "Camera on when entering the room",
   "setting_item_L3": "Low-Latency Live",
-  "feedback": "Feedback"
+  "feedback": "Feedback",
+  "room_setting": "Room Settings",
+  "custom_UI": "Custom UI",
+  "version": "Version",
+  "upload_log": "upload log"
 }

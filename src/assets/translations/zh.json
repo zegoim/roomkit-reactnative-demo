@@ -62,5 +62,10 @@
   "setting_room_camera_on_when_joining": "进入房间时将摄像头开启",
   "setting_item_L3": "大班课低延迟模式",
   "setting_item_Handwriting": "开启笔锋",
-  "feedback": "意见反馈"
+  "feedback": "意见反馈",
+
+  "room_setting": "房间设置",
+  "custom_UI": "自定义UI",
+  "version": "版本号",
+  "upload_log": "上传日志"
 }

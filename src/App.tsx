@@ -17,7 +17,7 @@
  */
 
 import React, {useEffect, type PropsWithChildren} from 'react';
-import {StyleSheet, Text, useColorScheme, View, Button, I18nManager} from 'react-native';
+import {StyleSheet, Text, useColorScheme, View, Button, I18nManager, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import i18n from 'i18n-js';
@@ -27,6 +27,8 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import IndexInput from './pages/IndexInput';
 import Login from './pages/Login';
 import Setting from './pages/Setting';
+import RoomSetting from './pages/RoomSetting';
+import Schedule from './pages/Schedule';
 
 const translationGetters = {
   // lazy requires
@@ -80,13 +82,62 @@ const App = () => {
     };
   }, []);
 
+  const screens = [
+    {
+      name: 'Login',
+      options: {
+        headerShown: false,
+      },
+      component: Login,
+    },
+    {
+      name: 'Schedule',
+      options: {
+        headerShown: false,
+      },
+      component: Schedule,
+    },
+    {
+      name: 'Setting',
+      options: {
+        headerShown: false,
+      },
+      component: Setting,
+    },
+    {
+      name: 'RoomSetting',
+      options: {
+        headerShown: false,
+      },
+      component: RoomSetting,
+    },
+
+    {
+      name: 'Details',
+      options: {
+        headerShown: false,
+      },
+      component: DetailsScreen,
+    },
+  ];
+
   const handleLocalizationChange = () => {
     setI18nConfig();
   };
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
       <Stack.Navigator>
-        <Stack.Screen
+        {screens.map((screenItem, index) => {
+          return (
+            <Stack.Screen
+              key={screenItem.name}
+              name={screenItem.name}
+              options={{...screenItem.options}}
+              component={screenItem.component}></Stack.Screen>
+          );
+        })}
+        {/* <Stack.Screen
           name="Setting"
           options={{
             headerShown: false,
@@ -106,7 +157,7 @@ const App = () => {
             headerShown: false,
           }}
           component={DetailsScreen}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

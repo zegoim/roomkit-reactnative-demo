@@ -39,19 +39,19 @@ const Logo: React.FC<{}> = () => {
   return <Image style={logoStyls.loginLogo} source={require('../assets/image/logo.png')}></Image>;
 };
 
-const SettingBtn: React.FC<{}> = () => {
+const SettingBtn: React.FC<{navigation: any}> = ({navigation}) => {
   const settingStyle = StyleSheet.create({
     settingBtnText: {
       fontSize: 18,
       paddingHorizontal: 16,
       paddingVertical: 14,
-      fontFamily: 'PingFang-SC-Medium',
     },
   });
   return (
     <View style={{alignItems: 'flex-end'}}>
       <Text
         onPress={() => {
+          navigation.push('Setting');
           console.log('mytag touch setting');
         }}
         style={settingStyle.settingBtnText}>
@@ -144,6 +144,7 @@ const SelectBox: React.FC<{
         flex: 1,
         alignItems: 'flex-end',
         flexDirection: 'row',
+        backgroundColor: 'rgba(100,100,100,0.5)',
       },
       modalView: {
         width: '100%',
@@ -320,8 +321,7 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
   // {i18n.t('quick_join_select_room_type')}
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="pink" barStyle="dark-content" />
-      <SettingBtn></SettingBtn>
+      <SettingBtn navigation={navigation}></SettingBtn>
       <Logo></Logo>
       <InputBoxMemo
         placeholder={i18n.t('enterClassID')}
@@ -363,7 +363,13 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
         }}>
         {i18n.t('attendClass')}
       </TouchableButton>
-      <Text style={styles.createClass}>{i18n.t('teacherCreateClass')}</Text>
+      <Text
+        style={styles.createClass}
+        onPress={() => {
+          navigation.push('Schedule');
+        }}>
+        {i18n.t('teacherCreateClass')}
+      </Text>
       <Footer>
         <View>
           <EnvTitle></EnvTitle>
