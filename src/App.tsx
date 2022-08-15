@@ -28,12 +28,13 @@ import IndexInput from './pages/IndexInput';
 import Login from './pages/Login';
 import Setting from './pages/Setting';
 import RoomSetting from './pages/RoomSetting';
+import CustomUI from './pages/CustomUI';
 import Schedule from './pages/Schedule';
 
 const translationGetters = {
   // lazy requires
-  en: () => require('./assets/translations/en.json'),
   zh: () => require('./assets/translations/zh.json'),
+  en: () => require('./assets/translations/en.json'),
 };
 
 // 缓存
@@ -84,19 +85,20 @@ const App = () => {
 
   const screens = [
     {
-      name: 'Login',
-      options: {
-        headerShown: false,
-      },
-      component: Login,
-    },
-    {
       name: 'Schedule',
       options: {
         headerShown: false,
       },
       component: Schedule,
     },
+    {
+      name: 'Login',
+      options: {
+        headerShown: false,
+      },
+      component: Login,
+    },
+
     {
       name: 'Setting',
       options: {
@@ -111,7 +113,13 @@ const App = () => {
       },
       component: RoomSetting,
     },
-
+    {
+      name: 'CustomUI',
+      options: {
+        headerShown: false,
+      },
+      component: CustomUI,
+    },
     {
       name: 'Details',
       options: {
@@ -137,27 +145,6 @@ const App = () => {
               component={screenItem.component}></Stack.Screen>
           );
         })}
-        {/* <Stack.Screen
-          name="Setting"
-          options={{
-            headerShown: false,
-          }}
-          component={Setting}
-        />
-        <Stack.Screen
-          name="Login"
-          options={{
-            headerShown: false,
-          }}
-          component={Login}
-        />
-        <Stack.Screen
-          name="Details"
-          options={{
-            headerShown: false,
-          }}
-          component={DetailsScreen}
-        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

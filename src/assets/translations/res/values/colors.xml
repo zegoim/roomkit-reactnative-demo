@@ -1,74 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="roomkit_color_gray_level1">#000000</color>
-    <color name="roomkit_color_gray_level2">#121212</color>
-    <color name="roomkit_color_gray_level3">#1e1e1e</color>
-    <color name="roomkit_color_gray_level4">#1f1f1f</color>
-    <color name="roomkit_color_gray_level5">#242424</color>
-    <color name="roomkit_color_gray_level6">#2e2e2e</color>
-    <color name="roomkit_color_gray_level7">#333333</color>
-    <color name="roomkit_color_gray_level8">#343434</color>
-    <color name="roomkit_color_gray_level9">#373737</color>
-    <color name="roomkit_color_gray_level10">#3d3d3d</color>
-    <color name="roomkit_color_gray_level11">#424242</color>
-    <color name="roomkit_color_gray_level12">#4a4a4a</color>
-    <color name="roomkit_color_gray_level13">#4d4d4d</color>
-    <color name="roomkit_color_gray_level14">#525252</color>
-    <color name="roomkit_color_gray_level15">#575757</color>
-    <color name="roomkit_color_gray_level16">#666666</color>
-    <color name="roomkit_color_gray_level17">#808080</color>
-    <color name="roomkit_color_gray_level18">#999999</color>
-    <color name="roomkit_color_gray_level19">#b1b4bd</color>
-    <color name="roomkit_color_gray_level20">#d6d7d6</color>
-    <color name="roomkit_color_gray_level21">#d9d9d9</color>
-    <color name="roomkit_color_gray_level22">#dbdbdb</color>
-    <color name="roomkit_color_gray_level23">#e9e9e9</color>
-    <color name="roomkit_color_gray_level24">#f4f5f8</color>
-    <color name="roomkit_color_gray_level25">#f5f5f5</color>
-    <color name="roomkit_color_gray_level26">#ffffff</color>
-
-    <color name="roomkit_color_gray_level1_alpha_b2">#b2000000</color>
-
-    <color name="roomkit_color_main_level1">#006cff</color>
-    <color name="roomkit_color_main_level2">#1a7bff</color>
-    <color name="roomkit_color_tips_level1">#ff5248</color>
-    <color name="roomkit_color_im_level1">#ff7d03</color>
-    <color name="roomkit_color_im_level2">#ffd800</color>
-
-    <color name="roomkit_color_extend_level1">#171717</color>
-    <color name="roomkit_color_extend_level2">#eb0606</color>
-    <color name="roomkit_color_extend_level3">#007aff</color>
-    <color name="roomkit_color_extend_level4">#2953ff</color>
-    <color name="roomkit_color_extend_level5">#f9f9f9</color>
-    <color name="roomkit_color_extend_level6">#afb6be</color>
-    <color name="roomkit_color_extend_level7">#f1f1f1</color>
-    <color name="roomkit_color_extend_level8">#0f0f0f</color>
-    <color name="roomkit_color_extend_level9">#b3b3b3</color>
-    <color name="roomkit_color_extend_level10">#f54326</color>
-    <color name="roomkit_color_extend_level11">#1c1c1c</color>
-    <color name="roomkit_color_extend_level12">#eb2e1f</color>
-    <color name="roomkit_color_extend_level13">#e6e6e6</color>
-    <color name="roomkit_color_extend_level14">#4c4c4c</color>
-
-    <!--    带透明度的颜色-->
-    <color name="roomkit_transparent">#00000000</color>
-    <color name="roomkit_half_transparent">#80000000</color>
-    <color name="roomkit_black_alpha">#cc000000</color>
-
-    <!--    画笔颜色，不做修改-->
-    <color name="roomkit_graffiti_color_1">#ffffff</color>
-    <color name="roomkit_graffiti_color_2">#b3b3b3</color>
-    <color name="roomkit_graffiti_color_3">#333333</color>
-    <color name="roomkit_graffiti_color_4">#000000</color>
-    <color name="roomkit_graffiti_color_5">#f54326</color>
-    <color name="roomkit_graffiti_color_6">#fc7802</color>
-    <color name="roomkit_graffiti_color_7">#fbe600</color>
-    <color name="roomkit_graffiti_color_8">#41bb54</color>
-    <color name="roomkit_graffiti_color_9">#00eae7</color>
-    <color name="roomkit_graffiti_color_10">#4c9efe</color>
-    <color name="roomkit_graffiti_color_11">#fa7d7d</color>
-    <color name="roomkit_graffiti_color_12">#825fd0</color>
-
-    <color name="roomkit_graffiti_color_ff2b2b">#ff2b2b</color>
-    <color name="roomkit_color_69696a">#69696a</color>
+    <color name="textColor">#ffffff</color>
+    <color name="roomkit_pop_title_color">#565e66</color>
+    <color name="roomkit_cut_line_color">#ececec</color>
+    <color name="roomkit_pop_text_color">#0f0f0f</color>
+    <color name="roomkit_pop_bg_color">#26000000</color>
+    <color name="editTextColor">#040404</color>
+    <color name="demo_theme_color">#2953ff</color>
+    <color name="edit_hint_color">#868ca0</color>
+    <color name="roomkit_black">#000000</color>
+    <color name="roomkit_gray_text">#4d4d4d</color>
 </resources>

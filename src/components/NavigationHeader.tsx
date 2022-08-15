@@ -1,5 +1,12 @@
+
 import React from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 
 const NavigationHeader: React.FC<{title: string; navigation: any}> = ({title, navigation}) => {
   const headerStyle = StyleSheet.create({
@@ -31,4 +38,4 @@ const NavigationHeader: React.FC<{title: string; navigation: any}> = ({title, na
   );
 };
 
-export default NavigationHeader;
+export default NavigationHeader

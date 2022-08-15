@@ -60,22 +60,18 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={{backgroundColor: '#F5F5F5', flex: 1}}>
-      <NavigationHeader navigation={navigation} title={i18n.t('roomkit_setting_room')}></NavigationHeader>
+      <NavigationHeader navigation={navigation} title={i18n.t('roomkit_setting_custom_ui')}></NavigationHeader>
       <SwitchButtonMemo
         getSwitch={useCallback((isSwitchOn: boolean) => setMicMuted(isSwitchOn), [])}
         style={styles.mgt10}>
-        {i18n.t('roomkit_setting_room_mic_off_when_joining')}
+        {i18n.t('roomkit_custom_ui_hide_bottom_bar')}
       </SwitchButtonMemo>
-      <SwitchButtonMemo>{i18n.t('roomkit_setting_room_camera_off_when_joining')}</SwitchButtonMemo>
-      <SwitchButtonMemo style={styles.mgt10}>{i18n.t('roomkit_setting_room_beautify')}</SwitchButtonMemo>
-      <SwitchButtonMemo>{i18n.t('roomkit_setting_room_preview_mirror')}</SwitchButtonMemo>
-      <SwitchButtonMemo>{i18n.t('roomkit_setting_room_video_fit')}</SwitchButtonMemo>
-      <SwitchButtonMemo style={styles.mgt10}>{i18n.t('roomkit_setting_item_L3')}</SwitchButtonMemo>
-      <SwitchButtonMemo>{i18n.t('roomkit_enable_hand_writing')}</SwitchButtonMemo>
-      <SwitchButtonMemo>{i18n.t('roomkit_show_in_out_room_msg')}</SwitchButtonMemo>
-      <SwitchButtonMemo>{i18n.t('roomkit_msg_avatar')}</SwitchButtonMemo>
-      <SwitchButtonMemo>{i18n.t('roomkit_hide_in_out_msg')}</SwitchButtonMemo>
-      <SwitchButtonMemo style={{marginBottom: 100}}>{i18n.t('roomkit_hide_in_out_msg')}</SwitchButtonMemo>
+      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_chat')}</SwitchButtonMemo>
+      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_member')}</SwitchButtonMemo>
+      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_share')}</SwitchButtonMemo>
+      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_camera')}</SwitchButtonMemo>
+      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_mic')}</SwitchButtonMemo>
+      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_more')}</SwitchButtonMemo>
     </ScrollView>
   );
 };

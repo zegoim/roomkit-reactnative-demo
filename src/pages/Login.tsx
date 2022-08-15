@@ -22,8 +22,8 @@ interface SelectModalList {
 type textFunction = (text: string) => void;
 
 const ENV = {
-  CHINA: 'quick_join_access_env_mainland',
-  INTERNATIONAL: 'quick_join_access_env_overseas',
+  CHINA: 'roomkit_quick_join_access_env_mainland',
+  INTERNATIONAL: 'roomkit_quick_join_access_env_overseas',
 };
 
 const Logo: React.FC<{}> = () => {
@@ -55,7 +55,7 @@ const SettingBtn: React.FC<{navigation: any}> = ({navigation}) => {
           console.log('mytag touch setting');
         }}
         style={settingStyle.settingBtnText}>
-        {i18n.t('setting')}
+        {i18n.t('roomkit_setting')}
       </Text>
     </View>
   );
@@ -254,7 +254,7 @@ function EnvTitle() {
     <View style={envStyles.container}>
       <Text style={envStyles.line}></Text>
       <Text style={envStyles.text}>
-        {i18n.t('quick_join_access_env')}{' '}
+        {i18n.t('roomkit_quick_join_access_env')}{' '}
         <Image style={envStyles.tips} source={require('../assets/image/tips.png')}></Image>
       </Text>
       <Text style={envStyles.line}></Text>
@@ -311,44 +311,44 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
   const [env, setEnv] = useState(i18n.t(ENV.CHINA));
 
   useEffect(() => {
-    console.log('mytag i18n.t("hello")', i18n.t('hello'));
+    console.log('mytag i18n.t("hello")', i18n.t('roomkit_hello'));
     console.log('mytag roomID', roomID);
     console.log('mytag userName', userName);
     // console.log('mytag classType', classType);
     // console.log('mytag role', role);
   }, [roomID]);
 
-  // {i18n.t('quick_join_select_room_type')}
+  // {i18n.t('roomkit_quick_join_select_room_type')}
   return (
     <View style={styles.container}>
       <SettingBtn navigation={navigation}></SettingBtn>
       <Logo></Logo>
       <InputBoxMemo
-        placeholder={i18n.t('enterClassID')}
+        placeholder={i18n.t('roomkit_quick_join_input_id')}
         onChangeText={useCallback((text: string) => setRoomID(text), [])}
       />
       <InputBoxMemo
-        placeholder={i18n.t('enterName')}
+        placeholder={i18n.t('roomkit_quick_join_input_nickname')}
         onChangeText={useCallback((text: string) => setUserName(text), [])}
       />
       <SelectBoxMemo
-        placeholder={i18n.t('quick_join_select_room_type')}
+        placeholder={i18n.t('roomkit_quick_join_select_room_type')}
         list={{
-          title: i18n.t('room_schedule_type_web'),
-          items: [i18n.t('schedule_1v1'), i18n.t('schedule_small_class'), i18n.t('schedule_large_class')],
+          title: i18n.t('roomkit_room_schedule_type_web'),
+          items: [i18n.t('roomkit_schedule_1v1'), i18n.t('roomkit_schedule_small_class'), i18n.t('roomkit_schedule_large_class')],
         }}
         onSelected={useCallback((selectedItem: string, index: number) => {
           setClassType(index);
         }, [])}
       />
       <SelectBoxMemo
-        placeholder={i18n.t('quick_join_select_role')}
+        placeholder={i18n.t('roomkit_quick_join_select_role')}
         list={{
-          title: i18n.t('quick_join_select_role'),
+          title: i18n.t('roomkit_quick_join_select_role'),
           items: [
-            i18n.t('quick_join_select_role_attendee'),
-            i18n.t('quick_join_select_role_assistant'),
-            i18n.t('quick_join_select_role_host'),
+            i18n.t('roomkit_quick_join_select_role_attendee'),
+            i18n.t('roomkit_quick_join_select_role_assistant'),
+            i18n.t('roomkit_quick_join_select_role_host'),
           ],
         }}
         onSelected={useCallback((selectedItem: string, index: number) => {
@@ -361,14 +361,14 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
           console.log('mytag 快速加入课堂!!!! ');
           navigation.push('Details');
         }}>
-        {i18n.t('attendClass')}
+        {i18n.t('roomkit_quick_join_room')}
       </TouchableButton>
       <Text
         style={styles.createClass}
         onPress={() => {
           navigation.push('Schedule');
         }}>
-        {i18n.t('teacherCreateClass')}
+        {i18n.t('roomkit_create_room')}
       </Text>
       <Footer>
         <View>

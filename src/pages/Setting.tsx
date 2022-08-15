@@ -53,7 +53,7 @@ const TouchableButton: React.FC<{
     },
   });
 
-  console.log('mytag re-render');
+  console.log('mytag re-render', children);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -77,7 +77,7 @@ const EnvSelectButton: React.FC<{
   onSelected: (selectedItem: string, index: number) => void;
 }> = ({list, onSelected}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(i18n.t('quick_join_domestic_env'));
+  const [selectedItem, setSelectedItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
   return (
     <View>
       <TouchableButton
@@ -85,7 +85,7 @@ const EnvSelectButton: React.FC<{
           setModalVisible(true);
         }, [])}
         customRight={selectedItem}>
-        {i18n.t('quick_join_access_env')}
+        {i18n.t('roomkit_quick_join_access_env')}
       </TouchableButton>
       <EnvModal />
     </View>
@@ -153,7 +153,7 @@ const EnvSelectButton: React.FC<{
 
 const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: number) => void}> = ({onSelected}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(i18n.t('quick_join_domestic_env'));
+  const [selectedItem, setSelectedItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
   return (
     <View>
       <TouchableButton
@@ -163,7 +163,7 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
         needArrow={false}
         isCenterLayout={true}
         fontStyle={{color: '#F54326'}}>
-        {i18n.t('logout')}
+        {i18n.t('roomkit_setting_logout')}
       </TouchableButton>
       <LogoutModal />
     </View>
@@ -216,13 +216,13 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
           style={modalStyle.modalContainer}>
           <View style={modalStyle.modalView}>
             <View style={[modalStyle.modalRow]}>
-              <Text style={[modalStyle.text, modalStyle.modalHeader]}>{i18n.t('logout_desc')}</Text>
+              <Text style={[modalStyle.text, modalStyle.modalHeader]}>{i18n.t('roomkit_logout_desc')}</Text>
               <Text
                 onPress={() => {
                   console.log('mytag touch confirm');
                 }}
                 style={[modalStyle.text, {color: '#F54326'}]}>
-                {i18n.t('confirm')}
+                {i18n.t('roomkit_confirm')}
               </Text>
             </View>
             <View style={[modalStyle.modalRow]}>
@@ -231,7 +231,7 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
                   console.log('mytag touch cancel');
                 }}
                 style={[modalStyle.text]}>
-                {i18n.t('cancel')}
+                {i18n.t('roomkit_cancel')}
               </Text>
             </View>
 
@@ -257,30 +257,38 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
 const TouchableButtonMemo = memo(TouchableButton);
 
 const App: React.FC<{navigation: any}> = ({navigation}) => {
-  const [envItem, setEnvItem] = useState(i18n.t('quick_join_domestic_env'));
+  const [envItem, setEnvItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
+
+  const goSetting = () => {
+    navigation.push('RoomSetting');
+  };
+
+  const goCustomUI = () => {
+    navigation.push('CustomUI');
+  };
+
   return (
     <View style={{backgroundColor: '#F5F5F5', flex: 1}}>
-      <NavigationHeader navigation={navigation} title={i18n.t('setting')}></NavigationHeader>
-      <TouchableButtonMemo onPress={useCallback(() =>{
-        console.log('mytag touch here', )
-        navigation.push("RoomSetting")
-      },[])} style={styles.mgt10}>{i18n.t('room_setting')}</TouchableButtonMemo>
-      <TouchableButtonMemo>{i18n.t('custom_UI')}</TouchableButtonMemo>
+      <NavigationHeader navigation={navigation} title={i18n.t('roomkit_setting')}></NavigationHeader>
+      <TouchableButtonMemo onPress={goSetting} style={styles.mgt10}>
+        {i18n.t('roomkit_setting')}
+      </TouchableButtonMemo>
+      <TouchableButtonMemo onPress={goCustomUI}>{i18n.t('roomkit_setting_custom_ui')}</TouchableButtonMemo>
       <EnvSelectButton
         list={{
-          title: i18n.t('quick_join_access_env'),
-          items: [i18n.t('quick_join_domestic_env'), i18n.t('quick_join_overseas_env')],
+          title: i18n.t('roomkit_quick_join_access_env'),
+          items: [i18n.t('roomkit_quick_join_domestic_env'), i18n.t('roomkit_quick_join_overseas_env')],
         }}
         onSelected={useCallback((selectedItem: string, index: number) => {
           setEnvItem(selectedItem);
         }, [])}></EnvSelectButton>
       <TouchableButtonMemo needArrow={false} customRight={'v1.1.1'}>
-        {i18n.t('version')}
+        {i18n.t('roomkit_setting_version')}
       </TouchableButtonMemo>
-      <TouchableButtonMemo style={styles.mgt10}>{i18n.t('feedback')}</TouchableButtonMemo>
-      <TouchableButtonMemo>{i18n.t('upload_log')}</TouchableButtonMemo>
+      <TouchableButtonMemo style={styles.mgt10}>{i18n.t('roomkit_feedback')}</TouchableButtonMemo>
+      <TouchableButtonMemo>{i18n.t('roomkit_setting_upload_log')}</TouchableButtonMemo>
       <TouchableButtonMemo style={styles.mgt10} needArrow={false} isCenterLayout={true}>
-        {i18n.t('delete_account')}
+        {i18n.t('roomkit_setting_cancel_account')}
       </TouchableButtonMemo>
 
       <LogoutComfirmButton
@@ -288,8 +296,11 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
           // logout todo
           // setEnvItem(selectedItem);
         }, [])}></LogoutComfirmButton>
+      <TouchableButtonMemo fontStyle={{color: '#F54326'}} needArrow={false} isCenterLayout={true}>
+        {'todo: ' + i18n.t('roomkit_setting_logout_room')}
+      </TouchableButtonMemo>
       {/* <TouchableButtonMemo needArrow={false} isCenterLayout={true} fontStyle={{color: '#F54326'}}>
-        {i18n.t('logout')}
+        {i18n.t('roomkit_logout')}
       </TouchableButtonMemo> */}
     </View>
   );
