@@ -13,13 +13,20 @@ import {
   SectionList,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
+import i18n from 'i18n-js';
+import md5 from 'md5';
+import {Toast} from 'antd-mobile-rn';
+
 import {getUid, getPid} from '../utils/utils';
 import {ClassType, Env} from '../utils/config';
-import i18n from 'i18n-js';
 
+interface SelectItem {
+  content: string;
+  value: number;
+}
 interface SelectModalList {
   title: string;
-  items: string[];
+  items: SelectItem[];
 }
 type textFunction = (text: string) => void;
 
@@ -27,6 +34,12 @@ const ENV_VAL = {
   CHINA: 'roomkit_quick_join_access_env_mainland',
   INTERNATIONAL: 'roomkit_quick_join_access_env_overseas',
 };
+
+enum RoleType {
+  Student = 2,
+  Assistant = 4,
+  Host = 1,
+}
 
 const Logo: React.FC<{}> = () => {
   const logoStyls = StyleSheet.create({
@@ -94,7 +107,7 @@ const InputBox: React.FC<{placeholder: string; onChangeText?: textFunction}> = (
 const SelectBox: React.FC<{
   placeholder: string;
   list: SelectModalList;
-  onSelected: (selectedItem: string, index: number) => void;
+  onSelected: (selectedItem: SelectItem, index: number) => void;
 }> = ({placeholder, list, onSelected}) => {
   console.log('mytag re-render', placeholder);
   const seletBoxStyle = StyleSheet.create({
@@ -104,7 +117,8 @@ const SelectBox: React.FC<{
     },
   });
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('');
+  const [selectedVal, setSelectedVal] = useState(0);
+  const [selectedContent, setSelectedContent] = useState('');
   return (
     <View style={[seletBoxStyle.inputBox]}>
       <SelectInput />
@@ -135,8 +149,8 @@ const SelectBox: React.FC<{
         }}
         activeOpacity={1}
         style={[inputStyle.inputBoxInput, inputStyle.selectBox, {alignItems: 'center'}]}>
-        <Text style={{fontSize: 16, color: !!selectedItem ? '#0F0F0F' : '#868CA0'}}>
-          {!!selectedItem ? selectedItem : placeholder}
+        <Text style={{fontSize: 16, color: !!selectedVal ? '#0F0F0F' : '#868CA0'}}>
+          {!!selectedVal ? selectedContent : placeholder}
         </Text>
         <Image
           style={{width: 12, height: 12}}
@@ -187,16 +201,17 @@ const SelectBox: React.FC<{
           style={modalStyle.modalContainer}>
           <View style={modalStyle.modalView}>
             <Text style={[modalStyle.modalRow, modalStyle.modalHeader]}>{list.title}</Text>
-            {list.items.map((item: any, index: number) => (
+            {list.items.map((item: SelectItem, index: number) => (
               <Text
                 onPress={() => {
                   onSelected(item, index);
-                  setSelectedItem(item);
+                  setSelectedVal(item.value);
+                  setSelectedContent(item.content);
                   setModalVisible(false);
                 }}
                 key={index}
-                style={[modalStyle.modalRow, item === selectedItem ? {color: '#2953FF'} : {}]}>
-                {item}
+                style={[modalStyle.modalRow, item.value === selectedVal ? {color: '#2953FF'} : {}]}>
+                {item.content}
               </Text>
             ))}
           </View>
@@ -269,7 +284,7 @@ function EnvTitle() {
   );
 }
 
-function EnvChooseButton() {
+const EnvChooseButton: React.FC<{onChoose: (env: number) => void}> = ({onChoose}) => {
   const envStyles = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -284,7 +299,12 @@ function EnvChooseButton() {
   const [value, setValue] = React.useState(i18n.t(ENV_VAL.CHINA));
 
   return (
-    <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
+    <RadioButton.Group
+      onValueChange={value => {
+        setValue(value);
+        onChoose(value === i18n.t(ENV_VAL.CHINA) ? Env.MainLand : Env.OverSeas);
+      }}
+      value={value}>
       <View style={envStyles.container}>
         <RadioButton.Item
           color="#3456F6"
@@ -305,7 +325,7 @@ function EnvChooseButton() {
       </View>
     </RadioButton.Group>
   );
-}
+};
 
 const SelectBoxMemo = memo(SelectBox);
 const InputBoxMemo = memo(InputBox);
@@ -313,21 +333,21 @@ const InputBoxMemo = memo(InputBox);
 const App: React.FC<{navigation: any}> = ({navigation}) => {
   const [roomID, setRoomID] = useState('');
   const [userName, setUserName] = useState('');
-  const [classType, setClassType] = useState("0");
-  const [role, setRole] = useState(0);
-  const [env, setEnv] = useState(i18n.t(ENV_VAL.CHINA));
-  useEffect(() => {
-    // console.log('mytag classType', classType);
-    // console.log('mytag role', role);
-  }, [roomID]);
+  const [classType, setClassType] = useState(0);
+  const [roleType, setRole] = useState(0);
+  const [env, setEnv] = useState(Env.MainLand);
+  // useEffect(() => {
+  //   // console.log('mytag classType', classType);
+  //   // console.log('mytag roleType', roleType);
+  // }, [roomID]);
 
-  const classTypeList = useMemo(() => {
+  const classTypeList: SelectModalList = useMemo(() => {
     return {
       title: i18n.t('roomkit_room_schedule_type_web'),
       items: [
-        i18n.t('roomkit_schedule_1v1'),
-        i18n.t('roomkit_schedule_small_class'),
-        i18n.t('roomkit_schedule_large_class'),
+        {content: i18n.t('roomkit_schedule_1v1'), value: ClassType.Class_1V1},
+        {content: i18n.t('roomkit_schedule_small_class'), value: ClassType.CLASS_SMALL},
+        {content: i18n.t('roomkit_schedule_large_class'), value: ClassType.CLASS_LARGE},
       ],
     };
   }, []);
@@ -335,42 +355,43 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
     return {
       title: i18n.t('roomkit_quick_join_select_role'),
       items: [
-        i18n.t('roomkit_quick_join_select_role_attendee'),
-        i18n.t('roomkit_quick_join_select_role_assistant'),
-        i18n.t('roomkit_quick_join_select_role_host'),
+        {content: i18n.t('roomkit_quick_join_select_role_attendee'), value: RoleType.Student},
+        {content: i18n.t('roomkit_quick_join_select_role_assistant'), value: RoleType.Assistant},
+        {content: i18n.t('roomkit_quick_join_select_role_host'), value: RoleType.Host},
       ],
     };
   }, []);
   const setRoomIDFun = useCallback((text: string) => setRoomID(text), []);
   const setUserNameFun = useCallback((text: string) => setUserName(text), []);
-  const setClassTypeFun = useCallback((selectedItem: string, index: number) => {
-    setClassType(String(index));
+  const setClassTypeFun = useCallback((selectedItem: any, index: number) => {
+    setClassType(selectedItem.value);
   }, []);
-  const setRoleTypeFun = useCallback((selectedItem: string, index: number) => {
-    setRole(index);
+  const setRoleTypeFun = useCallback((selectedItem: any, index: number) => {
+    setRole(selectedItem.value);
+  }, []);
+  const setEnvFun = useCallback((env: Env) => {
+    setEnv(env);
   }, []);
 
-  const classSelectedMap = {
-    '0': ClassType.Class_1V1,
-    '1': ClassType.CLASS_SMALL,
-    '2': ClassType.CLASS_LARGE,
-  };
-  
-  const envSelectedMap = {
-    [ENV_VAL.CHINA]: Env.MainLand,
-    [ENV_VAL.INTERNATIONAL]: Env.OverSeas,
-  };
-  const goDetail = useCallback(() => {
+  const goClassRoom = async () => {
+    if (!roomID) return Toast.fail('no roomID');
+    if (!userName) return Toast.fail('no userName');
+    if (!roleType) return Toast.fail('no choose role');
+    if (!classType) return Toast.fail('no choose class type');
+
     const routeParam = {
       roomID,
       userName,
+      role: roleType,
+      classType,
       userID: getUid(userName),
-      pid: getPid(ClassType.Class_1V1, envSelectedMap[env], '123'),
+      pid: getPid(classType, env, false),
     };
-    navigation.push('Details');
-  }, []);
+    navigation.push('Classroom', routeParam);
+    return;
+  };
 
-  const goSchedule = useCallback(() => {
+  const goCreateRoom = useCallback(() => {
     navigation.push('Schedule');
   }, []);
 
@@ -396,16 +417,16 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
         list={roleTypeList}
         onSelected={setRoleTypeFun}
       />
-      <TouchableButton style={styles.joinClass} onPress={goDetail}>
+      <TouchableButton style={styles.joinClass} onPress={goClassRoom}>
         {i18n.t('roomkit_quick_join_room')}
       </TouchableButton>
-      <Text style={styles.createClass} onPress={goSchedule}>
+      <Text style={styles.createClass} onPress={goCreateRoom}>
         {i18n.t('roomkit_create_room')}
       </Text>
       <Footer>
         <View>
           <EnvTitle></EnvTitle>
-          <EnvChooseButton></EnvChooseButton>
+          <EnvChooseButton onChoose={setEnvFun}></EnvChooseButton>
         </View>
       </Footer>
     </View>

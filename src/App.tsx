@@ -30,6 +30,7 @@ import Setting from './pages/Setting';
 import RoomSetting from './pages/RoomSetting';
 import CustomUI from './pages/CustomUI';
 import Schedule from './pages/Schedule';
+import Classroom from './pages/Classroom';
 
 const translationGetters = {
   // lazy requires
@@ -47,7 +48,8 @@ const setI18nConfig = () => {
   // 如果没有可用的语言则回退到中文
   const fallback = {languageTag: 'zh', isRTL: false};
   // 获取 最佳语言标签及其阅读方向
-  const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || fallback;
+  const {languageTag, isRTL} =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || fallback;
   // 设置语言方向
   I18nManager.forceRTL(isRTL);
   // 当前的语言包
@@ -84,7 +86,6 @@ const App = () => {
   }, []);
 
   const screens = [
-
     {
       name: 'Login',
       options: {
@@ -98,6 +99,13 @@ const App = () => {
         headerShown: false,
       },
       component: Schedule,
+    },
+    {
+      name: 'Classroom',
+      options: {
+        headerShown: false,
+      },
+      component: Classroom,
     },
     {
       name: 'Setting',

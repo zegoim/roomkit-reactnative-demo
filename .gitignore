@@ -63,4 +63,5 @@ buck-out/
 /vendor/bundle/
 
 
+/libs
 /src/assets/translations/res/**/*

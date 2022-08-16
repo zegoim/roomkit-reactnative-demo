@@ -6,91 +6,113 @@
  * @FilePath: /grett/zego_roomkit_reactnative_sdk/example/src/utils/Fetch.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import _ from 'lodash'
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-import {Toast} from "antd-mobile-rn"
-import config from "./config";
+// import _ from 'lodash';
+import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
+import {RoomkitServiceDomain, EduServiceDomain} from './config';
+// import {Toast} from "antd-mobile-rn"
+// import config from "./config";
 
+const Toast = {
+  fail(msg: string) {
+    console.error('msg', msg);
+  },
+  info(msg: string) {
+    console.log('mytag msg', msg);
+  },
+};
 interface ajaxOptions {
-  baseURL?: string
-  version?: string
-  headers?: object
-  method?: string
-  data?: object
+  baseURL?: string;
+  version?: string;
+  headers?: object;
+  method?: string;
+  data?: object;
+  isEduService?: boolean;
+}
+
+enum SERVICE_TYPE {
+  EUD_SERVICE = 0,
+  ROOMKIT_SERVICE = 1,
 }
 
 export const ajax = (url: string, options: ajaxOptions) => {
-  let axiosOptions: AxiosRequestConfig = {}
+  let axiosOptions: AxiosRequestConfig = {};
 
-  axiosOptions.headers = {
-    ...options.headers
+  console.log('mytag options', options);
+  axiosOptions = {
+    headers: {...options.headers},
+    method: options.method || 'get',
+    timeout: 30 * 1000,
+    baseURL: !!options.isEduService ? EduServiceDomain : RoomkitServiceDomain,
+  };
+
+  if (options.data && (options.method === 'get' || options.method === 'delete')) {
+    axiosOptions.params = options.data;
+  } else {
+    axiosOptions.data = options.data;
   }
-//请求方式
-  axiosOptions.method = options.method || 'get'
-//超时时间
-  axiosOptions.timeout = 30 * 1000
 
-  if (options.data && _.includes(['get', 'delete'], options.method))
-    axiosOptions.params = options.data
-  else
-    axiosOptions.data = options.data
-
-  return new Promise<any>((resolve:any, reject:any) => {
+  return new Promise<any>((resolve: any, reject: any) => {
+    console.log('mytag axiosOptions', axiosOptions);
     axios(url, axiosOptions)
       .then(async (res: AxiosResponse<any>) => {
-        if(res.data.ret.code === 0){
-          resolve(res.data)
-          return
-          // @ts-ignore
-        } 
-
-        Toast.fail(res.data.ret)
+        if (res.data.ret.code === 0) {
+          return resolve(res.data);
+        }
+        Toast.fail(res.data.ret);
         reject({
           ...res,
-          handled:false
-        })
+          handled: false,
+        });
       })
       .catch(async (err: AxiosError) => {
-        console.warn(err)
-        console.log(url,axiosOptions)
+        // console.warn("err",err);
+        // console.log("url, axiosOptions",url, axiosOptions);
         if (!err.response) {
-          Toast.fail('服务繁忙，稍候请重试')
-          reject({ ...err, handled: true })
-          return
+          Toast.fail('服务繁忙，稍候请重试');
+          reject({...err, handled: true});
+          return;
         }
 
         if (err.response.status == 401) {
-          reject({ handled: true })
-          Toast.info('登录状态失效，请重新登录')
-        }
-        else if (err.response.status == 400) {
+          reject({handled: true});
+          Toast.info('登录状态失效，请重新登录');
+        } else if (err.response.status == 400) {
           reject({
             data: err.response.data,
             message: _.get(err.response.data, 'msg'),
-            handled: false
-          })
+            handled: false,
+          });
+        } else {
+          reject({...err, handled: true});
+          Toast.fail('服务繁忙，稍候请重试');
         }
-        else {
-          reject({ ...err, handled: true })
-          Toast.fail('服务繁忙，稍候请重试')
-        }
-      })
-  })
+      });
+  });
+};
+
+// export const GET = (url: string, options: ajaxOptions) =>
+//   ajax(url, {
+//     ...options,
+//     method: 'get',
+//   });
+// export const PUT = (url: string, options: ajaxOptions) =>
+//   ajax(url, {
+//     ...options,
+//     method: 'put',
+//   });
+export const POST = (url: string, options: ajaxOptions) => ajax(url, {...options, method: 'post'});
+// export const DEL = (url: string, options: ajaxOptions) =>
+//   ajax(url, {
+//     ...options,
+//     method: 'delete',
+//   });
+
+// 登录
+export function getSdkToken(params: any) {
+  return POST('/auth/get_sdk_token', {data: {...params}, isEduService: false});
 }
 
-export const GET = (url: string, options: ajaxOptions) => ajax(url, {
-  ...options,
-  method: 'get'
-})
-export const PUT = (url: string, options: ajaxOptions) => ajax(url, {
-  ...options,
-  method: 'put'
-})
-export const POST = (url: string, options: ajaxOptions) => ajax(url, {
-  ...options,
-  method: 'post'
-})
-export const DEL = (url: string, options: ajaxOptions) => ajax(url, {
-  ...options,
-  method: 'delete'
-})
+// 获取房间信息，教育云接口
+export function getRoomInfo(params: any) {
+  return POST('/room/get', {data: {...params}, isEduService: true});
+}
