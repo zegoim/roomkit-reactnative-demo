@@ -84,13 +84,7 @@ const App = () => {
   }, []);
 
   const screens = [
-    {
-      name: 'Schedule',
-      options: {
-        headerShown: false,
-      },
-      component: Schedule,
-    },
+
     {
       name: 'Login',
       options: {
@@ -98,7 +92,13 @@ const App = () => {
       },
       component: Login,
     },
-
+    {
+      name: 'Schedule',
+      options: {
+        headerShown: false,
+      },
+      component: Schedule,
+    },
     {
       name: 'Setting',
       options: {

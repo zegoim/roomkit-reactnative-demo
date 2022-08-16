@@ -256,9 +256,13 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
 
 const TouchableButtonMemo = memo(TouchableButton);
 
-const App: React.FC<{navigation: any}> = ({navigation}) => {
+const App: React.FC<{route: any; navigation: any}> = ({route, navigation}) => {
   const [envItem, setEnvItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
 
+  const isFromSchedule = () => {
+    return route.params instanceof Object && route.params.from === 'Schedule';
+  };
+  console.log('mytag route', route);
   const goSetting = () => {
     navigation.push('RoomSetting');
   };
@@ -291,14 +295,18 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
         {i18n.t('roomkit_setting_cancel_account')}
       </TouchableButtonMemo>
 
-      <LogoutComfirmButton
-        onSelected={useCallback((selectedItem: string, index: number) => {
-          // logout todo
-          // setEnvItem(selectedItem);
-        }, [])}></LogoutComfirmButton>
-      <TouchableButtonMemo fontStyle={{color: '#F54326'}} needArrow={false} isCenterLayout={true}>
-        {'todo: ' + i18n.t('roomkit_setting_logout_room')}
-      </TouchableButtonMemo>
+      {!!isFromSchedule() ? (
+        <TouchableButtonMemo fontStyle={{color: '#F54326'}} needArrow={false} isCenterLayout={true}>
+          {i18n.t('roomkit_setting_logout_room')}
+        </TouchableButtonMemo>
+      ) : (
+        <LogoutComfirmButton
+          onSelected={useCallback((selectedItem: string, index: number) => {
+            // logout todo
+            // setEnvItem(selectedItem);
+          }, [])}></LogoutComfirmButton>
+      )}
+
       {/* <TouchableButtonMemo needArrow={false} isCenterLayout={true} fontStyle={{color: '#F54326'}}>
         {i18n.t('roomkit_logout')}
       </TouchableButtonMemo> */}

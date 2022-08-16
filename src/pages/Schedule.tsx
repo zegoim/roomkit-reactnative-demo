@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {Children, memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {
   Image,
   Modal,
@@ -20,9 +20,8 @@ interface SelectModalList {
 
 const ScheduleHeader: React.FC<{
   navigation: any;
-  modalList: SelectModalList;
-  onSelected: (selectedItem: string, index: number) => void;
-}> = ({navigation, modalList, onSelected}) => {
+  children: JSX.Element[];
+}> = ({navigation, children}) => {
   const headerStyle = StyleSheet.create({
     container: {
       height: 44,
@@ -50,14 +49,9 @@ const ScheduleHeader: React.FC<{
   });
   return (
     <View style={headerStyle.container}>
-      <Text style={headerStyle.text}>设置</Text>
-      <Text style={[headerStyle.text, headerStyle.title]}>日程</Text>
-      {/* <Text style={[headerStyle.text, headerStyle.rightTitle]}>安排</Text> */}
-      <ScheduleButton
-        list={modalList}
-        onSelected={function (selectedItem: string, index: number): void {
-          onSelected(selectedItem, index);
-        }}></ScheduleButton>
+      <Text style={headerStyle.text}>{children[0]}</Text>
+      <Text style={[headerStyle.text, headerStyle.title]}>{children[1]}</Text>
+      <Text>{children[2]}</Text>
     </View>
   );
 };
@@ -274,27 +268,26 @@ const ScheduleItem: React.FC<{classItem: ClassInfo; index: number; onShutdown: (
   );
 };
 
-const App: React.FC<{navigation: any}> = ({navigation}) => {
+const App: React.FC<{route: any; navigation: any}> = ({route, navigation}) => {
   const [micMuted, setMicMuted] = useState(false);
   const a: number[] = [1, 2, 3];
-  const [classList, setClassList] = useState<ClassInfo[]>([
-    {
-      attendee_count: 4,
-      begin_timestamp: 1660549927049,
-      create_timestamp: 1660549867189,
-      duration: 30,
-      end_timestamp: 1660551727049,
-      locked: 0,
-      max_attendee_count: 10000,
-      max_user_count: 10000,
-      pid: 1253,
-      room_id: '926182952',
-      room_type: 5,
-      status: 2,
-      subject: '13551463创建的大班课',
-      user_role: 1,
-    },
-  ]);
+  const classInfo = {
+    attendee_count: 4,
+    begin_timestamp: 1660549927049,
+    create_timestamp: 1660549867189,
+    duration: 30,
+    end_timestamp: 1660551727049,
+    locked: 0,
+    max_attendee_count: 10000,
+    max_user_count: 10000,
+    pid: 1253,
+    room_id: '926182952',
+    room_type: 5,
+    status: 2,
+    subject: '13551463创建的大班课',
+    user_role: 1,
+  };
+  const [classList, setClassList] = useState<ClassInfo[]>([classInfo]);
 
   const selectItem = (selectedItem: string, index: number) => {
     enum CLASSTYPE {
@@ -305,40 +298,32 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
     console.log('mytag selectedItem', selectedItem);
     console.log('mytag index', index);
     if (index === CLASSTYPE.CLASS_1V1) {
-      const classInfo = {
-        attendee_count: 4,
-        begin_timestamp: 1660549927049,
-        create_timestamp: 1660549867189,
-        duration: 30,
-        end_timestamp: 1660551727049,
-        locked: 0,
-        max_attendee_count: 10000,
-        max_user_count: 10000,
-        pid: 1253,
-        room_id: '926182952',
-        room_type: 5,
-        status: 2,
-        subject: '13551463创建的大班课',
-        user_role: 1,
-      };
       setClassList(classList.concat(classInfo));
       console.log('mytag classList', classList);
       // ToastAndroid.showWithGravity('this is message', ToastAndroid.SHORT, ToastAndroid.CENTER);
       // Alert.alert('this is message');
     }
   };
+  const goSetting = () => {
+    navigation.push('Setting', {
+      from: route.name,
+    });
+  };
   return (
     <View style={{backgroundColor: '#F6F6F6', flex: 1}}>
-      <ScheduleHeader
-        navigation={navigation}
-        onSelected={selectItem}
-        modalList={{
-          items: [
-            i18n.t('roomkit_schedule_1v1'),
-            i18n.t('roomkit_schedule_small_class'),
-            i18n.t('roomkit_schedule_large_class'),
-          ],
-        }}></ScheduleHeader>
+      <ScheduleHeader navigation={navigation}>
+        <Text onPress={goSetting}>设置</Text>
+        <Text>日程</Text>
+        <ScheduleButton
+          onSelected={selectItem}
+          list={{
+            items: [
+              i18n.t('roomkit_schedule_1v1'),
+              i18n.t('roomkit_schedule_small_class'),
+              i18n.t('roomkit_schedule_large_class'),
+            ],
+          }}></ScheduleButton>
+      </ScheduleHeader>
       {
         // !classList.length ? (
         //   <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>

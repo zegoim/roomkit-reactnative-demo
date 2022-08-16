@@ -13,6 +13,8 @@ import {
   SectionList,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
+import {getUid, getPid} from '../utils/utils';
+import {ClassType, Env} from '../utils/config';
 import i18n from 'i18n-js';
 
 interface SelectModalList {
@@ -21,7 +23,7 @@ interface SelectModalList {
 }
 type textFunction = (text: string) => void;
 
-const ENV = {
+const ENV_VAL = {
   CHINA: 'roomkit_quick_join_access_env_mainland',
   INTERNATIONAL: 'roomkit_quick_join_access_env_overseas',
 };
@@ -61,7 +63,10 @@ const SettingBtn: React.FC<{navigation: any}> = ({navigation}) => {
   );
 };
 
-const InputBox: React.FC<{placeholder: string; onChangeText?: textFunction}> = ({placeholder, onChangeText}) => {
+const InputBox: React.FC<{placeholder: string; onChangeText?: textFunction}> = ({
+  placeholder,
+  onChangeText,
+}) => {
   const inputBoxStyle = StyleSheet.create({
     inputBox: {
       marginHorizontal: 30,
@@ -91,7 +96,7 @@ const SelectBox: React.FC<{
   list: SelectModalList;
   onSelected: (selectedItem: string, index: number) => void;
 }> = ({placeholder, list, onSelected}) => {
-  console.log('mytag touch here');
+  console.log('mytag re-render', placeholder);
   const seletBoxStyle = StyleSheet.create({
     inputBox: {
       marginHorizontal: 30,
@@ -133,7 +138,9 @@ const SelectBox: React.FC<{
         <Text style={{fontSize: 16, color: !!selectedItem ? '#0F0F0F' : '#868CA0'}}>
           {!!selectedItem ? selectedItem : placeholder}
         </Text>
-        <Image style={{width: 12, height: 12}} source={require('../assets/image/down_arrow.png')}></Image>
+        <Image
+          style={{width: 12, height: 12}}
+          source={require('../assets/image/down_arrow.png')}></Image>
       </TouchableOpacity>
     );
   }
@@ -274,7 +281,7 @@ function EnvChooseButton() {
       paddingRight: 60,
     },
   });
-  const [value, setValue] = React.useState('first');
+  const [value, setValue] = React.useState(i18n.t(ENV_VAL.CHINA));
 
   return (
     <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
@@ -284,16 +291,16 @@ function EnvChooseButton() {
           style={[envStyles.leftButton, envStyles.button]}
           labelStyle={{fontSize: 14}}
           position="leading"
-          label={i18n.t(ENV.CHINA)}
-          value={i18n.t(ENV.CHINA)}
+          label={i18n.t(ENV_VAL.CHINA)}
+          value={i18n.t(ENV_VAL.CHINA)}
         />
         <RadioButton.Item
           color="#3456F6"
           style={envStyles.button}
           labelStyle={{fontSize: 14}}
           position="leading"
-          label={i18n.t(ENV.INTERNATIONAL)}
-          value={i18n.t(ENV.INTERNATIONAL)}
+          label={i18n.t(ENV_VAL.INTERNATIONAL)}
+          value={i18n.t(ENV_VAL.INTERNATIONAL)}
         />
       </View>
     </RadioButton.Group>
@@ -306,68 +313,93 @@ const InputBoxMemo = memo(InputBox);
 const App: React.FC<{navigation: any}> = ({navigation}) => {
   const [roomID, setRoomID] = useState('');
   const [userName, setUserName] = useState('');
-  const [classType, setClassType] = useState(0);
+  const [classType, setClassType] = useState("0");
   const [role, setRole] = useState(0);
-  const [env, setEnv] = useState(i18n.t(ENV.CHINA));
-
+  const [env, setEnv] = useState(i18n.t(ENV_VAL.CHINA));
   useEffect(() => {
-    console.log('mytag i18n.t("hello")', i18n.t('roomkit_hello'));
-    console.log('mytag roomID', roomID);
-    console.log('mytag userName', userName);
     // console.log('mytag classType', classType);
     // console.log('mytag role', role);
   }, [roomID]);
 
-  // {i18n.t('roomkit_quick_join_select_room_type')}
+  const classTypeList = useMemo(() => {
+    return {
+      title: i18n.t('roomkit_room_schedule_type_web'),
+      items: [
+        i18n.t('roomkit_schedule_1v1'),
+        i18n.t('roomkit_schedule_small_class'),
+        i18n.t('roomkit_schedule_large_class'),
+      ],
+    };
+  }, []);
+  const roleTypeList = useMemo(() => {
+    return {
+      title: i18n.t('roomkit_quick_join_select_role'),
+      items: [
+        i18n.t('roomkit_quick_join_select_role_attendee'),
+        i18n.t('roomkit_quick_join_select_role_assistant'),
+        i18n.t('roomkit_quick_join_select_role_host'),
+      ],
+    };
+  }, []);
+  const setRoomIDFun = useCallback((text: string) => setRoomID(text), []);
+  const setUserNameFun = useCallback((text: string) => setUserName(text), []);
+  const setClassTypeFun = useCallback((selectedItem: string, index: number) => {
+    setClassType(String(index));
+  }, []);
+  const setRoleTypeFun = useCallback((selectedItem: string, index: number) => {
+    setRole(index);
+  }, []);
+
+  const classSelectedMap = {
+    '0': ClassType.Class_1V1,
+    '1': ClassType.CLASS_SMALL,
+    '2': ClassType.CLASS_LARGE,
+  };
+  
+  const envSelectedMap = {
+    [ENV_VAL.CHINA]: Env.MainLand,
+    [ENV_VAL.INTERNATIONAL]: Env.OverSeas,
+  };
+  const goDetail = useCallback(() => {
+    const routeParam = {
+      roomID,
+      userName,
+      userID: getUid(userName),
+      pid: getPid(ClassType.Class_1V1, envSelectedMap[env], '123'),
+    };
+    navigation.push('Details');
+  }, []);
+
+  const goSchedule = useCallback(() => {
+    navigation.push('Schedule');
+  }, []);
+
   return (
     <View style={styles.container}>
       <SettingBtn navigation={navigation}></SettingBtn>
       <Logo></Logo>
       <InputBoxMemo
         placeholder={i18n.t('roomkit_quick_join_input_id')}
-        onChangeText={useCallback((text: string) => setRoomID(text), [])}
+        onChangeText={setRoomIDFun}
       />
       <InputBoxMemo
         placeholder={i18n.t('roomkit_quick_join_input_nickname')}
-        onChangeText={useCallback((text: string) => setUserName(text), [])}
+        onChangeText={setUserNameFun}
       />
       <SelectBoxMemo
         placeholder={i18n.t('roomkit_quick_join_select_room_type')}
-        list={{
-          title: i18n.t('roomkit_room_schedule_type_web'),
-          items: [i18n.t('roomkit_schedule_1v1'), i18n.t('roomkit_schedule_small_class'), i18n.t('roomkit_schedule_large_class')],
-        }}
-        onSelected={useCallback((selectedItem: string, index: number) => {
-          setClassType(index);
-        }, [])}
+        list={classTypeList}
+        onSelected={setClassTypeFun}
       />
       <SelectBoxMemo
         placeholder={i18n.t('roomkit_quick_join_select_role')}
-        list={{
-          title: i18n.t('roomkit_quick_join_select_role'),
-          items: [
-            i18n.t('roomkit_quick_join_select_role_attendee'),
-            i18n.t('roomkit_quick_join_select_role_assistant'),
-            i18n.t('roomkit_quick_join_select_role_host'),
-          ],
-        }}
-        onSelected={useCallback((selectedItem: string, index: number) => {
-          setRole(index);
-        }, [])}
+        list={roleTypeList}
+        onSelected={setRoleTypeFun}
       />
-      <TouchableButton
-        style={styles.joinClass}
-        onPress={() => {
-          console.log('mytag 快速加入课堂!!!! ');
-          navigation.push('Details');
-        }}>
+      <TouchableButton style={styles.joinClass} onPress={goDetail}>
         {i18n.t('roomkit_quick_join_room')}
       </TouchableButton>
-      <Text
-        style={styles.createClass}
-        onPress={() => {
-          navigation.push('Schedule');
-        }}>
+      <Text style={styles.createClass} onPress={goSchedule}>
         {i18n.t('roomkit_create_room')}
       </Text>
       <Footer>
