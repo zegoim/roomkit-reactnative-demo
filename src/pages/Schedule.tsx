@@ -18,6 +18,7 @@ import {ClassType, SecretID} from '../utils/config';
 import {createClassRoom, deleteClass, getClassRoomList} from '../utils/fetch';
 import {useRoomkit} from '../context/roomkitContext';
 import {getPid} from '../utils/utils';
+import {useFocusEffect} from '@react-navigation/native';
 
 interface SelectItem {
   content: string;
@@ -293,9 +294,17 @@ const App: React.FC<{
   const [refreshing, setRefreshing] = useState(false);
   const [classList, setClassList] = useState<ClassInfo[]>([]);
   const [roomkitstate, roomkitAction] = useRoomkit();
-  useEffect(() => {
-    getClassList();
-  }, [route]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Do something when the screen is focused
+      getClassList();
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, []),
+  );
 
   const ClassTypeList: SelectModalList = useMemo(() => {
     return {

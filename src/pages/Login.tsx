@@ -404,21 +404,22 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
   };
 
   const createRoom = useCallback(async () => {
-    ZegoRoomkitSdk.init({
+    console.log('mytag before');
+    await ZegoRoomkitSdk.init({
       secretID: SecretID,
     });
-    await ZegoRoomkitSdk.instance().getDeviceID();
-    setTimeout(async () => {
-      let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
-      const userName = String(getUid(deviceID));
-      const userID = getUid(String(userName));
-      const routeParam = {
-        userName,
-        userID,
-        deviceID,
-      };
-      navigation.replace('Schedule', routeParam);
-    });
+    console.log('mytag after');
+
+    let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
+    console.log('mytag deviceID in Login ', deviceID);
+    const userName = String(getUid(deviceID));
+    const userID = getUid(String(userName));
+    const routeParam = {
+      userName,
+      userID,
+      deviceID,
+    };
+    navigation.replace('Schedule', routeParam);
   }, []);
 
   return (

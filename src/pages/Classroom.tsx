@@ -13,6 +13,7 @@ import ZegoRoomkitSdk, {
 
 import {ClassType, SecretID} from '../utils/config';
 import {useRoomkit} from '../context/roomkitContext';
+import {useFocusEffect} from '@react-navigation/native';
 
 const App: React.FC<{
   navigation: any;
@@ -29,22 +30,40 @@ const App: React.FC<{
 }> = ({navigation, route}) => {
   const [roomkitstate, roomkitAction] = useRoomkit();
   useEffect(() => {
-    console.log('mytag touch joinroom');
-    joinRoom();
+    console.log('mytag touch here');
+    // joinRoom();
     return () => {
+      console.log('mytag unmounted');
       // navigation.goBack();
     };
-  }, []);
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('mytag focus');
+      joinRoom();
+      // Do something when the screen is focused
+      // getClassList();
+      return () => {
+        console.log('mytag unfocues classRoom');
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, []),
+  );
 
   async function joinRoom() {
     try {
-      ZegoRoomkitSdk.init({
+      const res = await ZegoRoomkitSdk.init({
         secretID: SecretID,
       });
-      let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
+      console.log('mytag init res', res);
 
       callbackRegister();
+      let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
       const token = await getToken(deviceID);
+
+      console.log('mytag deviceID in ClassRoom', deviceID);
       const classDetail = await getClassDetail();
 
       let roomParameter = {
@@ -79,9 +98,10 @@ const App: React.FC<{
       // ZegoRoomkitSdk.instance().setAdvancedConfig({
       //   domain: Domain,
       // });
+
       await ZegoRoomkitSdk.instance().setRoomParameter(roomParameter);
       await ZegoRoomkitSdk.instance().joinRoom(joinConfig);
-      console.log('mytag done', )
+      console.log('mytag done');
     } catch (error) {
       console.log('mytag error in joinRoom', error);
     }
@@ -91,12 +111,12 @@ const App: React.FC<{
       console.log('mytag touch memberLeaveRoom');
       navigation.goBack();
     });
-    ZegoRoomkitSdk.instance().on('inRoomEventNotify', function() {
-      console.log('mytag inRoomEventNotify', arguments)
+    ZegoRoomkitSdk.instance().on('inRoomEventNotify', function () {
+      console.log('mytag inRoomEventNotify', arguments);
       console.log('mytag touch inRoomEventNotify');
     });
-    ZegoRoomkitSdk.instance().on('buttonEvent', function() {
-      console.log('mytag buttonEvent', arguments)
+    ZegoRoomkitSdk.instance().on('buttonEvent', function () {
+      console.log('mytag buttonEvent', arguments);
     });
   }
   async function getClassDetail() {
@@ -117,7 +137,9 @@ const App: React.FC<{
   return (
     <View>
       {/* <NavigationHeader navigation={navigation} title={'to delete: ClassRoom'}></NavigationHeader> */}
-      <Text>this is class room</Text>
+      <Text onPress={() => navigation.goBack()} style={{color: 'black', fontSize: 20,padding: 20}}>
+        返回上一页
+      </Text>
     </View>
   );
 };

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import md5 from 'md5';
 import {productIdList, Env, ClassType} from './config';
 import {getSdkToken, getRoomInfo} from './fetch';
