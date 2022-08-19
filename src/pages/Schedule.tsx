@@ -10,12 +10,21 @@ import {
   Platform,
   Alert,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import i18n, {translate} from 'i18n-js';
 import {Switch} from 'react-native-paper';
+import {ClassType, SecretID} from '../utils/config';
+import {createClassRoom, deleteClass, getClassRoomList} from '../utils/fetch';
+import {useRoomkit} from '../context/roomkitContext';
+import {getPid} from '../utils/utils';
 
+interface SelectItem {
+  content: string;
+  value: number;
+}
 interface SelectModalList {
-  items: string[];
+  items: SelectItem[];
 }
 
 const ScheduleHeader: React.FC<{
@@ -58,7 +67,7 @@ const ScheduleHeader: React.FC<{
 
 const ScheduleButton: React.FC<{
   list: SelectModalList;
-  onSelected: (selectedItem: string, index: number) => void;
+  onSelected: (selectedItem: SelectItem, index: number) => void;
 }> = ({list, onSelected}) => {
   const headerStyle = StyleSheet.create({
     text: {
@@ -70,7 +79,8 @@ const ScheduleButton: React.FC<{
     },
   });
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
+  // const [selectedVal, setSelectedVal] = useState(0);
+  // const [selectedContent, setSelectedContent] = useState('');
   return (
     <View>
       <Text
@@ -80,13 +90,6 @@ const ScheduleButton: React.FC<{
         }, [])}>
         {i18n.t('roomkit_main_schedule')}
       </Text>
-      {/* <TouchableButton
-        onPress={useCallback(() => {
-          setModalVisible(true);
-        }, [])}
-        customRight={selectedItem}>
-        {i18n.t('roomkit_quick_join_access_env')}
-      </TouchableButton> */}
       <EnvModal />
     </View>
   );
@@ -124,31 +127,28 @@ const ScheduleButton: React.FC<{
       },
     });
     return (
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          console.log('mytag Modal has been closed.');
-        }}>
+      <Modal animationType="none" transparent={true} visible={modalVisible}>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-            console.log('mytag touch modal toggle');
             setModalVisible(!modalVisible);
           }}
           style={modalStyle.modalContainer}>
           <View style={[modalStyle.modalView, modalStyle.shadow]}>
-            {list.items.map((item: any, index: number) => (
+            {list.items.map((item: SelectItem, index: number) => (
               <Text
                 onPress={() => {
                   onSelected(item, index);
-                  setSelectedItem(item);
+                  // setSelectedVal(item.value);
+                  // setSelectedContent(item.content);
                   setModalVisible(false);
                 }}
                 key={index}
-                style={[modalStyle.modalRow, index < list.items.length - 1 && modalStyle.borderBottom]}>
-                {item}
+                style={[
+                  modalStyle.modalRow,
+                  index < list.items.length - 1 && modalStyle.borderBottom,
+                ]}>
+                {item.content}
               </Text>
             ))}
           </View>
@@ -175,12 +175,12 @@ interface ClassInfo {
   user_role: number;
 }
 
-const ScheduleItem: React.FC<{classItem: ClassInfo; index: number; onShutdown: () => void; onAddclass: () => void}> = ({
-  classItem,
-  index,
-  onShutdown,
-  onAddclass,
-}) => {
+const ScheduleItem: React.FC<{
+  classItem: ClassInfo;
+  index: number;
+  onShutdown: (classItem: ClassInfo) => void;
+  onJoinClass: (classItem: ClassInfo) => void;
+}> = ({classItem, index, onShutdown, onJoinClass}) => {
   const itemStyle = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -231,9 +231,17 @@ const ScheduleItem: React.FC<{classItem: ClassInfo; index: number; onShutdown: (
       top: 7,
     },
   });
+
+  useEffect(() => {
+    console.log('mytag classItem.room_id', classItem.room_id);
+  }, [classItem]);
   const getTime = (timeStamp: number) => {
     const date = new Date(timeStamp);
-    return `${date.getHours()}:${date.getMinutes()}`;
+    const patchZego = (time: number) => `${time < 10 ? '0' : ''}${time}`;
+    const hour = patchZego(date.getHours());
+    const min = patchZego(date.getMinutes());
+
+    return `${hour}:${min}`;
   };
   return (
     <View style={itemStyle.container}>
@@ -244,106 +252,242 @@ const ScheduleItem: React.FC<{classItem: ClassInfo; index: number; onShutdown: (
       <View style={itemStyle.subjectBox}>
         <Text style={itemStyle.title}>{classItem.subject}</Text>
         <View style={itemStyle.addClassBar}>
-          <Text style={{paddingBottom: 3}}>课程ID:{classItem.room_id}</Text>
-          {/* <TouchableOpacity onPress={() => {}} activeOpacity={1}> */}
+          <View style={{paddingBottom: 3, flexDirection: 'row'}}>
+            <Text>{i18n.t('roomkit_room_id')} </Text>
+            <Text>{classItem.room_id}</Text>
+          </View>
           <Text
             style={itemStyle.addClassBtn}
             onPress={() => {
-              onAddclass();
+              onJoinClass(classItem);
             }}>
-            加入
+            {i18n.t('roomkit_room_join')}
           </Text>
           {/* </TouchableOpacity> */}
         </View>
       </View>
       <TouchableOpacity
         onPress={() => {
-          onShutdown();
+          onShutdown(classItem);
         }}
         style={itemStyle.shutdown}
         activeOpacity={1}>
-        <Image style={{width: 15, height: 15}} source={require('../assets/image/shutdown.png')}></Image>
+        <Image
+          style={{width: 15, height: 15}}
+          source={require('../assets/image/shutdown.png')}></Image>
       </TouchableOpacity>
     </View>
   );
 };
 
-const App: React.FC<{route: any; navigation: any}> = ({route, navigation}) => {
-  const [micMuted, setMicMuted] = useState(false);
-  const a: number[] = [1, 2, 3];
-  const classInfo = {
-    attendee_count: 4,
-    begin_timestamp: 1660549927049,
-    create_timestamp: 1660549867189,
-    duration: 30,
-    end_timestamp: 1660551727049,
-    locked: 0,
-    max_attendee_count: 10000,
-    max_user_count: 10000,
-    pid: 1253,
-    room_id: '926182952',
-    room_type: 5,
-    status: 2,
-    subject: '13551463创建的大班课',
-    user_role: 1,
+const App: React.FC<{
+  route: {
+    params: {
+      userName: string;
+      userID: string;
+      deviceID: string;
+    };
   };
-  const [classList, setClassList] = useState<ClassInfo[]>([classInfo]);
+  navigation: any;
+}> = ({route, navigation}) => {
+  const [refreshing, setRefreshing] = useState(false);
+  const [classList, setClassList] = useState<ClassInfo[]>([]);
+  const [roomkitstate, roomkitAction] = useRoomkit();
+  useEffect(() => {
+    getClassList();
+  }, [route]);
 
-  const selectItem = (selectedItem: string, index: number) => {
-    enum CLASSTYPE {
-      CLASS_1V1 = 0,
-      CLASS_SMALL = 1,
-      CLASS_LARGE = 1,
+  const ClassTypeList: SelectModalList = useMemo(() => {
+    return {
+      items: [
+        {content: i18n.t('roomkit_schedule_1v1'), value: ClassType.Class_1V1},
+        {content: i18n.t('roomkit_schedule_small_class'), value: ClassType.CLASS_SMALL},
+        {content: i18n.t('roomkit_schedule_large_class'), value: ClassType.CLASS_LARGE},
+      ],
+    };
+  }, []);
+
+  const {userName, userID, deviceID} = route.params;
+
+  const selectItem = async (selectedItem: SelectItem) => {
+    await createClass(selectedItem);
+    const roomList = await getClassList();
+  };
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    getClassList().then(() => setRefreshing(false));
+  }, []);
+
+  const getClassList: () => Promise<void> = async () => {
+    try {
+      const token = roomkitstate.token
+        ? roomkitstate.token
+        : await roomkitAction.updateToken(deviceID);
+      const list = await getClassRoomList({
+        begin_timestamp: new Date().getTime() - 12 * 60 * 60 * 1000,
+        count: 20,
+        device_id: deviceID,
+        end_timestamp: 0,
+        is_include_all: 0,
+        status: 3,
+        page: 1,
+        uid: userID,
+        sdk_token: token,
+        secret_id: SecretID,
+        verify_type: 3,
+      });
+      console.log('mytag list.data', list.data);
+      setClassList(list.data.room_list ? list.data.room_list : []);
+      return list.data.room_list;
+    } catch (error) {
+      // ToastAndroid.show(`error message:${data.ret.message}`, ToastAndroid.SHORT);
+      ToastAndroid.show(i18n.t('roomkit_Room_list_failed'), ToastAndroid.SHORT);
     }
-    console.log('mytag selectedItem', selectedItem);
-    console.log('mytag index', index);
-    if (index === CLASSTYPE.CLASS_1V1) {
-      setClassList(classList.concat(classInfo));
-      console.log('mytag classList', classList);
-      // ToastAndroid.showWithGravity('this is message', ToastAndroid.SHORT, ToastAndroid.CENTER);
-      // Alert.alert('this is message');
+  };
+  const createClass = async (selectedItem: SelectItem) => {
+    try {
+      console.log('mytag selectedItem', selectedItem);
+
+      const className = selectedItem.content;
+      const classType = selectedItem.value;
+
+      const token = roomkitstate.token
+        ? roomkitstate.token
+        : await roomkitAction.updateToken(deviceID);
+      console.log('mytag userName, userID', userName, userID);
+      const query = {
+        uid: userID,
+        subject: userName + '创建的' + className,
+        room_type: classType,
+        begin_timestamp: new Date().getTime() + 1000 * 60,
+        duration: 30,
+        max_attendee_count: classType === 3 ? undefined : classType === 1 ? 100 : 10000,
+        host: {
+          uid: userID,
+        },
+        attendees: [
+          {
+            uid: userID,
+          },
+        ],
+        assistants: [
+          {
+            uid: 123123,
+          },
+          {
+            uid: 456456,
+          },
+          {
+            uid: 789789,
+          },
+        ],
+        settings: {
+          enable_attendee_cam: classType !== 5,
+          enable_attendee_mic: classType !== 5,
+          enable_host_cam: true,
+          enable_host_mic: true,
+          enable_attendee_share: classType !== 1 && classType !== 6,
+          enable_chat: true,
+          enable_attendee_draw: classType !== 1,
+          is_auto_start: classType === 3 || classType === 6 || classType === 1,
+          max_onstage_count: 2,
+          is_private_room: false,
+          enable_raise_hand: true,
+        },
+        pid: getPid(classType, roomkitstate.env, false),
+        sdk_token: token,
+        device_id: deviceID,
+        secret_id: SecretID,
+        verify_type: 3,
+      };
+      const result = await createClassRoom(query);
+
+      return result;
+    } catch (error) {
+      // Toast.show({text1: `message:${data.ret.message}`, type: 'error'});
+      ToastAndroid.show(i18n.t('roomkit_room_schedule_failed'), ToastAndroid.SHORT);
+
+      // console.log('mytag error', error);
     }
+  };
+  const deleteRoom = async (roomID: string, pid: number) => {
+    try {
+      // const token = await getSDKToken(userId);
+      const token = roomkitstate.token
+        ? roomkitstate.token
+        : await roomkitAction.updateToken(deviceID);
+
+      const result = await deleteClass({
+        uid: userID,
+        room_id: String(roomID),
+        pid: pid,
+        sdk_token: token,
+        device_id: deviceID,
+        secret_id: SecretID,
+        verify_type: 3,
+      });
+      console.log('mytag result', result);
+      ToastAndroid.show(i18n.t('roomkit_room_delete_succeeded'), ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show(i18n.t('roomkit_room_delete_failed'), ToastAndroid.SHORT);
+    }
+    getClassList();
   };
   const goSetting = () => {
     navigation.push('Setting', {
       from: route.name,
     });
   };
+
+  const shutdownFun = (classItem: ClassInfo) => {
+    deleteRoom(classItem.room_id, classItem.pid);
+  };
+  const joinClassRoom = (classItem: ClassInfo) => {
+    console.log('mytag classItem', classItem);
+    const routeParam = {
+      roomID: classItem.room_id,
+      userName,
+      role: classItem.user_role,
+      classType: classItem.room_type,
+      userID: userID,
+      pid: getPid(classItem.room_type, roomkitstate.env, false),
+    };
+    navigation.push('Classroom', routeParam);
+    // deleteRoom(classItem.room_id, classItem.pid);
+  };
   return (
     <View style={{backgroundColor: '#F6F6F6', flex: 1}}>
       <ScheduleHeader navigation={navigation}>
         <Text onPress={goSetting}>设置</Text>
-        <Text>日程</Text>
-        <ScheduleButton
-          onSelected={selectItem}
-          list={{
-            items: [
-              i18n.t('roomkit_schedule_1v1'),
-              i18n.t('roomkit_schedule_small_class'),
-              i18n.t('roomkit_schedule_large_class'),
-            ],
-          }}></ScheduleButton>
+        <Text>{userName}的日程</Text>
+        <ScheduleButton onSelected={selectItem} list={ClassTypeList}></ScheduleButton>
       </ScheduleHeader>
-      {
-        // !classList.length ? (
-        //   <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
-        //     <Image style={styles.noMeeting} source={require('../assets/image/no_meeting.png')}></Image>
-        //   </View>
-        // ) :
-        // scroll
-        <ScrollView style={{backgroundColor: 'pink'}}>
-          {classList.map((classItem, index) => {
-            return (
-              <ScheduleItem
-                key={index}
-                classItem={classItem}
-                index={index}
-                onAddclass={() => console.log('mytag onAddclass', index)}
-                onShutdown={() => console.log('mytag onShutdown', index)}></ScheduleItem>
-            );
-          })}
-        </ScrollView>
-      }
+
+      <ScrollView
+        style={{backgroundColor: `${classList.length ? '#F6F6F6' : 'white'}`}}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        {!classList.length ? (
+          <View style={{alignItems: 'center', marginTop: 100}}>
+            <Image
+              style={styles.noMeeting}
+              source={require('../assets/image/no_meeting.png')}></Image>
+          </View>
+        ) : (
+          <>
+            {classList.map((classItem, index) => {
+              return (
+                <ScheduleItem
+                  key={classItem.room_id}
+                  classItem={classItem}
+                  index={index}
+                  onJoinClass={joinClassRoom}
+                  onShutdown={shutdownFun}></ScheduleItem>
+              );
+            })}
+          </>
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -353,10 +497,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   noMeeting: {
-    transform: [{translateX: -60}, {translateY: -60}],
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
     width: 120,
     height: 120,
   },

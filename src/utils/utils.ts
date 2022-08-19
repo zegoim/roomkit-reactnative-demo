@@ -34,3 +34,23 @@ export const getToken = async (deviceid: string) => {
   let res = await getSdkToken(params);
   return res.data.sdk_token;
 };
+
+export const storage = {
+  async setItem(key: string, val: string) {
+    try {
+      await AsyncStorage.setItem(key, val);
+    } catch (error) {
+      console.log('mytag setItem error', error);
+    }
+  },
+  async getItem(key: string) {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      return value;
+    } catch (error) {
+      console.log('mytag getItem error', error);
+      return null;
+    }
+  },
+};
+

@@ -16,14 +16,26 @@
  * @format
  */
 
-import React, {useEffect, type PropsWithChildren} from 'react';
-import {StyleSheet, Text, useColorScheme, View, Button, I18nManager, StatusBar} from 'react-native';
+import React, {useEffect, useContext, createContext, type PropsWithChildren} from 'react';
+import {
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+  Button,
+  I18nManager,
+  StatusBar,
+  SafeAreaView,
+} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
 import * as RNLocalize from 'react-native-localize';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {RoomkitProvider} from './context/roomkitContext';
+
 import IndexInput from './pages/IndexInput';
 import Login from './pages/Login';
 import Setting from './pages/Setting';
@@ -31,6 +43,7 @@ import RoomSetting from './pages/RoomSetting';
 import CustomUI from './pages/CustomUI';
 import Schedule from './pages/Schedule';
 import Classroom from './pages/Classroom';
+import {toastConfig} from './utils/CustomToast';
 
 const translationGetters = {
   // lazy requires
@@ -73,6 +86,7 @@ const DetailsScreen: React.FC<{navigation: any}> = ({navigation}) => {
 };
 
 const Stack = createNativeStackNavigator();
+
 const App = () => {
   // 要在 created 阶段设置。 如果在 didmount 阶段就太晚了。
   setI18nConfig();
@@ -92,6 +106,13 @@ const App = () => {
         headerShown: false,
       },
       component: Login,
+    },
+    {
+      name: 'RoomSetting',
+      options: {
+        headerShown: false,
+      },
+      component: RoomSetting,
     },
     {
       name: 'Schedule',
@@ -114,13 +135,7 @@ const App = () => {
       },
       component: Setting,
     },
-    {
-      name: 'RoomSetting',
-      options: {
-        headerShown: false,
-      },
-      component: RoomSetting,
-    },
+
     {
       name: 'CustomUI',
       options: {
@@ -141,20 +156,27 @@ const App = () => {
     setI18nConfig();
   };
   return (
-    <NavigationContainer>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <Stack.Navigator>
-        {screens.map((screenItem, index) => {
-          return (
-            <Stack.Screen
-              key={screenItem.name}
-              name={screenItem.name}
-              options={{...screenItem.options}}
-              component={screenItem.component}></Stack.Screen>
-          );
-        })}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <RoomkitProvider>
+        <SafeAreaView style={{flex: 1}}>
+          <NavigationContainer>
+            <StatusBar backgroundColor="white" barStyle="dark-content" />
+            <Stack.Navigator>
+              {screens.map((screenItem, index) => {
+                return (
+                  <Stack.Screen
+                    key={screenItem.name}
+                    name={screenItem.name}
+                    options={{...screenItem.options}}
+                    component={screenItem.component}></Stack.Screen>
+                );
+              })}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </RoomkitProvider>
+      <Toast config={toastConfig} />
+    </>
   );
 };
 

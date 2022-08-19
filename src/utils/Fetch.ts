@@ -9,17 +9,17 @@
 // import _ from 'lodash';
 import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {RoomkitServiceDomain, EduServiceDomain} from './config';
-// import {Toast} from "antd-mobile-rn"
+import Toast from 'react-native-toast-message';
 // import config from "./config";
 
-const Toast = {
-  fail(msg: string) {
-    console.error('msg', msg);
-  },
-  info(msg: string) {
-    console.log('mytag msg', msg);
-  },
-};
+// const Toast = {
+//   fail(msg: string) {
+//     console.error('msg', msg);
+//   },
+//   info(msg: string) {
+//     console.log('mytag msg', msg);
+//   },
+// };
 interface ajaxOptions {
   baseURL?: string;
   version?: string;
@@ -37,7 +37,6 @@ enum SERVICE_TYPE {
 export const ajax = (url: string, options: ajaxOptions) => {
   let axiosOptions: AxiosRequestConfig = {};
 
-  console.log('mytag options', options);
   axiosOptions = {
     headers: {...options.headers},
     method: options.method || 'get',
@@ -52,40 +51,45 @@ export const ajax = (url: string, options: ajaxOptions) => {
   }
 
   return new Promise<any>((resolve: any, reject: any) => {
-    console.log('mytag axiosOptions', axiosOptions);
     axios(url, axiosOptions)
       .then(async (res: AxiosResponse<any>) => {
+        console.log('mytag res.data', res.data);
         if (res.data.ret.code === 0) {
           return resolve(res.data);
         }
-        Toast.fail(res.data.ret);
+        // Toast.fail(res.data.ret);
+        Toast.show({text1: `message:${res.data.ret.message}`, type: 'error'});
         reject({
           ...res,
           handled: false,
         });
       })
       .catch(async (err: AxiosError) => {
+        console.log('mytag err', err);
         // console.warn("err",err);
         // console.log("url, axiosOptions",url, axiosOptions);
         if (!err.response) {
-          Toast.fail('服务繁忙，稍候请重试');
+          Toast.show({text1: '服务繁忙，稍候请重试', type: 'error'});
           reject({...err, handled: true});
           return;
         }
 
         if (err.response.status == 401) {
           reject({handled: true});
-          Toast.info('登录状态失效，请重新登录');
+          // Toast.info('登录状态失效，请重新登录');
+          Toast.show({text1: '登录状态失效，请重新登录', type: 'error'});
         } else if (err.response.status == 400) {
           reject({
             data: err.response.data,
-            message: _.get(err.response.data, 'msg'),
+            // @ts-ignore
+            message: err.response.data?.msg,
             handled: false,
           });
         } else {
           reject({...err, handled: true});
-          Toast.fail('服务繁忙，稍候请重试');
+          Toast.show({text1: '服务繁忙，稍候请重试', type: 'error'});
         }
+        reject({...err, handled: true});
       });
   });
 };
@@ -115,4 +119,15 @@ export function getSdkToken(params: any) {
 // 获取房间信息，教育云接口
 export function getRoomInfo(params: any) {
   return POST('/room/get', {data: {...params}, isEduService: true});
+}
+
+export function createClassRoom(params: any) {
+  return POST('/room/create', {data: {...params}, isEduService: true});
+}
+
+export function getClassRoomList(params: any) {
+  return POST('/room/query', {data: {...params}, isEduService: true});
+}
+export function deleteClass(params: any) {
+  return POST('/room/cancel', {data: {...params}, isEduService: true});
 }

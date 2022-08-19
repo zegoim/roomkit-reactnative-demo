@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {memo, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {
   Button,
   StyleSheet,
@@ -15,10 +15,12 @@ import {
 import {RadioButton} from 'react-native-paper';
 import i18n from 'i18n-js';
 import md5 from 'md5';
-import {Toast} from 'antd-mobile-rn';
+import Toast from 'react-native-toast-message';
+import ZegoRoomkitSdk from 'zego_roomkit_reactnative_sdk';
 
 import {getUid, getPid} from '../utils/utils';
-import {ClassType, Env} from '../utils/config';
+import {ClassType, Env, SecretID} from '../utils/config';
+import {useRoomkit} from '../context/roomkitContext';
 
 interface SelectItem {
   content: string;
@@ -284,7 +286,10 @@ function EnvTitle() {
   );
 }
 
-const EnvChooseButton: React.FC<{onChoose: (env: number) => void}> = ({onChoose}) => {
+const EnvChooseButton: React.FC<{envValue: Env; onChoose: (env: number) => void}> = ({
+  envValue,
+  onChoose,
+}) => {
   const envStyles = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -296,15 +301,19 @@ const EnvChooseButton: React.FC<{onChoose: (env: number) => void}> = ({onChoose}
       paddingRight: 60,
     },
   });
-  const [value, setValue] = React.useState(i18n.t(ENV_VAL.CHINA));
+  const [radioContent, setRadioContent] = React.useState(i18n.t(ENV_VAL.CHINA));
 
+  useEffect(() => {
+    setRadioContent(i18n.t(envValue === Env.MainLand ? ENV_VAL.CHINA : ENV_VAL.INTERNATIONAL));
+  }, [envValue]);
+  // if(envValue){}
   return (
     <RadioButton.Group
       onValueChange={value => {
-        setValue(value);
+        setRadioContent(value);
         onChoose(value === i18n.t(ENV_VAL.CHINA) ? Env.MainLand : Env.OverSeas);
       }}
-      value={value}>
+      value={radioContent}>
       <View style={envStyles.container}>
         <RadioButton.Item
           color="#3456F6"
@@ -335,11 +344,10 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
   const [userName, setUserName] = useState('');
   const [classType, setClassType] = useState(0);
   const [roleType, setRole] = useState(0);
-  const [env, setEnv] = useState(Env.MainLand);
-  // useEffect(() => {
-  //   // console.log('mytag classType', classType);
-  //   // console.log('mytag roleType', roleType);
-  // }, [roomID]);
+  const [roomkitstate, roomkitAction] = useRoomkit();
+  // const {roomSettings, roomUIConfig} = roomkitstate;
+  // // @ts-ignore
+  // console.log('mytag roomkitstate', roomkitstate)
 
   const classTypeList: SelectModalList = useMemo(() => {
     return {
@@ -369,15 +377,19 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
   const setRoleTypeFun = useCallback((selectedItem: any, index: number) => {
     setRole(selectedItem.value);
   }, []);
-  const setEnvFun = useCallback((env: Env) => {
-    setEnv(env);
-  }, []);
+  // const setEnvFun = useCallback((env: Env) => {
+  //   setEnv(env);
+  // }, []);
 
-  const goClassRoom = async () => {
-    if (!roomID) return Toast.fail('no roomID');
-    if (!userName) return Toast.fail('no userName');
-    if (!roleType) return Toast.fail('no choose role');
-    if (!classType) return Toast.fail('no choose class type');
+  const joinClassRoom = async () => {
+    console.log('mytag Toast.show', Toast.show);
+    if (!roomID) return Toast.show({text1: i18n.t('roomkit_quick_join_input_id'), type: 'error'});
+    if (!userName)
+      return Toast.show({text1: i18n.t('roomkit_quick_join_input_nickname'), type: 'error'});
+    if (!classType)
+      return Toast.show({text1: i18n.t('roomkit_quick_join_select_room_type'), type: 'error'});
+    if (!roleType)
+      return Toast.show({text1: i18n.t('roomkit_quick_join_select_role'), type: 'error'});
 
     const routeParam = {
       roomID,
@@ -385,14 +397,28 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
       role: roleType,
       classType,
       userID: getUid(userName),
-      pid: getPid(classType, env, false),
+      pid: getPid(classType, roomkitstate.env, false),
     };
     navigation.push('Classroom', routeParam);
     return;
   };
 
-  const goCreateRoom = useCallback(() => {
-    navigation.push('Schedule');
+  const createRoom = useCallback(async () => {
+    ZegoRoomkitSdk.init({
+      secretID: SecretID,
+    });
+    await ZegoRoomkitSdk.instance().getDeviceID();
+    setTimeout(async () => {
+      let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
+      const userName = String(getUid(deviceID));
+      const userID = getUid(String(userName));
+      const routeParam = {
+        userName,
+        userID,
+        deviceID,
+      };
+      navigation.replace('Schedule', routeParam);
+    });
   }, []);
 
   return (
@@ -417,16 +443,18 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
         list={roleTypeList}
         onSelected={setRoleTypeFun}
       />
-      <TouchableButton style={styles.joinClass} onPress={goClassRoom}>
+      <TouchableButton style={styles.joinClass} onPress={joinClassRoom}>
         {i18n.t('roomkit_quick_join_room')}
       </TouchableButton>
-      <Text style={styles.createClass} onPress={goCreateRoom}>
+      <Text style={styles.createClass} onPress={createRoom}>
         {i18n.t('roomkit_create_room')}
       </Text>
       <Footer>
         <View>
           <EnvTitle></EnvTitle>
-          <EnvChooseButton onChoose={setEnvFun}></EnvChooseButton>
+          <EnvChooseButton
+            envValue={roomkitstate.env}
+            onChoose={roomkitAction.setEnv}></EnvChooseButton>
         </View>
       </Footer>
     </View>
@@ -435,7 +463,7 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'pink',
+    backgroundColor: 'white',
     height: '100%',
   },
 

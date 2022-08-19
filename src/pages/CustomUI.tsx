@@ -3,6 +3,7 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import i18n from 'i18n-js';
 import NavigationHeader from '../components/NavigationHeader';
 import {Switch} from 'react-native-paper';
+import {useRoomkit} from '../context/roomkitContext';
 
 interface SelectModalList {
   title: string;
@@ -10,10 +11,11 @@ interface SelectModalList {
 }
 
 const SwitchButton: React.FC<{
-  children: string;
+  content: string;
   style?: Object;
+  value: boolean;
   getSwitch?: (isSwitchOn: boolean) => void;
-}> = ({children, style, getSwitch}) => {
+}> = ({content, style, value, getSwitch}) => {
   const buttonStyle = StyleSheet.create({
     container: {
       height: 57,
@@ -36,42 +38,65 @@ const SwitchButton: React.FC<{
       alignItems: 'center',
     },
   });
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
   const onToggleSwitch = () => {
-    setIsSwitchOn(!isSwitchOn);
-    !!getSwitch && getSwitch(isSwitchOn);
+    !!getSwitch && getSwitch(!value);
   };
-
   return (
     <View style={[buttonStyle.container, style]}>
-      <Text onPress={() => console.log('touch here')} style={[buttonStyle.left]}>
-        {children}
-      </Text>
-      <Switch color="#2953FF" value={isSwitchOn} onValueChange={onToggleSwitch} />
+      <Text style={[buttonStyle.left]}>{content}</Text>
+      <Switch color="#2953FF" value={value} onValueChange={onToggleSwitch} />
     </View>
   );
 };
 
+
 const SwitchButtonMemo = memo(SwitchButton);
 
 const App: React.FC<{navigation: any}> = ({navigation}) => {
-  const [micMuted, setMicMuted] = useState(false);
-  console.log('mytag micMuted', micMuted);
+  const [roomkitstate, roomkitAction] = useRoomkit();
+  const {roomSettings, roomUIConfig} = roomkitstate;
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={{backgroundColor: '#F5F5F5', flex: 1}}>
-      <NavigationHeader navigation={navigation} title={i18n.t('roomkit_setting_custom_ui')}></NavigationHeader>
+      <NavigationHeader
+        navigation={navigation}
+        title={i18n.t('roomkit_setting_custom_ui')}></NavigationHeader>
       <SwitchButtonMemo
-        getSwitch={useCallback((isSwitchOn: boolean) => setMicMuted(isSwitchOn), [])}
-        style={styles.mgt10}>
-        {i18n.t('roomkit_custom_ui_hide_bottom_bar')}
-      </SwitchButtonMemo>
-      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_chat')}</SwitchButtonMemo>
-      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_member')}</SwitchButtonMemo>
-      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_share')}</SwitchButtonMemo>
-      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_camera')}</SwitchButtonMemo>
-      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_mic')}</SwitchButtonMemo>
-      <SwitchButtonMemo >{i18n.t('roomkit_custom_ui_hide_more')}</SwitchButtonMemo>
+        value={roomUIConfig.isBottomBarHiddenMode}
+        getSwitch={roomkitAction.setIsBottomBarHiddenMode}
+        style={styles.mgt10}
+        content={i18n.t('roomkit_custom_ui_hide_bottom_bar')}
+      />
+      <SwitchButtonMemo
+        value={roomUIConfig.isChatHidden}
+        getSwitch={roomkitAction.setIsChatHidden}
+        content={i18n.t('roomkit_custom_ui_hide_chat')}
+      />
+      <SwitchButtonMemo
+        value={roomUIConfig.isAttendeesHidden}
+        getSwitch={roomkitAction.setIsAttendeesHidden}
+        content={i18n.t('roomkit_custom_ui_hide_member')}
+      />
+      <SwitchButtonMemo
+        value={roomUIConfig.isShareHidden}
+        getSwitch={roomkitAction.setIsShareHidden}
+        content={i18n.t('roomkit_custom_ui_hide_share')}
+      />
+      <SwitchButtonMemo
+        value={roomUIConfig.isCameraHidden}
+        getSwitch={roomkitAction.setIsCameraHidden}
+        content={i18n.t('roomkit_custom_ui_hide_camera')}
+      />
+      <SwitchButtonMemo
+        value={roomUIConfig.isMicrophoneHidden}
+        getSwitch={roomkitAction.setIsMicrophoneHidden}
+        content={i18n.t('roomkit_custom_ui_hide_mic')}
+      />
+      <SwitchButtonMemo
+        value={roomUIConfig.isMoreHidden}
+        getSwitch={roomkitAction.setIsMoreHidden}
+        content={i18n.t('roomkit_custom_ui_hide_more')}
+      />
     </ScrollView>
   );
 };

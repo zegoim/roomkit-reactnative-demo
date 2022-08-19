@@ -6,54 +6,117 @@ import {Switch} from 'react-native-paper';
 import {getSdkToken, getRoomInfo} from '../utils/fetch';
 import {getToken} from '../utils/utils';
 import md5 from 'md5';
-import ZegoRoomkitSdk from 'zego_roomkit_reactnative_sdk';
+import ZegoRoomkitSdk, {
+  ZegoRoomkitJoinRoomConfig,
+  setRoomParameterConfig,
+} from 'zego_roomkit_reactnative_sdk';
 
+import {ClassType, SecretID} from '../utils/config';
+import {useRoomkit} from '../context/roomkitContext';
 
-const App: React.FC<{navigation: any; route: any}> = ({navigation, route}) => {
+const App: React.FC<{
+  navigation: any;
+  route: {
+    params: {
+      roomID: string;
+      userName: string;
+      role: number;
+      classType: number;
+      userID: string;
+      pid: number;
+    };
+  };
+}> = ({navigation, route}) => {
+  const [roomkitstate, roomkitAction] = useRoomkit();
   useEffect(() => {
-    // joinRoom();
+    console.log('mytag touch joinroom');
+    joinRoom();
+    return () => {
+      // navigation.goBack();
+    };
   }, []);
 
-  async function getClassDetail(uid: number, roomID: string, pid: Number) {
+  async function joinRoom() {
+    try {
+      ZegoRoomkitSdk.init({
+        secretID: SecretID,
+      });
+      let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
+
+      callbackRegister();
+      const token = await getToken(deviceID);
+      const classDetail = await getClassDetail();
+
+      let roomParameter = {
+        subject: classDetail && classDetail.subject,
+        beginTimestamp: new Date().getTime(),
+      } as setRoomParameterConfig;
+      const {userID, roomID, pid, userName, role} = route.params;
+
+      let joinConfig = {
+        userName,
+        userID,
+        roomID,
+        productID: pid,
+        role,
+        sdkToken: token,
+      } as unknown as ZegoRoomkitJoinRoomConfig;
+      console.log('mytag roomParameter', roomParameter);
+      console.log('mytag joinConfig', joinConfig);
+
+      ZegoRoomkitSdk.instance().setUserParameter({
+        avatarUrl: 'https://img2.baidu.com/it/u=325567737,3478266281&fm=26&fmt=auto&gp=0.jpg',
+        customIconUrl: 'http://www.gov.cn/guoqing/site1/20100928/001aa04acfdf0e0bfb6401.gif',
+      });
+
+      // UI config
+      const {isBottomBarHiddenMode} = roomkitstate.roomUIConfig;
+      ZegoRoomkitSdk.instance().setUIConfig({
+        ...roomkitstate.roomUIConfig,
+        bottomBarHiddenMode: !!isBottomBarHiddenMode ? 1 : 2,
+      });
+
+      // ZegoRoomkitSdk.instance().setAdvancedConfig({
+      //   domain: Domain,
+      // });
+      await ZegoRoomkitSdk.instance().setRoomParameter(roomParameter);
+      await ZegoRoomkitSdk.instance().joinRoom(joinConfig);
+      console.log('mytag done', )
+    } catch (error) {
+      console.log('mytag error in joinRoom', error);
+    }
+  }
+  function callbackRegister() {
+    ZegoRoomkitSdk.instance().on('memberLeaveRoom', () => {
+      console.log('mytag touch memberLeaveRoom');
+      navigation.goBack();
+    });
+    ZegoRoomkitSdk.instance().on('inRoomEventNotify', function() {
+      console.log('mytag inRoomEventNotify', arguments)
+      console.log('mytag touch inRoomEventNotify');
+    });
+    ZegoRoomkitSdk.instance().on('buttonEvent', function() {
+      console.log('mytag buttonEvent', arguments)
+    });
+  }
+  async function getClassDetail() {
+    const {userID, roomID, pid} = route.params;
     try {
       const query = {
-        uid,
+        uid: route.params.userID,
         room_id: roomID,
         pid,
       };
+      console.log('mytag query', query);
       const classDetail = await getRoomInfo(query);
       return classDetail;
     } catch (error) {
       return null;
     }
   }
-  async function joinRoom() {
-    const token = await getToken('device32652109476901');
-    const {} = route.params;
-
-    let roomParameter = {
-      subject: 'etttte',
-      beginTimestamp: new Date().getTime(),
-      duration: 30,
-      hostNickname: 'test007',
-    };
-    let joinConfig = {
-      userName: 'usera',
-      userID: 12345678,
-      roomID: '21212987654321',
-      productID: 1253,
-      role: 1,
-      sdkToken: token,
-    };
-    console.log(roomParameter);
-    console.log(joinConfig);
-    // await ZegoRoomkitSdk.instance().setRoomParameter(roomParameter);
-    // let joinRes = await ZegoRoomkitSdk.instance().joinRoom(joinConfig);
-  }
-
-  console.log('mytag route', route);
   return (
     <View>
+      {/* <NavigationHeader navigation={navigation} title={'to delete: ClassRoom'}></NavigationHeader> */}
       <Text>this is class room</Text>
     </View>
   );

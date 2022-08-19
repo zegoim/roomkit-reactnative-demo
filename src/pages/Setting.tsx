@@ -15,10 +15,16 @@ import {
 import {RadioButton} from 'react-native-paper';
 import i18n from 'i18n-js';
 import NavigationHeader from '../components/NavigationHeader';
+import {useRoomkit} from '../context/roomkitContext';
+import {Env} from '../utils/config';
 
+interface SelectItem {
+  content: string;
+  value: number;
+}
 interface SelectModalList {
   title: string;
-  items: string[];
+  items: SelectItem[];
 }
 
 const TouchableButton: React.FC<{
@@ -26,10 +32,20 @@ const TouchableButton: React.FC<{
   needArrow?: boolean;
   style?: Object;
   fontStyle?: Object;
-  customRight?: string;
+  rightContext?: string;
   isCenterLayout?: boolean;
+  disabled?: boolean;
   onPress?: () => void;
-}> = ({children, needArrow = true, style, fontStyle, customRight, isCenterLayout = false, onPress}) => {
+}> = ({
+  children,
+  needArrow = true,
+  style,
+  fontStyle,
+  rightContext,
+  isCenterLayout = false,
+  disabled,
+  onPress,
+}) => {
   const buttonStyle = StyleSheet.create({
     container: {
       height: 57,
@@ -51,21 +67,31 @@ const TouchableButton: React.FC<{
       flexDirection: 'row',
       alignItems: 'center',
     },
+    disabled: {
+      backgroundColor: '#f3f3f3',
+      color: '#aeaeae',
+    },
   });
 
   console.log('mytag re-render', children);
   return (
     <TouchableOpacity
       onPress={() => {
+        console.log('mytag ');
         onPress && onPress();
       }}
+      disabled={disabled}
       activeOpacity={1}
-      style={[buttonStyle.container, style]}>
-      <Text style={[buttonStyle.left, fontStyle]}>{children}</Text>
+      style={[buttonStyle.container, style, !!disabled && buttonStyle.disabled]}>
+      <Text style={[buttonStyle.left, fontStyle, !!disabled && buttonStyle.disabled]}>
+        {children}
+      </Text>
       <View style={buttonStyle.right}>
-        {!!customRight && <Text style={{fontSize: 14}}>{customRight}</Text>}
+        {!!rightContext && <Text style={{fontSize: 14}}>{rightContext}</Text>}
         {!!needArrow && (
-          <Image style={{width: 14, height: 14}} source={require('../assets/image/right_arrow.png')}></Image>
+          <Image
+            style={{width: 14, height: 14}}
+            source={require('../assets/image/right_arrow.png')}></Image>
         )}
       </View>
     </TouchableOpacity>
@@ -73,18 +99,30 @@ const TouchableButton: React.FC<{
 };
 
 const EnvSelectButton: React.FC<{
+  value: Env;
   list: SelectModalList;
-  onSelected: (selectedItem: string, index: number) => void;
-}> = ({list, onSelected}) => {
+  onSelected: (selectedItem: SelectItem, index: number) => void;
+}> = ({list, value, onSelected}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
+  // const [selectedItem, setSelectedItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
+  const [selectedVal, setSelectedVal] = useState(0);
+  const [selectedContent, setSelectedContent] = useState(i18n.t('roomkit_quick_join_domestic_env'));
+
+  useEffect(() => {
+    list.items.forEach((item: SelectItem) => {
+      if (value === item.value) {
+        setSelectedVal(item.value);
+        setSelectedContent(item.content);
+      }
+    });
+  }, []);
   return (
     <View>
       <TouchableButton
         onPress={useCallback(() => {
           setModalVisible(true);
         }, [])}
-        customRight={selectedItem}>
+        rightContext={selectedContent}>
         {i18n.t('roomkit_quick_join_access_env')}
       </TouchableButton>
       <EnvModal />
@@ -132,16 +170,17 @@ const EnvSelectButton: React.FC<{
           style={modalStyle.modalContainer}>
           <View style={modalStyle.modalView}>
             <Text style={[modalStyle.modalRow, modalStyle.modalHeader]}>{list.title}</Text>
-            {list.items.map((item: any, index: number) => (
+            {list.items.map((item: SelectItem, index: number) => (
               <Text
                 onPress={() => {
                   onSelected(item, index);
-                  setSelectedItem(item);
+                  setSelectedVal(item.value);
+                  setSelectedContent(item.content);
                   setModalVisible(false);
                 }}
                 key={index}
-                style={[modalStyle.modalRow, item === selectedItem ? {color: '#2953FF'} : {}]}>
-                {item}
+                style={[modalStyle.modalRow, item.value === selectedVal ? {color: '#2953FF'} : {}]}>
+                {item.content}
               </Text>
             ))}
           </View>
@@ -151,12 +190,15 @@ const EnvSelectButton: React.FC<{
   }
 };
 
-const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: number) => void}> = ({onSelected}) => {
+const LogoutComfirmButton: React.FC<{
+  onSelected: (selectedItem: string, index: number) => void;
+  disabled?: boolean;
+}> = ({onSelected, disabled}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
   return (
     <View>
       <TouchableButton
+        disabled={disabled}
         onPress={useCallback(() => {
           setModalVisible(true);
         }, [])}
@@ -200,29 +242,25 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
       },
     });
     return (
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          console.log('mytag Modal has been closed.');
-        }}>
+      <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
             console.log('mytag touch modal toggle');
             setModalVisible(!modalVisible);
           }}
-          style={modalStyle.modalContainer}>
+          style={[modalStyle.modalContainer]}>
           <View style={modalStyle.modalView}>
             <View style={[modalStyle.modalRow]}>
-              <Text style={[modalStyle.text, modalStyle.modalHeader]}>{i18n.t('roomkit_logout_desc')}</Text>
+              <Text style={[modalStyle.text, modalStyle.modalHeader]}>
+                {i18n.t('setting_logout_title')}
+              </Text>
               <Text
                 onPress={() => {
                   console.log('mytag touch confirm');
                 }}
                 style={[modalStyle.text, {color: '#F54326'}]}>
-                {i18n.t('roomkit_confirm')}
+                {i18n.t('setting_logout_btn_ok')}
               </Text>
             </View>
             <View style={[modalStyle.modalRow]}>
@@ -231,7 +269,7 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
                   console.log('mytag touch cancel');
                 }}
                 style={[modalStyle.text]}>
-                {i18n.t('roomkit_cancel')}
+                {i18n.t('setting_logout_btn_cancle')}
               </Text>
             </View>
 
@@ -254,62 +292,80 @@ const LogoutComfirmButton: React.FC<{onSelected: (selectedItem: string, index: n
   }
 };
 
-const TouchableButtonMemo = memo(TouchableButton);
+// const TouchableButtonMemo = memo(TouchableButton);
+// const EnvSelectButtonMemo = memo(EnvSelectButton);
 
 const App: React.FC<{route: any; navigation: any}> = ({route, navigation}) => {
-  const [envItem, setEnvItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
+  // const [envItem, setEnvItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
+  const [roomkitstate, roomkitAction] = useRoomkit();
+
+  const EnvList: SelectModalList = useMemo(() => {
+    return {
+      title: i18n.t('roomkit_room_schedule_type_web'),
+      items: [
+        {content: i18n.t('roomkit_quick_join_domestic_env'), value: Env.MainLand},
+        {content: i18n.t('roomkit_quick_join_overseas_env'), value: Env.OverSeas},
+      ],
+    };
+  }, []);
+  const selectEnv = useCallback((selectedItem: SelectItem, index: number) => {
+    // setEnvItem(selectedItem.value);
+    roomkitAction.setEnv(selectedItem.value);
+  }, []);
 
   const isFromSchedule = () => {
     return route.params instanceof Object && route.params.from === 'Schedule';
   };
-  console.log('mytag route', route);
   const goSetting = () => {
     navigation.push('RoomSetting');
   };
-
   const goCustomUI = () => {
     navigation.push('CustomUI');
+  };
+  const logout = () => {
+    roomkitAction.init();
+    navigation.navigate('Login');
   };
 
   return (
     <View style={{backgroundColor: '#F5F5F5', flex: 1}}>
-      <NavigationHeader navigation={navigation} title={i18n.t('roomkit_setting')}></NavigationHeader>
-      <TouchableButtonMemo onPress={goSetting} style={styles.mgt10}>
+      <NavigationHeader
+        navigation={navigation}
+        title={i18n.t('roomkit_setting')}></NavigationHeader>
+      <TouchableButton onPress={goSetting} style={styles.mgt10}>
         {i18n.t('roomkit_setting')}
-      </TouchableButtonMemo>
-      <TouchableButtonMemo onPress={goCustomUI}>{i18n.t('roomkit_setting_custom_ui')}</TouchableButtonMemo>
-      <EnvSelectButton
-        list={{
-          title: i18n.t('roomkit_quick_join_access_env'),
-          items: [i18n.t('roomkit_quick_join_domestic_env'), i18n.t('roomkit_quick_join_overseas_env')],
-        }}
-        onSelected={useCallback((selectedItem: string, index: number) => {
-          setEnvItem(selectedItem);
-        }, [])}></EnvSelectButton>
-      <TouchableButtonMemo needArrow={false} customRight={'v1.1.1'}>
+      </TouchableButton>
+      <TouchableButton onPress={goCustomUI}>{i18n.t('roomkit_setting_custom_ui')}</TouchableButton>
+
+      <EnvSelectButton value={roomkitstate.env} list={EnvList} onSelected={selectEnv} />
+
+      <TouchableButton needArrow={false} rightContext={'v1.1.1'}>
         {i18n.t('roomkit_setting_version')}
-      </TouchableButtonMemo>
-      <TouchableButtonMemo style={styles.mgt10}>{i18n.t('roomkit_feedback')}</TouchableButtonMemo>
-      <TouchableButtonMemo>{i18n.t('roomkit_setting_upload_log')}</TouchableButtonMemo>
-      <TouchableButtonMemo style={styles.mgt10} needArrow={false} isCenterLayout={true}>
+      </TouchableButton>
+      <TouchableButton disabled={true} style={styles.mgt10}>
+        {i18n.t('roomkit_feedback')}
+      </TouchableButton>
+      <TouchableButton disabled={true}>{i18n.t('roomkit_setting_upload_log')}</TouchableButton>
+      <TouchableButton disabled={true} style={styles.mgt10} needArrow={false} isCenterLayout={true}>
         {i18n.t('roomkit_setting_cancel_account')}
-      </TouchableButtonMemo>
+      </TouchableButton>
 
       {!!isFromSchedule() ? (
-        <TouchableButtonMemo fontStyle={{color: '#F54326'}} needArrow={false} isCenterLayout={true}>
+        <TouchableButton
+          onPress={logout}
+          fontStyle={{color: '#F54326'}}
+          needArrow={false}
+          isCenterLayout={true}>
           {i18n.t('roomkit_setting_logout_room')}
-        </TouchableButtonMemo>
+        </TouchableButton>
       ) : (
         <LogoutComfirmButton
+          disabled={true}
           onSelected={useCallback((selectedItem: string, index: number) => {
             // logout todo
             // setEnvItem(selectedItem);
           }, [])}></LogoutComfirmButton>
       )}
-
-      {/* <TouchableButtonMemo needArrow={false} isCenterLayout={true} fontStyle={{color: '#F54326'}}>
-        {i18n.t('roomkit_logout')}
-      </TouchableButtonMemo> */}
     </View>
   );
 };
