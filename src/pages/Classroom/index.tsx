@@ -1,18 +1,14 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import i18n from 'i18n-js';
-import NavigationHeader from '../components/NavigationHeader';
-import {Switch} from 'react-native-paper';
-import {getSdkToken, getRoomInfo} from '../utils/fetch';
-import {getToken} from '../utils/utils';
-import md5 from 'md5';
+import React, {useCallback, useEffect} from 'react';
+import {Text, View} from 'react-native';
+import {getRoomInfoApi} from '../../utils/fetch';
+import {getToken} from '../../utils/utils';
 import ZegoRoomkitSdk, {
   ZegoRoomkitJoinRoomConfig,
   setRoomParameterConfig,
 } from 'zego_roomkit_reactnative_sdk';
 
-import {ClassType, SecretID} from '../utils/config';
-import {useRoomkit} from '../context/roomkitContext';
+import {SecretID} from '../../utils/config';
+import {useRoomkit} from '../../context/roomkitContext';
 import {useFocusEffect} from '@react-navigation/native';
 
 const App: React.FC<{
@@ -28,27 +24,17 @@ const App: React.FC<{
     };
   };
 }> = ({navigation, route}) => {
-  const [roomkitstate, roomkitAction] = useRoomkit();
-  useEffect(() => {
-    console.log('mytag touch here');
-    // joinRoom();
-    return () => {
-      console.log('mytag unmounted');
-      // navigation.goBack();
-    };
-  });
-
+  const [roomkitstate] = useRoomkit();
   useFocusEffect(
     useCallback(() => {
       console.log('mytag focus');
-      joinRoom();
+      // joinRoom();
       // Do something when the screen is focused
       // getClassList();
       return () => {
         console.log('mytag unfocues classRoom');
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
 
@@ -94,7 +80,6 @@ const App: React.FC<{
         ...roomkitstate.roomUIConfig,
         bottomBarHiddenMode: !!isBottomBarHiddenMode ? 1 : 2,
       });
-
       // ZegoRoomkitSdk.instance().setAdvancedConfig({
       //   domain: Domain,
       // });
@@ -120,7 +105,7 @@ const App: React.FC<{
     });
   }
   async function getClassDetail() {
-    const {userID, roomID, pid} = route.params;
+    const {roomID, pid} = route.params;
     try {
       const query = {
         uid: route.params.userID,
@@ -128,7 +113,7 @@ const App: React.FC<{
         pid,
       };
       console.log('mytag query', query);
-      const classDetail = await getRoomInfo(query);
+      const classDetail = await getRoomInfoApi(query);
       return classDetail;
     } catch (error) {
       return null;
@@ -137,17 +122,17 @@ const App: React.FC<{
   return (
     <View>
       {/* <NavigationHeader navigation={navigation} title={'to delete: ClassRoom'}></NavigationHeader> */}
-      <Text onPress={() => navigation.goBack()} style={{color: 'black', fontSize: 20,padding: 20}}>
+      <Text onPress={() => navigation.goBack()} style={{color: 'black', fontSize: 20, padding: 20}}>
         返回上一页
       </Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  mgt10: {
-    marginTop: 10,
-  },
-});
+// const styles = StyleSheet.create({
+//   mgt10: {
+//     marginTop: 10,
+//   },
+// });
 
 export default App;

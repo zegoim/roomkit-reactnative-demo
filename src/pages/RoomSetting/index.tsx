@@ -1,9 +1,9 @@
 import React, {memo, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import i18n from 'i18n-js';
-import NavigationHeader from '../components/NavigationHeader';
+import NavigationHeader from '../../components/NavigationHeader';
 import {Switch} from 'react-native-paper';
-import {useRoomkit} from '../context/roomkitContext';
+import {useRoomkit} from '../../context/roomkitContext';
 
 const SwitchButton: React.FC<{
   content: string;
@@ -52,9 +52,7 @@ const App: React.FC<{navigation: any}> = ({navigation}) => {
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={{backgroundColor: '#F5F5F5', flex: 1}}>
-      <NavigationHeader
-        navigation={navigation}
-        title={i18n.t('roomkit_setting_room')}></NavigationHeader>
+      <NavigationHeader navigation={navigation} title={i18n.t('roomkit_setting_room')} />
       <SwitchButtonMemo
         value={roomSettings.isMicrophoneOnWhenJoiningRoom}
         getSwitch={roomkitAction.setIsMicrophoneOnWhenJoiningRoom}

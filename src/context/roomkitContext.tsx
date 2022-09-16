@@ -1,14 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-  type PropsWithChildren,
-  useReducer,
-} from 'react';
+import React, {useContext, createContext, useReducer} from 'react';
+import {useEffect} from 'react';
 import {Env} from '../utils/config';
 import {getToken, storage} from '../utils/utils';
-
 
 export interface RoomSettings {
   isMicrophoneOnWhenJoiningRoom: boolean;
@@ -17,7 +10,6 @@ export interface RoomSettings {
   previewVideoMirrorMode: boolean;
   videoFitMode: boolean;
 }
-
 export interface RoomUIConfig {
   enableHandwriting: boolean;
   isFixedInOutMessage: boolean;
@@ -31,7 +23,6 @@ export interface RoomUIConfig {
   isMicrophoneHidden: boolean;
   isMoreHidden: boolean;
 }
-
 export interface RoomkitAction {
   // 数据初始化
   init: () => void;
@@ -56,7 +47,6 @@ export interface RoomkitAction {
   setIsMicrophoneHidden: (val: boolean) => void;
   setIsMoreHidden: (val: boolean) => void;
 }
-
 export interface RoomkitInitState {
   count: number;
   env: Env;
@@ -90,9 +80,6 @@ const initialState = {
     isMoreHidden: false,
   },
 };
-
-
-
 
 function roomkitReducer(state: RoomkitInitState, action: {type: any; payload?: any}) {
   let _state = JSON.parse(JSON.stringify(state));
@@ -128,14 +115,16 @@ const RoomkitHooks = () => {
   const init = async () => {
     let _state = JSON.parse(JSON.stringify(initialState));
     const rawRoomSettings = await storage.getItem('roomSettings');
-    if (!!rawRoomSettings) Object.assign(_state.roomSettings, JSON.parse(rawRoomSettings));
+    if (rawRoomSettings) Object.assign(_state.roomSettings, JSON.parse(rawRoomSettings));
 
     const rawRoomUIConfig = await storage.getItem('roomUIConfig');
-    if (!!rawRoomUIConfig) Object.assign(_state.roomUIConfig, JSON.parse(rawRoomUIConfig));
+    if (rawRoomUIConfig) Object.assign(_state.roomUIConfig, JSON.parse(rawRoomUIConfig));
 
+    console.log('mytag rawRoomUIConfig', rawRoomUIConfig);
     dispatch({type: 'init', payload: {stateWithStorage: _state}});
   };
   const setEnv = (env: Env) => {
+    console.log('mytag env', env);
     dispatch({type: 'updateEnv', payload: {env}});
   };
   const updateToken = async (deviceID: string) => {
@@ -226,8 +215,12 @@ export const useRoomkit = () => {
 };
 
 export const RoomkitProvider: React.FC<{children: JSX.Element}> = ({children}) => {
-  // 封装 useReducer
+  // 下发状态，然后在子组件中通过自定义 hook 获取context
   const roomkitHooks = RoomkitHooks();
-
+  console.log('mytag re-render ============');
+  useEffect(() => {
+    // 初始化，从storage 获取之前的设置。
+    roomkitHooks.init();
+  }, []);
   return <RoomKitContext.Provider value={roomkitHooks}>{children}</RoomKitContext.Provider>;
 };

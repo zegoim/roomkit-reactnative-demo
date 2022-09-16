@@ -16,34 +16,24 @@
  * @format
  */
 
-import React, {useEffect, useContext, createContext, type PropsWithChildren} from 'react';
-import {
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  Button,
-  I18nManager,
-  StatusBar,
-  SafeAreaView,
-} from 'react-native';
+import React, {useEffect, useReducer} from 'react';
+import {I18nManager, StatusBar, SafeAreaView} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
 import * as RNLocalize from 'react-native-localize';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {RoomkitProvider} from './context/roomkitContext';
 
-import IndexInput from './pages/IndexInput';
-import Login from './pages/Login';
-import Setting from './pages/Setting';
+import Login from './pages/Login/index';
+import Setting from './pages/Setting/index';
 import RoomSetting from './pages/RoomSetting';
-import CustomUI from './pages/CustomUI';
-import Schedule from './pages/Schedule';
-import Classroom from './pages/Classroom';
+import CustomUI from './pages/CustomUI/index';
+import Schedule from './pages/Schedule/index';
+import Classroom from './pages/Classroom/index';
 import {toastConfig} from './utils/CustomToast';
+import {useState} from 'react';
 
 const translationGetters = {
   // lazy requires
@@ -57,7 +47,14 @@ const translationGetters = {
 //   (key, config) => (config ? key + JSON.stringify(config) : key),
 // );
 
+ErrorUtils.setGlobalHandler(error => {
+  console.log('ErrorUtils发现了语法错误，避免了崩溃，具体报错信息：');
+  console.log(error.name, error.message, [{text: 'OK'}]);
+  Toast.show({text1: error.message, type: 'error'});
+});
+
 const setI18nConfig = () => {
+  console.log('mytag 12312', 12312);
   // 如果没有可用的语言则回退到中文
   const fallback = {languageTag: 'zh', isRTL: false};
   // 获取 最佳语言标签及其阅读方向
@@ -73,31 +70,24 @@ const setI18nConfig = () => {
   i18n.locale = languageTag;
 };
 
-const DetailsScreen: React.FC<{navigation: any}> = ({navigation}) => {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Details Screen</Text>
-      <Text>{i18n.t('hello')}</Text>
-      <Button title="Go to Details... again" onPress={() => navigation.push('Details')} />
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-    </View>
-  );
-};
-
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  // 要在 created 阶段设置。 如果在 didmount 阶段就太晚了。
-  setI18nConfig();
+  // 初始化 i18n
+  useState(() => setI18nConfig());
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
   useEffect(() => {
-    console.log('mytag APP.tsx componentDidMount ');
     RNLocalize.addEventListener('change', handleLocalizationChange);
     return () => {
-      console.log('mytag APP.tsx componentWillUnmount ');
       RNLocalize.removeEventListener('change', handleLocalizationChange);
     };
   }, []);
+
+  const handleLocalizationChange = (e: any) => {
+    console.log('mytag locallisze change e', e);
+    setI18nConfig();
+    forceUpdate();
+  };
 
   const screens = [
     {
@@ -135,7 +125,6 @@ const App = () => {
       },
       component: Setting,
     },
-
     {
       name: 'CustomUI',
       options: {
@@ -143,18 +132,15 @@ const App = () => {
       },
       component: CustomUI,
     },
-    {
-      name: 'Details',
-      options: {
-        headerShown: false,
-      },
-      component: DetailsScreen,
-    },
+    // {
+    //   name: 'Details',
+    //   options: {
+    //     headerShown: false,
+    //   },
+    //   component: DetailsScreen,
+    // },
   ];
 
-  const handleLocalizationChange = () => {
-    setI18nConfig();
-  };
   return (
     <>
       <RoomkitProvider>
@@ -162,13 +148,14 @@ const App = () => {
           <NavigationContainer>
             <StatusBar backgroundColor="white" barStyle="dark-content" />
             <Stack.Navigator>
-              {screens.map((screenItem, index) => {
+              {screens.map(screenItem => {
                 return (
                   <Stack.Screen
                     key={screenItem.name}
                     name={screenItem.name}
                     options={{...screenItem.options}}
-                    component={screenItem.component}></Stack.Screen>
+                    component={screenItem.component}
+                  />
                 );
               })}
             </Stack.Navigator>
@@ -179,25 +166,5 @@ const App = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-    backgroundColor: '#FFFFFF',
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;

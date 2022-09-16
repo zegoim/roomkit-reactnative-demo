@@ -112,22 +112,22 @@ export const POST = (url: string, options: ajaxOptions) => ajax(url, {...options
 //   });
 
 // 登录
-export function getSdkToken(params: any) {
+export function getSdkTokenApi(params: any) {
   return POST('/auth/get_sdk_token', {data: {...params}, isEduService: false});
 }
 
 // 获取房间信息，教育云接口
-export function getRoomInfo(params: any) {
+export function getRoomInfoApi(params: any) {
   return POST('/room/get', {data: {...params}, isEduService: true});
 }
 
-export function createClassRoom(params: any) {
+export function createClassRoomApi(params: any) {
   return POST('/room/create', {data: {...params}, isEduService: true});
 }
 
-export function getClassRoomList(params: any) {
+export function getClassRoomListApi(params: any) {
   return POST('/room/query', {data: {...params}, isEduService: true});
 }
-export function deleteClass(params: any) {
+export function deleteClassApi(params: any) {
   return POST('/room/cancel', {data: {...params}, isEduService: true});
 }

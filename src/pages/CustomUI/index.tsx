@@ -1,14 +1,10 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {memo} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import i18n from 'i18n-js';
-import NavigationHeader from '../components/NavigationHeader';
+import NavigationHeader from '../../components/NavigationHeader';
 import {Switch} from 'react-native-paper';
-import {useRoomkit} from '../context/roomkitContext';
-
-interface SelectModalList {
-  title: string;
-  items: string[];
-}
+import {useRoomkit} from '../../context/roomkitContext';
+import {useCallback} from 'react';
 
 const SwitchButton: React.FC<{
   content: string;
@@ -38,9 +34,11 @@ const SwitchButton: React.FC<{
       alignItems: 'center',
     },
   });
-  const onToggleSwitch = () => {
+  console.log('mytag re-render in custom ui', content);
+
+  const onToggleSwitch = useCallback(() => {
     !!getSwitch && getSwitch(!value);
-  };
+  }, [getSwitch, value]);
   return (
     <View style={[buttonStyle.container, style]}>
       <Text style={[buttonStyle.left]}>{content}</Text>
@@ -49,18 +47,15 @@ const SwitchButton: React.FC<{
   );
 };
 
-
 const SwitchButtonMemo = memo(SwitchButton);
 
 const App: React.FC<{navigation: any}> = ({navigation}) => {
   const [roomkitstate, roomkitAction] = useRoomkit();
-  const {roomSettings, roomUIConfig} = roomkitstate;
+  const {roomUIConfig} = roomkitstate;
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={{backgroundColor: '#F5F5F5', flex: 1}}>
-      <NavigationHeader
-        navigation={navigation}
-        title={i18n.t('roomkit_setting_custom_ui')}></NavigationHeader>
+      <NavigationHeader navigation={navigation} title={i18n.t('roomkit_setting_custom_ui')} />
       <SwitchButtonMemo
         value={roomUIConfig.isBottomBarHiddenMode}
         getSwitch={roomkitAction.setIsBottomBarHiddenMode}

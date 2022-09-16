@@ -1,33 +1,10 @@
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  Button,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  StatusBar,
-  TextInput,
-  Modal,
-  TouchableHighlight,
-  SectionList,
-} from 'react-native';
-import {RadioButton} from 'react-native-paper';
+import {Button, StyleSheet, Text, View, Image, TouchableOpacity, Modal} from 'react-native';
+import {Env} from '../../../utils/config';
+import {SelectModalList, SelectItem} from '../../../types/types';
 import i18n from 'i18n-js';
-import NavigationHeader from '../components/NavigationHeader';
-import {useRoomkit} from '../context/roomkitContext';
-import {Env} from '../utils/config';
 
-interface SelectItem {
-  content: string;
-  value: number;
-}
-interface SelectModalList {
-  title: string;
-  items: SelectItem[];
-}
-
-const TouchableButton: React.FC<{
+export const ArrowButton: React.FC<{
   children: string;
   needArrow?: boolean;
   style?: Object;
@@ -73,7 +50,7 @@ const TouchableButton: React.FC<{
     },
   });
 
-  console.log('mytag re-render', children);
+  console.log('mytag re-render in setting com', children);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -91,14 +68,16 @@ const TouchableButton: React.FC<{
         {!!needArrow && (
           <Image
             style={{width: 14, height: 14}}
-            source={require('../assets/image/right_arrow.png')}></Image>
+            source={require('../../../assets/image/right_arrow.png')}
+          />
         )}
       </View>
     </TouchableOpacity>
   );
 };
 
-const EnvSelectButton: React.FC<{
+const ArrowButtonMemo = memo(ArrowButton);
+export const EnvSelectButton: React.FC<{
   value: Env;
   list: SelectModalList;
   onSelected: (selectedItem: SelectItem, index: number) => void;
@@ -118,13 +97,13 @@ const EnvSelectButton: React.FC<{
   }, []);
   return (
     <View>
-      <TouchableButton
+      <ArrowButtonMemo
         onPress={useCallback(() => {
           setModalVisible(true);
         }, [])}
         rightContext={selectedContent}>
         {i18n.t('roomkit_quick_join_access_env')}
-      </TouchableButton>
+      </ArrowButtonMemo>
       <EnvModal />
     </View>
   );
@@ -190,14 +169,14 @@ const EnvSelectButton: React.FC<{
   }
 };
 
-const LogoutComfirmButton: React.FC<{
+export const LogoutComfirmButton: React.FC<{
   onSelected: (selectedItem: string, index: number) => void;
   disabled?: boolean;
 }> = ({onSelected, disabled}) => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View>
-      <TouchableButton
+      <ArrowButtonMemo
         disabled={disabled}
         onPress={useCallback(() => {
           setModalVisible(true);
@@ -206,7 +185,7 @@ const LogoutComfirmButton: React.FC<{
         isCenterLayout={true}
         fontStyle={{color: '#F54326'}}>
         {i18n.t('roomkit_setting_logout')}
-      </TouchableButton>
+      </ArrowButtonMemo>
       <LogoutModal />
     </View>
   );
@@ -266,7 +245,7 @@ const LogoutComfirmButton: React.FC<{
             <View style={[modalStyle.modalRow]}>
               <Text
                 onPress={() => {
-                  console.log('mytag touch cancel');
+                  setModalVisible(false);
                 }}
                 style={[modalStyle.text]}>
                 {i18n.t('setting_logout_btn_cancle')}
@@ -291,89 +270,3 @@ const LogoutComfirmButton: React.FC<{
     );
   }
 };
-
-// const TouchableButtonMemo = memo(TouchableButton);
-// const EnvSelectButtonMemo = memo(EnvSelectButton);
-
-const App: React.FC<{route: any; navigation: any}> = ({route, navigation}) => {
-  // const [envItem, setEnvItem] = useState(i18n.t('roomkit_quick_join_domestic_env'));
-  const [roomkitstate, roomkitAction] = useRoomkit();
-
-  const EnvList: SelectModalList = useMemo(() => {
-    return {
-      title: i18n.t('roomkit_room_schedule_type_web'),
-      items: [
-        {content: i18n.t('roomkit_quick_join_domestic_env'), value: Env.MainLand},
-        {content: i18n.t('roomkit_quick_join_overseas_env'), value: Env.OverSeas},
-      ],
-    };
-  }, []);
-  const selectEnv = useCallback((selectedItem: SelectItem, index: number) => {
-    // setEnvItem(selectedItem.value);
-    roomkitAction.setEnv(selectedItem.value);
-  }, []);
-
-  const isFromSchedule = () => {
-    return route.params instanceof Object && route.params.from === 'Schedule';
-  };
-  const goSetting = () => {
-    navigation.push('RoomSetting');
-  };
-  const goCustomUI = () => {
-    navigation.push('CustomUI');
-  };
-  const logout = () => {
-    roomkitAction.init();
-    navigation.navigate('Login');
-  };
-
-  return (
-    <View style={{backgroundColor: '#F5F5F5', flex: 1}}>
-      <NavigationHeader
-        navigation={navigation}
-        title={i18n.t('roomkit_setting')}></NavigationHeader>
-      <TouchableButton onPress={goSetting} style={styles.mgt10}>
-        {i18n.t('roomkit_setting')}
-      </TouchableButton>
-      <TouchableButton onPress={goCustomUI}>{i18n.t('roomkit_setting_custom_ui')}</TouchableButton>
-
-      <EnvSelectButton value={roomkitstate.env} list={EnvList} onSelected={selectEnv} />
-
-      <TouchableButton needArrow={false} rightContext={'v1.1.1'}>
-        {i18n.t('roomkit_setting_version')}
-      </TouchableButton>
-      <TouchableButton disabled={true} style={styles.mgt10}>
-        {i18n.t('roomkit_feedback')}
-      </TouchableButton>
-      <TouchableButton disabled={true}>{i18n.t('roomkit_setting_upload_log')}</TouchableButton>
-      <TouchableButton disabled={true} style={styles.mgt10} needArrow={false} isCenterLayout={true}>
-        {i18n.t('roomkit_setting_cancel_account')}
-      </TouchableButton>
-
-      {!!isFromSchedule() ? (
-        <TouchableButton
-          onPress={logout}
-          fontStyle={{color: '#F54326'}}
-          needArrow={false}
-          isCenterLayout={true}>
-          {i18n.t('roomkit_setting_logout_room')}
-        </TouchableButton>
-      ) : (
-        <LogoutComfirmButton
-          disabled={true}
-          onSelected={useCallback((selectedItem: string, index: number) => {
-            // logout todo
-            // setEnvItem(selectedItem);
-          }, [])}></LogoutComfirmButton>
-      )}
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  mgt10: {
-    marginTop: 10,
-  },
-});
-
-export default App;
