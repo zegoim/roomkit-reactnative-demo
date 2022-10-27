@@ -1,7 +1,7 @@
-import React, {useContext, createContext, useReducer} from 'react';
-import {useEffect} from 'react';
-import {Env} from '../utils/config';
-import {getToken, storage} from '../utils/utils';
+import React, { useContext, createContext, useReducer } from 'react';
+import { useEffect } from 'react';
+import { Env } from '../config';
+import { getToken, storage } from '../utils/utils';
 
 export interface RoomSettings {
   isMicrophoneOnWhenJoiningRoom: boolean;
@@ -46,6 +46,9 @@ export interface RoomkitAction {
   setIsCameraHidden: (val: boolean) => void;
   setIsMicrophoneHidden: (val: boolean) => void;
   setIsMoreHidden: (val: boolean) => void;
+
+  // avatar
+  setIsAvatarHidden: (val: boolean) => void;
 }
 export interface RoomkitInitState {
   count: number;
@@ -53,11 +56,12 @@ export interface RoomkitInitState {
   token: string;
   roomSettings: RoomSettings;
   roomUIConfig: RoomUIConfig;
+  isAvatarHidden: boolean;
 }
 
-const initialState = {
+const initialState: RoomkitInitState = {
   count: 0,
-  env: Env.MainLand,
+  env: Env.OverSeas,
   token: '',
   roomSettings: {
     isMicrophoneOnWhenJoiningRoom: false,
@@ -79,30 +83,36 @@ const initialState = {
     isMicrophoneHidden: false,
     isMoreHidden: false,
   },
+  isAvatarHidden: false
 };
 
-function roomkitReducer(state: RoomkitInitState, action: {type: any; payload?: any}) {
+function roomkitReducer(state: RoomkitInitState, action: { type: any; payload?: any }) {
   let _state = JSON.parse(JSON.stringify(state));
 
   if (action.type === 'init') {
-    const {stateWithStorage} = action.payload;
+    const { stateWithStorage } = action.payload;
     _state = stateWithStorage;
   } else if (action.type === 'updateEnv') {
-    const {env} = action.payload;
+    const { env } = action.payload;
     _state.env = env;
   } else if (action.type === 'updateRoomSettings') {
-    const {key, val} = action.payload;
+    const { key, val } = action.payload;
     // @ts-ignore
     _state.roomSettings[key] = val;
     storage.setItem('roomSettings', JSON.stringify(_state.roomSettings));
   } else if (action.type === 'updateRoomUIConfig') {
-    const {key, val} = action.payload;
+    const { key, val } = action.payload;
     // @ts-ignore
     _state.roomUIConfig[key] = val;
     storage.setItem('roomUIConfig', JSON.stringify(_state.roomUIConfig));
   } else if (action.type === 'updateToken') {
-    const {token} = action.payload;
+    const { token } = action.payload;
     _state.token = token;
+  } else if(action.type === "setIsAvatarHidden"){
+    const { key, val } = action.payload;
+    console.log('mytag key, val', key, val)
+    _state.isAvatarHidden = val;
+
   }
 
   return _state;
@@ -121,65 +131,70 @@ const RoomkitHooks = () => {
     if (rawRoomUIConfig) Object.assign(_state.roomUIConfig, JSON.parse(rawRoomUIConfig));
 
     console.log('mytag rawRoomUIConfig', rawRoomUIConfig);
-    dispatch({type: 'init', payload: {stateWithStorage: _state}});
+    dispatch({ type: 'init', payload: { stateWithStorage: _state } });
   };
   const setEnv = (env: Env) => {
     console.log('mytag env', env);
-    dispatch({type: 'updateEnv', payload: {env}});
+    dispatch({ type: 'updateEnv', payload: { env } });
   };
   const updateToken = async (deviceID: string) => {
+    console.log('mytag updateToken deviceID', deviceID)
     const token = await getToken(deviceID);
-    dispatch({type: 'updateToken', payload: {token}});
+    console.log('mytag updateToken token', token)
+    dispatch({ type: 'updateToken', payload: { token } });
     return token;
   };
   // roomSettings
   const setIsMicrophoneOnWhenJoiningRoom = (val: boolean) => {
-    dispatch({type: 'updateRoomSettings', payload: {key: 'isMicrophoneOnWhenJoiningRoom', val}});
+    dispatch({ type: 'updateRoomSettings', payload: { key: 'isMicrophoneOnWhenJoiningRoom', val } });
   };
   const setIsCameraOnWhenJoiningRoom = (val: boolean) => {
-    dispatch({type: 'updateRoomSettings', payload: {key: 'isCameraOnWhenJoiningRoom', val}});
+    dispatch({ type: 'updateRoomSettings', payload: { key: 'isCameraOnWhenJoiningRoom', val } });
   };
   const setBeautifyMode = (val: boolean) => {
-    dispatch({type: 'updateRoomSettings', payload: {key: 'beautifyMode', val}});
+    dispatch({ type: 'updateRoomSettings', payload: { key: 'beautifyMode', val } });
   };
   const setPreviewVideoMirrorMode = (val: boolean) => {
-    dispatch({type: 'updateRoomSettings', payload: {key: 'previewVideoMirrorMode', val}});
+    dispatch({ type: 'updateRoomSettings', payload: { key: 'previewVideoMirrorMode', val } });
   };
   const setVideoFitMode = (val: boolean) => {
-    dispatch({type: 'updateRoomSettings', payload: {key: 'videoFitMode', val}});
+    dispatch({ type: 'updateRoomSettings', payload: { key: 'videoFitMode', val } });
   };
 
   // roomUIConfig
   const setIsMemberLeaveRoomMessageHidden = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isMemberLeaveRoomMessageHidden', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isMemberLeaveRoomMessageHidden', val } });
   };
   const setEnableHandwriting = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'enableHandwriting', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'enableHandwriting', val } });
   };
   const SetIsFixedInOutMessage = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isFixedInOutMessage', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isFixedInOutMessage', val } });
   };
   // CustomUi page
   const setIsBottomBarHiddenMode = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isBottomBarHiddenMode', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isBottomBarHiddenMode', val } });
   };
   const setIsChatHidden = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isChatHidden', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isChatHidden', val } });
   };
   const setIsAttendeesHidden = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isAttendeesHidden', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isAttendeesHidden', val } });
   };
   const setIsShareHidden = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isShareHidden', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isShareHidden', val } });
   };
   const setIsCameraHidden = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isCameraHidden', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isCameraHidden', val } });
   };
   const setIsMicrophoneHidden = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isMicrophoneHidden', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isMicrophoneHidden', val } });
   };
   const setIsMoreHidden = (val: boolean) => {
-    dispatch({type: 'updateRoomUIConfig', payload: {key: 'isMoreHidden', val}});
+    dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isMoreHidden', val } });
+  };
+  const setIsAvatarHidden = (val: boolean) => {
+    dispatch({ type: 'setIsAvatarHidden', payload: { key: 'isAvatarHidden', val } });
   };
 
   return {
@@ -202,6 +217,7 @@ const RoomkitHooks = () => {
     setIsCameraHidden,
     setIsMicrophoneHidden,
     setIsMoreHidden,
+    setIsAvatarHidden
   };
 };
 
@@ -210,11 +226,11 @@ const RoomKitContext = createContext({});
 
 export const useRoomkit = () => {
   // @ts-ignore
-  const {state, ...action} = useContext(RoomKitContext);
+  const { state, ...action } = useContext(RoomKitContext);
   return [state, action] as [RoomkitInitState, RoomkitAction];
 };
 
-export const RoomkitProvider: React.FC<{children: JSX.Element}> = ({children}) => {
+export const RoomkitProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
   // 下发状态，然后在子组件中通过自定义 hook 获取context
   const roomkitHooks = RoomkitHooks();
   console.log('mytag re-render ============');

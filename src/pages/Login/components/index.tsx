@@ -1,13 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Modal} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Modal } from 'react-native';
 import i18n from 'i18n-js';
-import {SelectModalList, SelectItem} from '../../../types/types';
-import {Env} from '../../../utils/config';
-import {RadioButton} from 'react-native-paper';
+import { SelectModalList, SelectItem } from '../../../types/types';
+import { Env } from '../../../config';
+import { RadioButton } from 'react-native-paper';
+import RadioGroup from 'react-native-radio-buttons-group';
+
+
 const ENV_VAL = {
   CHINA: 'roomkit_quick_join_access_env_mainland',
   INTERNATIONAL: 'roomkit_quick_join_access_env_overseas',
 };
+
 
 export const Logo: React.FC<{}> = () => {
   const logoStyls = StyleSheet.create({
@@ -22,7 +26,7 @@ export const Logo: React.FC<{}> = () => {
   return <Image style={logoStyls.loginLogo} source={require('../../../assets/image/logo.png')} />;
 };
 
-export const SettingBtn: React.FC<{navigation: any}> = ({navigation}) => {
+export const SettingBtn: React.FC<{ navigation: any }> = ({ navigation }) => {
   const settingStyle = StyleSheet.create({
     settingBtnText: {
       fontSize: 18,
@@ -31,7 +35,7 @@ export const SettingBtn: React.FC<{navigation: any}> = ({navigation}) => {
     },
   });
   return (
-    <View style={{alignItems: 'flex-end'}}>
+    <View style={{ alignItems: 'flex-end' }}>
       <Text
         onPress={() => {
           navigation.push('Setting');
@@ -44,7 +48,7 @@ export const SettingBtn: React.FC<{navigation: any}> = ({navigation}) => {
   );
 };
 
-export const InputBox: React.FC<{placeholder: string; onChangeText?: (text: string) => void}> = ({
+export const InputBox: React.FC<{ placeholder: string; onChangeText?: (text: string) => void }> = ({
   placeholder,
   onChangeText,
 }) => {
@@ -58,6 +62,8 @@ export const InputBox: React.FC<{placeholder: string; onChangeText?: (text: stri
       backgroundColor: '#F4F4F4',
       borderRadius: 6,
       paddingLeft: 16,
+      paddingVertical: 12,
+
     },
   });
   console.log('mytag input box has rerender', placeholder);
@@ -66,7 +72,7 @@ export const InputBox: React.FC<{placeholder: string; onChangeText?: (text: stri
       <TextInput
         style={inputBoxStyle.inputBoxInput}
         placeholder={placeholder}
-        onChangeText={onChangeText ? onChangeText : () => {}}
+        onChangeText={onChangeText ? onChangeText : () => { }}
       />
     </View>
   );
@@ -76,7 +82,7 @@ export const SelectBox: React.FC<{
   placeholder: string;
   list: SelectModalList;
   onSelected: (selectedItem: SelectItem, index: number) => void;
-}> = ({placeholder, list, onSelected}) => {
+}> = ({ placeholder, list, onSelected }) => {
   const seletBoxStyle = StyleSheet.create({
     inputBox: {
       marginHorizontal: 30,
@@ -86,6 +92,9 @@ export const SelectBox: React.FC<{
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedVal, setSelectedVal] = useState(0);
   const [selectedContent, setSelectedContent] = useState('');
+
+  console.log('mytag list', list)
+
   return (
     <View style={[seletBoxStyle.inputBox]}>
       <SelectInput />
@@ -115,12 +124,12 @@ export const SelectBox: React.FC<{
           setModalVisible(!modalVisible);
         }}
         activeOpacity={1}
-        style={[inputStyle.inputBoxInput, inputStyle.selectBox, {alignItems: 'center'}]}>
-        <Text style={{fontSize: 16, color: selectedVal ? '#0F0F0F' : '#868CA0'}}>
+        style={[inputStyle.inputBoxInput, inputStyle.selectBox, { alignItems: 'center' }]}>
+        <Text style={{ fontSize: 16, color: selectedVal ? '#0F0F0F' : '#868CA0' }}>
           {selectedVal ? selectedContent : placeholder}
         </Text>
         <Image
-          style={{width: 12, height: 12}}
+          style={{ width: 12, height: 12 }}
           source={require('../../../assets/image/down_arrow.png')}></Image>
       </TouchableOpacity>
     );
@@ -167,7 +176,7 @@ export const SelectBox: React.FC<{
           }}
           style={modalStyle.modalContainer}>
           <View style={modalStyle.modalView}>
-            <Text style={[modalStyle.modalRow, modalStyle.modalHeader]}>{list.title}</Text>
+            <Text style={[modalStyle.modalRow, modalStyle.modalHeader]}>{list && list.title}</Text>
             {list.items.map((item: SelectItem, index: number) => (
               <Text
                 onPress={() => {
@@ -177,7 +186,7 @@ export const SelectBox: React.FC<{
                   setModalVisible(false);
                 }}
                 key={index}
-                style={[modalStyle.modalRow, item.value === selectedVal ? {color: '#2953FF'} : {}]}>
+                style={[modalStyle.modalRow, item.value === selectedVal ? { color: '#2953FF' } : {}]}>
                 {item.content}
               </Text>
             ))}
@@ -188,7 +197,7 @@ export const SelectBox: React.FC<{
   }
 };
 
-export const Footer: React.FC<{children: JSX.Element}> = ({children}) => {
+export const Footer: React.FC<{ children: JSX.Element }> = ({ children }) => {
   return (
     <View
       style={{
@@ -216,7 +225,7 @@ export const EnvTitle: React.FC<{}> = () => {
       height: 0,
       width: 113,
     },
-    text: {paddingHorizontal: 11, fontSize: 13, color: '#AFB6BE'},
+    text: { paddingHorizontal: 11, fontSize: 13, color: '#AFB6BE' },
     tips: {
       width: 14,
       height: 14,
@@ -234,7 +243,13 @@ export const EnvTitle: React.FC<{}> = () => {
   );
 };
 
-export const EnvChooseButton: React.FC<{envValue: Env; onChoose: (env: number) => void}> = ({
+//     onChoose(value === i18n.t(ENV_VAL.CHINA) ? Env.MainLand : Env.OverSeas);
+
+//       label={i18n.t(ENV_VAL.CHINA)}
+//       value={i18n.t(ENV_VAL.CHINA)}
+
+
+export const EnvChooseButton: React.FC<{ envValue: Env; onChoose: (env: number) => void }> = ({
   envValue,
   onChoose,
 }) => {
@@ -244,42 +259,47 @@ export const EnvChooseButton: React.FC<{envValue: Env; onChoose: (env: number) =
       justifyContent: 'center',
       marginBottom: 20,
     },
-    button: {paddingVertical: 0, paddingHorizontal: 0},
+    button: { paddingVertical: 0, paddingHorizontal: 0 },
     leftButton: {
-      paddingRight: 60,
+      paddingRight: 30,
     },
   });
-  const [radioContent, setRadioContent] = React.useState(i18n.t(ENV_VAL.CHINA));
+  const radioButtonsData = [{
+    id: String(Env.MainLand), // acts as primary key, should be unique and non-empty string
+    label: i18n.t(ENV_VAL.CHINA),
+    color: "#3456F6",
+    size: 18,
+    labelStyle: envStyles.leftButton,
+    selected: envValue === Env.MainLand ? true : false, // 初始化的值
+    onPress: onPressRadioButton,
 
-  useEffect(() => {
-    setRadioContent(i18n.t(envValue === Env.MainLand ? ENV_VAL.CHINA : ENV_VAL.INTERNATIONAL));
-  }, [envValue]);
-  // if(envValue){}
+  }, {
+    id: String(Env.OverSeas),
+    label: i18n.t(ENV_VAL.INTERNATIONAL),
+    size: 18,
+    color: "#3456F6",
+    selected: envValue === Env.OverSeas ? true : false,
+    onPress: onPressRadioButton,
+  }]
+  const [radioButtons, setRadioButtons] = useState(radioButtonsData)
+
+  function onPressRadioButton(value: any) {
+    const selectedRadio = radioButtonsData.find(item => item.selected === true)
+    // 同步全局的环境值
+    onChoose(Number(selectedRadio?.id));
+  }
+
+  function onPressRadioButtonGroup(radioButtonsArray: any) {
+    console.log('mytag radioButtonsArray', radioButtonsArray)
+    setRadioButtons(radioButtonsArray);
+  }
   return (
-    <RadioButton.Group
-      onValueChange={value => {
-        setRadioContent(value);
-        onChoose(value === i18n.t(ENV_VAL.CHINA) ? Env.MainLand : Env.OverSeas);
-      }}
-      value={radioContent}>
-      <View style={envStyles.container}>
-        <RadioButton.Item
-          color="#3456F6"
-          style={[envStyles.leftButton, envStyles.button]}
-          labelStyle={{fontSize: 14}}
-          position="leading"
-          label={i18n.t(ENV_VAL.CHINA)}
-          value={i18n.t(ENV_VAL.CHINA)}
-        />
-        <RadioButton.Item
-          color="#3456F6"
-          style={envStyles.button}
-          labelStyle={{fontSize: 14}}
-          position="leading"
-          label={i18n.t(ENV_VAL.INTERNATIONAL)}
-          value={i18n.t(ENV_VAL.INTERNATIONAL)}
-        />
-      </View>
-    </RadioButton.Group>
+    <View style={{ flexDirection: "row", justifyContent: "center" }}>
+      <RadioGroup
+        radioButtons={radioButtons}
+        onPress={onPressRadioButtonGroup}
+        layout='row'
+      />
+    </View>
   );
 };

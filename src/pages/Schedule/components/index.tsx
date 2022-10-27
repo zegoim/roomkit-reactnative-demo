@@ -28,9 +28,6 @@ export const ScheduleHeader: React.FC<{
     title: {
       fontSize: 18,
     },
-    rightTitle: {
-      color: '#2953FF',
-    },
   });
   return (
     <View style={headerStyle.container}>
@@ -41,7 +38,7 @@ export const ScheduleHeader: React.FC<{
   );
 };
 
-export const ScheduleButton: React.FC<{
+export const ArrangeButton: React.FC<{
   list: SelectModalList;
   onSelected: (selectedItem: SelectItem, index: number) => void;
 }> = ({list, onSelected}) => {
@@ -49,6 +46,7 @@ export const ScheduleButton: React.FC<{
     text: {
       fontSize: 16,
       color: '#040404',
+      padding: 5,
     },
     rightTitle: {
       color: '#2953FF',
@@ -66,10 +64,10 @@ export const ScheduleButton: React.FC<{
         }, [])}>
         {i18n.t('roomkit_main_schedule')}
       </Text>
-      <EnvModal />
+      <ClassTypeModal />
     </View>
   );
-  function EnvModal() {
+  function ClassTypeModal() {
     const modalStyle = StyleSheet.create({
       modalContainer: {
         flex: 1,

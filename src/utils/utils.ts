@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import md5 from 'md5';
-import {productIdList, Env, ClassType} from './config';
-import {getSdkTokenApi, getRoomInfoApi} from './fetch';
+import {productIdList, Env, ClassType} from '../config';
+import {getSdkTokenApi, getRoomInfoApi} from '../api/requestApi';
 
 export function getUid(userName: string) {
   const sign = md5(userName).slice(-6);

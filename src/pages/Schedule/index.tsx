@@ -1,36 +1,28 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Image,
   StyleSheet,
   Text,
   View,
-  ToastAndroid,
   ScrollView,
   RefreshControl,
 } from 'react-native';
 import i18n from 'i18n-js';
-import {ClassType, SecretID} from '../../utils/config';
-import {createClassRoomApi, deleteClassApi, getClassRoomListApi} from '../../utils/fetch';
-import {useRoomkit} from '../../context/roomkitContext';
-import {getPid} from '../../utils/utils';
-import {useFocusEffect} from '@react-navigation/native';
-import {SelectModalList, SelectItem, ClassInfo} from '../../types/types';
-import {DefaultView, ScheduleButton, ScheduleHeader, ScheduleItem} from './components';
+import { ClassType, SecretID } from '../../config';
+import { createClassRoomApi, deleteClassApi, getClassRoomListApi } from '../../api/requestApi';
+import { useRoomkit } from '../../context/roomkitContext';
+import { getPid } from '../../utils/utils';
+import { useFocusEffect } from '@react-navigation/native';
+import { SelectModalList, SelectItem, ClassInfo } from '../../types/types';
+import { DefaultView, ArrangeButton, ScheduleHeader, ScheduleItem } from './components';
+import Toast from 'react-native-toast-message';
+import { LoadingContext } from "../../App"
+import { joinRoom } from '../../api/roomkitApi';
 
 let ClassTypeList: SelectModalList;
 
-const initList = () => {
-  ClassTypeList = {
-    title: '',
-    items: [
-      {content: i18n.t('roomkit_schedule_1v1'), value: ClassType.Class_1V1},
-      {content: i18n.t('roomkit_schedule_small_class'), value: ClassType.CLASS_SMALL},
-      {content: i18n.t('roomkit_schedule_large_class'), value: ClassType.CLASS_LARGE},
-    ],
-  };
-};
 
-const getClassRoomList = ({deviceID, userID, token}: any) => {
+const getClassRoomList = ({ deviceID, userID, token }: any) => {
   return getClassRoomListApi({
     begin_timestamp: new Date().getTime() - 12 * 60 * 60 * 1000,
     count: 20,
@@ -46,7 +38,7 @@ const getClassRoomList = ({deviceID, userID, token}: any) => {
   });
 };
 
-const createClassRoom = ({userID, userName, className, classType, pid, token, deviceID}: any) => {
+const createClassRoom = ({ userID, userName, className, classType, pid, token, deviceID }: any) => {
   const query = {
     uid: userID,
     subject: userName + '创建的' + className,
@@ -95,6 +87,17 @@ const createClassRoom = ({userID, userName, className, classType, pid, token, de
   return createClassRoomApi(query);
 };
 
+const initList = () => {
+  ClassTypeList = {
+    title: '',
+    items: [
+      { content: i18n.t('roomkit_schedule_1v1'), value: ClassType.Class_1V1 },
+      { content: i18n.t('roomkit_schedule_small_class'), value: ClassType.CLASS_SMALL },
+      { content: i18n.t('roomkit_schedule_large_class'), value: ClassType.CLASS_LARGE },
+    ],
+  };
+};
+
 const App: React.FC<{
   route: {
     params: {
@@ -104,19 +107,27 @@ const App: React.FC<{
     };
   };
   navigation: any;
-}> = ({route, navigation}) => {
+}> = ({ route, navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [classList, setClassList] = useState<ClassInfo[]>([]);
   const [roomkitstate, roomkitAction] = useRoomkit();
+
+  // @ts-ignore
+  const { setSpinner } = useContext(LoadingContext)
+
   useState(() => initList());
-  useFocusEffect(
-    useCallback(() => {
-      getClassList();
-      return () => {};
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
-  );
-  const {userName, userID, deviceID} = route.params;
+  useEffect(() => {
+    getClassList();
+  }, [])
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     getClassList();
+  //     return () => { };
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   }, []),
+  // );
+  const { userName, userID, deviceID } = route.params;
 
   const selectItem = async (selectedItem: SelectItem) => {
     await createClass(selectedItem);
@@ -131,6 +142,7 @@ const App: React.FC<{
 
   const getClassList: () => Promise<void> = async () => {
     try {
+      setSpinner(true)
       const token = roomkitstate.token
         ? roomkitstate.token
         : await roomkitAction.updateToken(deviceID);
@@ -141,15 +153,19 @@ const App: React.FC<{
         token,
       });
       setClassList(list.data.room_list ? list.data.room_list : []);
+      setSpinner(false)
+
       return list.data.room_list;
     } catch (error) {
-      ToastAndroid.show(i18n.t('roomkit_Room_list_failed'), ToastAndroid.SHORT);
+      setSpinner(false)
+      Toast.show({ text1: i18n.t('roomkit_Room_list_failed'), type: 'error' });
     }
   };
 
   const createClass = async (selectedItem: SelectItem) => {
     try {
       console.log('mytag selectedItem', selectedItem);
+      setSpinner(true)
 
       const className = selectedItem.content;
       const classType = selectedItem.value;
@@ -166,15 +182,20 @@ const App: React.FC<{
         deviceID,
         pid: getPid(classType, roomkitstate.env, false),
       });
+      setSpinner(false)
       return result;
     } catch (error) {
+      setSpinner(false)
       // Toast.show({text1: `message:${data.ret.message}`, type: 'error'});
-      ToastAndroid.show(i18n.t('roomkit_room_schedule_failed'), ToastAndroid.SHORT);
+      Toast.show({ text1: i18n.t('roomkit_room_schedule_failed'), type: 'error' });
+
     }
   };
 
   const deleteRoom = async (roomID: string, pid: number) => {
     try {
+      setSpinner(true)
+
       // const token = await getSdkTokenApi(userId);
       const token = roomkitstate.token
         ? roomkitstate.token
@@ -190,11 +211,13 @@ const App: React.FC<{
         verify_type: 3,
       });
       console.log('mytag result', result);
-      ToastAndroid.show(i18n.t('roomkit_room_delete_succeeded'), ToastAndroid.SHORT);
+      await getClassList();
+      setSpinner(false)
+      Toast.show({ text1: i18n.t('roomkit_room_delete_succeeded'), type: 'success' });
     } catch (error) {
-      ToastAndroid.show(i18n.t('roomkit_room_delete_failed'), ToastAndroid.SHORT);
+      setSpinner(false)
+      Toast.show({ text1: i18n.t('roomkit_room_delete_failed'), type: 'error' });
     }
-    getClassList();
   };
 
   const goSetting = () => {
@@ -216,19 +239,20 @@ const App: React.FC<{
       classType: classItem.room_type,
       userID: userID,
       pid: getPid(classItem.room_type, roomkitstate.env, false),
+      roomkitstate
     };
-    navigation.push('Classroom', routeParam);
+    // navigation.push('Classroom', routeParam);
+    joinRoom(routeParam)
   };
   return (
-    <View style={{backgroundColor: '#F6F6F6', flex: 1}}>
+    <View style={{ backgroundColor: '#F6F6F6', flex: 1 }}>
       <ScheduleHeader navigation={navigation}>
-        <Text onPress={goSetting}>设置</Text>
-        <Text>{userName}的日程</Text>
-        <ScheduleButton onSelected={selectItem} list={ClassTypeList} />
+        <Text onPress={goSetting}>{i18n.t('roomkit_setting')}</Text>
+        <Text>{i18n.t('roomkit_main_page')}</Text>
+        <ArrangeButton onSelected={selectItem} list={ClassTypeList} />
       </ScheduleHeader>
-
       <ScrollView
-        style={{backgroundColor: `${classList.length ? '#F6F6F6' : 'white'}`}}
+        style={{ backgroundColor: `${classList.length ? '#F6F6F6' : 'white'}` }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {!classList.length ? (
           <DefaultView />

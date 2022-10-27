@@ -8,7 +8,7 @@
  */
 // import _ from 'lodash';
 import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
-import {RoomkitServiceDomain, EduServiceDomain} from './config';
+import {RoomkitServiceDomain, EduServiceDomain} from '../config';
 import Toast from 'react-native-toast-message';
 // import config from "./config";
 
@@ -49,18 +49,18 @@ export const ajax = (url: string, options: ajaxOptions) => {
   } else {
     axiosOptions.data = options.data;
   }
-
+  
   return new Promise<any>((resolve: any, reject: any) => {
     axios(url, axiosOptions)
       .then(async (res: AxiosResponse<any>) => {
-        console.log('mytag res.data', res.data);
+        console.log('mytag response', res.data);
         if (res.data.ret.code === 0) {
           return resolve(res.data);
         }
         // Toast.fail(res.data.ret);
         Toast.show({text1: `message:${res.data.ret.message}`, type: 'error'});
         reject({
-          ...res,
+          res,
           handled: false,
         });
       })

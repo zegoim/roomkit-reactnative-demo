@@ -16,15 +16,16 @@
  * @format
  */
 
-import React, {useEffect, useReducer} from 'react';
-import {I18nManager, StatusBar, SafeAreaView} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, { useEffect, useReducer, useContext, createContext, } from 'react';
+import { I18nManager, StatusBar, SafeAreaView, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
 import * as RNLocalize from 'react-native-localize';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-import {RoomkitProvider} from './context/roomkitContext';
+import { RoomkitProvider } from './context/roomkitContext';
 
 import Login from './pages/Login/index';
 import Setting from './pages/Setting/index';
@@ -32,8 +33,10 @@ import RoomSetting from './pages/RoomSetting';
 import CustomUI from './pages/CustomUI/index';
 import Schedule from './pages/Schedule/index';
 import Classroom from './pages/Classroom/index';
-import {toastConfig} from './utils/CustomToast';
-import {useState} from 'react';
+import { toastConfig } from './utils/CustomToast';
+import { useState } from 'react';
+
+export const LoadingContext = createContext({});
 
 const translationGetters = {
   // lazy requires
@@ -41,24 +44,18 @@ const translationGetters = {
   en: () => require('./assets/translations/en.json'),
 };
 
-// 缓存
-// const translate = memoize(
-//   (key, config) => i18n.t(key, config),
-//   (key, config) => (config ? key + JSON.stringify(config) : key),
-// );
 
 ErrorUtils.setGlobalHandler(error => {
   console.log('ErrorUtils发现了语法错误，避免了崩溃，具体报错信息：');
-  console.log(error.name, error.message, [{text: 'OK'}]);
-  Toast.show({text1: error.message, type: 'error'});
+  console.log("errorNname: " ,error.name + ", ", "errorMessage : " , error.message, [{ text: 'OK' }]);
+  Toast.show({ text1: error.message, type: 'error' });
 });
 
 const setI18nConfig = () => {
-  console.log('mytag 12312', 12312);
   // 如果没有可用的语言则回退到中文
-  const fallback = {languageTag: 'zh', isRTL: false};
+  const fallback = { languageTag: 'zh', isRTL: false };
   // 获取 最佳语言标签及其阅读方向
-  const {languageTag, isRTL} =
+  const { languageTag, isRTL } =
     RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || fallback;
   // 设置语言方向
   I18nManager.forceRTL(isRTL);
@@ -72,16 +69,19 @@ const setI18nConfig = () => {
 
 const Stack = createNativeStackNavigator();
 
+
 const App = () => {
   // 初始化 i18n
   useState(() => setI18nConfig());
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   useEffect(() => {
+    console.log('mytag touch app useeffect',)
     RNLocalize.addEventListener('change', handleLocalizationChange);
     return () => {
       RNLocalize.removeEventListener('change', handleLocalizationChange);
     };
   }, []);
+  const [spinner,setSpinner] = useState(false)
 
   const handleLocalizationChange = (e: any) => {
     console.log('mytag locallisze change e', e);
@@ -144,23 +144,31 @@ const App = () => {
   return (
     <>
       <RoomkitProvider>
-        <SafeAreaView style={{flex: 1}}>
-          <NavigationContainer>
-            <StatusBar backgroundColor="white" barStyle="dark-content" />
-            <Stack.Navigator>
-              {screens.map(screenItem => {
-                return (
-                  <Stack.Screen
-                    key={screenItem.name}
-                    name={screenItem.name}
-                    options={{...screenItem.options}}
-                    component={screenItem.component}
-                  />
-                );
-              })}
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
+        <LoadingContext.Provider value={{spinner,setSpinner}}>
+          <SafeAreaView style={{ flex: 1 }}>
+            <Spinner
+              visible={spinner}
+              textContent={'Loading...'}
+              textStyle={{ color: '#FFF' }}
+            />
+            <NavigationContainer>
+              <StatusBar backgroundColor="white" barStyle="dark-content" />
+              <Stack.Navigator>
+                {screens.map(screenItem => {
+                  return (
+                    <Stack.Screen
+                      key={screenItem.name}
+                      name={screenItem.name}
+                      options={{ ...screenItem.options }}
+                      component={screenItem.component}
+                    />
+                  );
+                })}
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaView>
+        </LoadingContext.Provider>
+
       </RoomkitProvider>
       <Toast config={toastConfig} />
     </>

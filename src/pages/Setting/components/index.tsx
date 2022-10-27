@@ -1,6 +1,6 @@
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {Button, StyleSheet, Text, View, Image, TouchableOpacity, Modal} from 'react-native';
-import {Env} from '../../../utils/config';
+import {Env} from '../../../config';
 import {SelectModalList, SelectItem} from '../../../types/types';
 import i18n from 'i18n-js';
 
