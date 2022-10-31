@@ -61,7 +61,7 @@ export interface RoomkitInitState {
 
 const initialState: RoomkitInitState = {
   count: 0,
-  env: Env.OverSeas,
+  env: Env.MainLand,
   token: '',
   roomSettings: {
     isMicrophoneOnWhenJoiningRoom: false,

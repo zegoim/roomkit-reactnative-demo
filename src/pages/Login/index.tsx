@@ -102,18 +102,8 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   const createRoom = useCallback(async () => {
     console.log('mytag before');
-    let deviceID
-    try {
-      console.log('mytag before getDeviceId',)
-      await ZegoRoomkitSdk.instance().getDeviceID();
-    } catch (error) {
-      console.log('mytag error', error)
-      await ZegoRoomkitSdk.init({
-        secretID: SecretID,
-      });
-    }
 
-    deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
+    let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
     console.log('mytag deviceID in Login ', deviceID);
     const userName_deviceID = String(getUid(deviceID));
     const userID = getUid(String(userName_deviceID));

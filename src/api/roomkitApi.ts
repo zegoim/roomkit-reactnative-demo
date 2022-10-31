@@ -1,5 +1,4 @@
 
-import { getRoomInfoApi } from './requestApi';
 import { getToken } from '../utils/utils';
 import ZegoRoomkitSdk, {
     ZegoRoomkitJoinRoomConfig,
@@ -11,8 +10,18 @@ import ZegoRoomkitSdk, {
 
 import { SecretID } from '../config';
 
+export async function initRoomkit() {
+    try {
+        await ZegoRoomkitSdk.instance().getDeviceID();
+    } catch (error) {
+        console.log('mytag error', error)
+        await ZegoRoomkitSdk.init({
+            secretID: SecretID,
+        });
+    }
+}
 
-export async function joinRoom({userID, roomID, pid, userName, role ,roomkitstate}: any) {
+export async function joinRoom({ userID, roomID, pid, userName, role, subject = "", roomkitstate }: any) {
 
     console.log('mytag roomkitstate', roomkitstate)
     try {
@@ -20,13 +29,6 @@ export async function joinRoom({userID, roomID, pid, userName, role ,roomkitstat
         // const { userID, roomID, pid, userName, role } = route.params;
         // 初始化
 
-        // try {
-        //   await ZegoRoomkitSdk.instance().getDeviceID();
-        // } catch (error) {
-        await ZegoRoomkitSdk.init({
-            secretID: SecretID,
-        });
-        // }
         callbackRegister();
 
         const roomService = ZegoRoomkitSdk.instance().inRoomService();
@@ -56,20 +58,27 @@ export async function joinRoom({userID, roomID, pid, userName, role ,roomkitstat
         } = roomkitstate.roomSettings;
         await roomSetting.setIsMicrophoneOnWhenJoiningRoom(isMicrophoneOnWhenJoiningRoom)
         await roomSetting.setIsCameraOnWhenJoiningRoom(isCameraOnWhenJoiningRoom)
-        await roomSetting.setBeautifyMode(beautifyMode ? ZegoBeautifyMode.ZegoBeautifyMedium : ZegoBeautifyMode.ZegoBeautifyNone )
-        await roomSetting.setPreviewVideoMirrorMode(previewVideoMirrorMode ?  ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeLeftRightSwap : ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeNone )
-        await roomSetting.setVideoFitMode(videoFitMode ?  ZegoVideoFitMode.ZegoVideoFill : ZegoVideoFitMode.ZegoVideoAspectFit)
+        await roomSetting.setBeautifyMode(beautifyMode ? ZegoBeautifyMode.ZegoBeautifyMedium : ZegoBeautifyMode.ZegoBeautifyNone)
+        await roomSetting.setPreviewVideoMirrorMode(previewVideoMirrorMode ? ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeLeftRightSwap : ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeNone)
+        await roomSetting.setVideoFitMode(videoFitMode ? ZegoVideoFitMode.ZegoVideoFill : ZegoVideoFitMode.ZegoVideoAspectFit)
 
         // ZegoRoomkitSdk.instance().setAdvancedConfig({
         //   domain: Domain,
         // });
 
         // setRoomParameter
-        const classDetail = await getClassDetail( { roomID, pid , userID });
-        let roomParameter = {
-            subject: classDetail && classDetail.subject,
+        // const classDetail = await getClassDetail({ roomID, pid, userID });
+
+        let roomParameter: setRoomParameterConfig = {
             beginTimestamp: new Date().getTime(),
-        } as setRoomParameterConfig;
+            subject: subject
+        };
+
+        // let roomParameter = {
+        //     subject: classDetail && classDetail.subject,
+        //     beginTimestamp: new Date().getTime(),
+        // } as setRoomParameterConfig;
+
         await roomService.setRoomParameter(roomParameter);
 
         // joinRoomWithConfig
@@ -84,8 +93,10 @@ export async function joinRoom({userID, roomID, pid, userName, role ,roomkitstat
             token: token,
         } as unknown as ZegoRoomkitJoinRoomConfig;
 
-
-        await roomService.joinRoomWithConfig(joinConfig);
+        console.log('mytag before joinRoomWithConfig',)
+        const joinRes = await roomService.joinRoomWithConfig(joinConfig);
+        console.log('mytag joinRes', joinRes)
+        console.log('mytag after joinRoomWithConfig',)
 
         // setSpinner(false)
         console.log('mytag done');
@@ -110,21 +121,4 @@ function callbackRegister() {
     ZegoRoomkitSdk.instance().on('buttonEvent', function () {
         console.log('mytag buttonEvent', arguments);
     });
-}
-
-async function getClassDetail( { roomID, pid , userID } :any) {
-    // const { roomID, pid } = route.params;
-    try {
-        const query = {
-            uid: userID,
-            room_id: roomID,
-            pid,
-        };
-        console.log('mytag query', query);
-        const classDetail = await getRoomInfoApi(query);
-        console.log('mytag classDetail', classDetail)
-        return classDetail;
-    } catch (error) {
-        return null;
-    }
 }

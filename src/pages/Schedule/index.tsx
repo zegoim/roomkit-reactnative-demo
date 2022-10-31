@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import { ClassType, SecretID } from '../../config';
-import { createClassRoomApi, deleteClassApi, getClassRoomListApi } from '../../api/requestApi';
+import { createClassRoomApi, deleteClassApi, getClassRoomListApi, getRoomInfoApi } from '../../api/requestApi';
 import { useRoomkit } from '../../context/roomkitContext';
 import { getPid } from '../../utils/utils';
 import { useFocusEffect } from '@react-navigation/native';
@@ -18,6 +18,7 @@ import { DefaultView, ArrangeButton, ScheduleHeader, ScheduleItem } from './comp
 import Toast from 'react-native-toast-message';
 import { LoadingContext } from "../../App"
 import { joinRoom } from '../../api/roomkitApi';
+
 
 let ClassTypeList: SelectModalList;
 
@@ -230,20 +231,42 @@ const App: React.FC<{
     deleteRoom(classItem.room_id, classItem.pid);
   };
 
-  const joinClassRoom = (classItem: ClassInfo) => {
+  const joinClassRoom = async (classItem: ClassInfo) => {
     console.log('mytag classItem', classItem);
     const routeParam = {
-      roomID: classItem.room_id,
+      roomID: classItem.room_id ,
       userName,
       role: classItem.user_role,
       classType: classItem.room_type,
       userID: userID,
       pid: getPid(classItem.room_type, roomkitstate.env, false),
-      roomkitstate
+      roomkitstate,
+      subject: ""
     };
+
+    console.log('mytag routeParam', routeParam)
     // navigation.push('Classroom', routeParam);
+    const classDetail = await getClassDetail({ roomID: classItem.room_id, pid: getPid(classItem.room_type, roomkitstate.env, false), userID })
+    if (classDetail && classDetail.data) routeParam.subject = classDetail.data.subject
     joinRoom(routeParam)
   };
+
+  async function getClassDetail({ roomID, pid, userID }: any) {
+    // const { roomID, pid } = route.params;
+    try {
+      const query = {
+        uid: userID,
+        room_id: roomID,
+        pid,
+      };
+      console.log('mytag query', query);
+      const classDetail = await getRoomInfoApi(query);
+      console.log('mytag classDetail', classDetail)
+      return classDetail;
+    } catch (error) {
+      return null;
+    }
+  }
   return (
     <View style={{ backgroundColor: '#F6F6F6', flex: 1 }}>
       <ScheduleHeader navigation={navigation}>

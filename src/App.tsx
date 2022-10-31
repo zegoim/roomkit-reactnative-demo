@@ -35,6 +35,7 @@ import Schedule from './pages/Schedule/index';
 import Classroom from './pages/Classroom/index';
 import { toastConfig } from './utils/CustomToast';
 import { useState } from 'react';
+import { initRoomkit } from './api/roomkitApi';
 
 export const LoadingContext = createContext({});
 
@@ -75,7 +76,7 @@ const App = () => {
   useState(() => setI18nConfig());
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   useEffect(() => {
-    console.log('mytag touch app useeffect',)
+    initRoomkit()
     RNLocalize.addEventListener('change', handleLocalizationChange);
     return () => {
       RNLocalize.removeEventListener('change', handleLocalizationChange);
