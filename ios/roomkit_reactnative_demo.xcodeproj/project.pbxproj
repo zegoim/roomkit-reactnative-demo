@@ -14,7 +14,9 @@
 		66B2DD7D33A3AF7512C147F3 /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BEC400071BEF600228BC1B /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		86794623290A70D000447D37 /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = 86794622290A70CF00447D37 /* bundle */; };
-		EF3E852B5FC37E656FAA5762 /* Pods_roomkit_reactnative_demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */; };
+		86E3B620290F7ADC0012425E /* Pods_roomkit_reactnative_demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */; };
+		86E3B621290F7ADC0012425E /* Pods_roomkit_reactnative_demo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		86EB7EB9290E37580036BC2C /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86EB7EB8290E37580036BC2C /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +28,20 @@
 			remoteInfo = roomkit_reactnative_demo;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		86E3B61F290F7ADB0012425E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				86E3B621290F7ADC0012425E /* Pods_roomkit_reactnative_demo.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00BEC400071BEF600228BC1B /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,8 +58,11 @@
 		5709B34CF0A7D63546082F79 /* Pods-roomkit_reactnative_demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo.release.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo/Pods-roomkit_reactnative_demo.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = roomkit_reactnative_demo/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		865672C7290F7B8900480386 /* CoreModules.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreModules.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		865F3B9C2907E85A00397F41 /* roomkit_reactnative_demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = roomkit_reactnative_demo.entitlements; path = roomkit_reactnative_demo/roomkit_reactnative_demo.entitlements; sourceTree = "<group>"; };
 		86794622290A70CF00447D37 /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
+		86E3B61B290F77E50012425E /* CoreModules.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreModules.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		86EB7EB8290E37580036BC2C /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig"; sourceTree = "<group>"; };
 		8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_roomkit_reactnative_demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -62,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF3E852B5FC37E656FAA5762 /* Pods_roomkit_reactnative_demo.framework in Frameworks */,
+				86E3B620290F7ADC0012425E /* Pods_roomkit_reactnative_demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +122,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				865672C7290F7B8900480386 /* CoreModules.framework */,
+				86E3B61B290F77E50012425E /* CoreModules.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */,
 				00BEC400071BEF600228BC1B /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */,
@@ -120,6 +141,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				86EB7EB8290E37580036BC2C /* Media.xcassets */,
 				86794622290A70CF00447D37 /* bundle */,
 				13B07FAE1A68108700A75B9A /* roomkit_reactnative_demo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -187,8 +209,9 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				86E3B61F290F7ADB0012425E /* Embed Frameworks */,
+				45B2712D80E8621778EC2F4C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -249,6 +272,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				86794623290A70D000447D37 /* bundle in Resources */,
+				86EB7EB9290E37580036BC2C /* Media.xcassets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,7 +296,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
+		45B2712D80E8621778EC2F4C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -439,7 +463,7 @@
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = LV66BYWL5G;
+				DEVELOPMENT_TEAM = B82BHJ5H89;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -468,7 +492,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = LV66BYWL5G;
+				DEVELOPMENT_TEAM = B82BHJ5H89;
 				INFOPLIST_FILE = roomkit_reactnative_demoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -492,8 +516,12 @@
 			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-roomkit_reactnative_demo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = roomkit_reactnative_demo/roomkit_reactnative_demo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B82BHJ5H89;
 				ENABLE_BITCODE = NO;
@@ -509,8 +537,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = im.zego.RoomKitRNDemo;
 				PRODUCT_NAME = roomkit_reactnative_demo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -522,8 +551,12 @@
 			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-roomkit_reactnative_demo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = roomkit_reactnative_demo/roomkit_reactnative_demo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B82BHJ5H89;
 				INFOPLIST_FILE = roomkit_reactnative_demo/Info.plist;
@@ -538,8 +571,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = im.zego.RoomKitRNDemo;
 				PRODUCT_NAME = roomkit_reactnative_demo;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
