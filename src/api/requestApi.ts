@@ -10,6 +10,8 @@
 import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {RoomkitServiceDomain, EduServiceDomain} from '../config';
 import Toast from 'react-native-toast-message';
+import i18n from 'i18n-js';
+
 // import config from "./config";
 
 // const Toast = {
@@ -69,7 +71,8 @@ export const ajax = (url: string, options: ajaxOptions) => {
         // console.warn("err",err);
         // console.log("url, axiosOptions",url, axiosOptions);
         if (!err.response) {
-          Toast.show({text1: '服务繁忙，稍候请重试', type: 'error'});
+          
+          Toast.show({text1: i18n.t('server_busy'), type: 'error'});
           reject({...err, handled: true});
           return;
         }
@@ -77,7 +80,7 @@ export const ajax = (url: string, options: ajaxOptions) => {
         if (err.response.status == 401) {
           reject({handled: true});
           // Toast.info('登录状态失效，请重新登录');
-          Toast.show({text1: '登录状态失效，请重新登录', type: 'error'});
+          Toast.show({text1: i18n.t('log_in_again'), type: 'error'});
         } else if (err.response.status == 400) {
           reject({
             data: err.response.data,
@@ -87,7 +90,7 @@ export const ajax = (url: string, options: ajaxOptions) => {
           });
         } else {
           reject({...err, handled: true});
-          Toast.show({text1: '服务繁忙，稍候请重试', type: 'error'});
+          Toast.show({text1: i18n.t('server_busy'), type: 'error'});
         }
         reject({...err, handled: true});
       });
