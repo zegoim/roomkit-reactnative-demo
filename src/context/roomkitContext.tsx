@@ -64,8 +64,8 @@ const initialState: RoomkitInitState = {
   env: Env.MainLand,
   token: '',
   roomSettings: {
-    isMicrophoneOnWhenJoiningRoom: false,
-    isCameraOnWhenJoiningRoom: false,
+    isMicrophoneOnWhenJoiningRoom: true,
+    isCameraOnWhenJoiningRoom: true,
     beautifyMode: false,
     previewVideoMirrorMode: false,
     videoFitMode: false,
@@ -92,9 +92,10 @@ function roomkitReducer(state: RoomkitInitState, action: { type: any; payload?: 
   if (action.type === 'init') {
     const { stateWithStorage } = action.payload;
     _state = stateWithStorage;
-  } else if (action.type === 'updateEnv') {
+  } else if (action.type === 'setEnv') {
     const { env } = action.payload;
     _state.env = env;
+    storage.setItem('env', JSON.stringify(env));
   } else if (action.type === 'updateRoomSettings') {
     const { key, val } = action.payload;
     // @ts-ignore
@@ -108,11 +109,10 @@ function roomkitReducer(state: RoomkitInitState, action: { type: any; payload?: 
   } else if (action.type === 'updateToken') {
     const { token } = action.payload;
     _state.token = token;
-  } else if(action.type === "setIsAvatarHidden"){
+  } else if (action.type === "setIsAvatarHidden") {
     const { key, val } = action.payload;
-    console.log('mytag key, val', key, val)
     _state.isAvatarHidden = val;
-
+    storage.setItem('isAvatarHidden', JSON.stringify(val));
   }
 
   return _state;
@@ -130,13 +130,34 @@ const RoomkitHooks = () => {
     const rawRoomUIConfig = await storage.getItem('roomUIConfig');
     if (rawRoomUIConfig) Object.assign(_state.roomUIConfig, JSON.parse(rawRoomUIConfig));
 
-    console.log('mytag rawRoomUIConfig', rawRoomUIConfig);
+    const rawIsAvatarHidden = await storage.getItem('isAvatarHidden');
+    if (rawIsAvatarHidden) _state.isAvatarHidden = JSON.parse(rawIsAvatarHidden)
+
+    const rawEvn = await storage.getItem('env');
+    if (rawEvn) _state.env = JSON.parse(rawEvn)
+
+
+    // console.log('mytag _state', _state)
+    // const asyncStorage = storage.getAsyncStorage()
+    // // @ts-ignore
+    // asyncStorage.getAllKeys((err, keys) => {
+    //   // @ts-ignore
+    //   asyncStorage.multiGet(keys, (err, stores) => {
+    //     // @ts-ignore
+    //     console.log('mytag storage =========== keys', keys)
+    //     console.log('mytag storage =========== err', err)
+    //     console.log('mytag storage =========== stores', stores)
+    //   });
+    // });
+
     dispatch({ type: 'init', payload: { stateWithStorage: _state } });
   };
+
   const setEnv = (env: Env) => {
     console.log('mytag env', env);
-    dispatch({ type: 'updateEnv', payload: { env } });
+    dispatch({ type: 'setEnv', payload: { env } });
   };
+
   const updateToken = async (deviceID: string) => {
     console.log('mytag updateToken deviceID', deviceID)
     const token = await getToken(deviceID);
@@ -233,7 +254,6 @@ export const useRoomkit = () => {
 export const RoomkitProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
   // 下发状态，然后在子组件中通过自定义 hook 获取context
   const roomkitHooks = RoomkitHooks();
-  console.log('mytag re-render ============');
   useEffect(() => {
     // 初始化，从storage 获取之前的设置。
     roomkitHooks.init();
