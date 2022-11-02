@@ -7,14 +7,15 @@ import ZegoRoomkitSdk, {
     ZegoPreviewVideoMirrorMode,
     ZegoVideoFitMode
 } from 'zego_roomkit_reactnative_sdk';
-
+import Toast from 'react-native-toast-message';
+import i18n from 'i18n-js';
 import { SecretID } from '../config';
 
 export async function initRoomkit() {
     try {
         await ZegoRoomkitSdk.instance().getDeviceID();
     } catch (error) {
-        console.log('mytag error', error)
+        console.log('mytag error in initRoomkit', error)
         await ZegoRoomkitSdk.init({
             secretID: SecretID,
         });
@@ -42,9 +43,11 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
             });
         }
         // UI config
-        const { isBottomBarHiddenMode } = roomkitstate.roomUIConfig;
+        const { isMemberLeaveRoomMessageHidden , isBottomBarHiddenMode } = roomkitstate.roomUIConfig;
+        
         await roomService.setUIConfig({
             ...roomkitstate.roomUIConfig,
+            isMemberJoinRoomMessageHidden: isMemberLeaveRoomMessageHidden,
             isMinimizeHidden: true,
             bottomBarHiddenMode: !isBottomBarHiddenMode ? 0 : 1,
         });
@@ -71,7 +74,7 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
 
         let roomParameter: setRoomParameterConfig = {
             beginTimestamp: new Date().getTime(),
-            subject: subject
+            subject: !!subject ? subject : roomID
         };
 
         // let roomParameter = {
@@ -95,30 +98,31 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
 
         console.log('mytag before joinRoomWithConfig',)
         const joinRes = await roomService.joinRoomWithConfig(joinConfig);
-        console.log('mytag joinRes', joinRes)
-        console.log('mytag after joinRoomWithConfig',)
-
+        if (joinRes && !!joinRes.errorCode) {
+            throw new Error(JSON.stringify(joinRes))
+        }
         // setSpinner(false)
         console.log('mytag done');
     } catch (error) {
-        // setSpinner(false)
+        Toast.show({ text1: i18n.t('roomkit_room_join_failed'), type: 'error' });
         console.log('mytag error in joinRoom', error);
+        return error
     }
 }
 
 function callbackRegister() {
     ZegoRoomkitSdk.instance().on('inRoomEventNotify', function (event, roomId) {
-        console.log('mytag event', event)
-        console.log('mytag roomId', roomId)
+        console.log('mytag roomkit callback event', event)
+        console.log('mytag roomkit callback roomId', roomId)
     });
     ZegoRoomkitSdk.instance().on('memberJoinRoom', (args) => {
-        console.log('mytag memberJoinRoom', args);
+        console.log('mytag roomkit callback memberJoinRoom', args);
     });
     ZegoRoomkitSdk.instance().on('memberLeaveRoom', () => {
-        console.log('mytag touch memberLeaveRoom');
+        console.log('mytag roomkit callback touch memberLeaveRoom');
     });
 
     ZegoRoomkitSdk.instance().on('buttonEvent', function () {
-        console.log('mytag buttonEvent', arguments);
+        console.log('mytag roomkit callback buttonEvent', arguments);
     });
 }
