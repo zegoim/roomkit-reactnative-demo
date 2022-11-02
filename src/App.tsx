@@ -16,9 +16,9 @@
  * @format
  */
 
-import React, { useEffect, useReducer, useContext, createContext, } from 'react';
+import React, { useEffect, useReducer, useContext, createContext, useRef, } from 'react';
 import { I18nManager, StatusBar, SafeAreaView, View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
@@ -48,7 +48,7 @@ const translationGetters = {
 
 ErrorUtils.setGlobalHandler(error => {
   console.log('ErrorUtils发现了语法错误，避免了崩溃，具体报错信息：');
-  console.log("errorNname: " ,error.name + ", ", "errorMessage : " , error.message, [{ text: 'OK' }]);
+  console.log("errorNname: ", error.name + ", ", "errorMessage : ", error.message, [{ text: 'OK' }]);
   Toast.show({ text1: error.message, type: 'error' });
 });
 
@@ -71,6 +71,59 @@ const setI18nConfig = () => {
 const Stack = createNativeStackNavigator();
 
 
+const screens = [
+  {
+    name: 'Login',
+    options: {
+      headerShown: false,
+    },
+    component: Login,
+  },
+  {
+    name: 'RoomSetting',
+    options: {
+      headerShown: false,
+    },
+    component: RoomSetting,
+  },
+  {
+    name: 'Schedule',
+    options: {
+      headerShown: false,
+    },
+    component: Schedule,
+  },
+  {
+    name: 'Classroom',
+    options: {
+      headerShown: false,
+    },
+    component: Classroom,
+  },
+  {
+    name: 'Setting',
+    options: {
+      headerShown: false,
+    },
+    component: Setting,
+  },
+  {
+    name: 'CustomUI',
+    options: {
+      headerShown: false,
+    },
+    component: CustomUI,
+  },
+  // {
+  //   name: 'Details',
+  //   options: {
+  //     headerShown: false,
+  //   },
+  //   component: DetailsScreen,
+  // },
+];
+
+
 const App = () => {
   // 初始化 i18n
   useState(() => setI18nConfig());
@@ -82,7 +135,10 @@ const App = () => {
       RNLocalize.removeEventListener('change', handleLocalizationChange);
     };
   }, []);
-  const [spinner,setSpinner] = useState(false)
+  const [spinner, setSpinner] = useState(false)
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef();
+
 
   const handleLocalizationChange = (e: any) => {
     console.log('mytag locallisze change e', e);
@@ -90,69 +146,29 @@ const App = () => {
     forceUpdate();
   };
 
-  const screens = [
-    {
-      name: 'Login',
-      options: {
-        headerShown: false,
-      },
-      component: Login,
-    },
-    {
-      name: 'RoomSetting',
-      options: {
-        headerShown: false,
-      },
-      component: RoomSetting,
-    },
-    {
-      name: 'Schedule',
-      options: {
-        headerShown: false,
-      },
-      component: Schedule,
-    },
-    {
-      name: 'Classroom',
-      options: {
-        headerShown: false,
-      },
-      component: Classroom,
-    },
-    {
-      name: 'Setting',
-      options: {
-        headerShown: false,
-      },
-      component: Setting,
-    },
-    {
-      name: 'CustomUI',
-      options: {
-        headerShown: false,
-      },
-      component: CustomUI,
-    },
-    // {
-    //   name: 'Details',
-    //   options: {
-    //     headerShown: false,
-    //   },
-    //   component: DetailsScreen,
-    // },
-  ];
 
   return (
     <>
       <RoomkitProvider>
-        <LoadingContext.Provider value={{spinner,setSpinner}}>
+        <LoadingContext.Provider value={{ spinner, setSpinner }}>
           <SafeAreaView style={{ flex: 1 }}>
             <Spinner
               visible={spinner}
               textContent={'Loading...'}
               textStyle={{ color: '#FFF' }}
             />
-            <NavigationContainer>
+            <NavigationContainer ref={navigationRef}
+              onReady={() => {
+                // @ts-ignore
+                routeNameRef.current = navigationRef.getCurrentRoute().name;
+                console.log('mytag routeNameRef ============= onReady', routeNameRef)
+              }}
+              onStateChange={async () => {
+                // @ts-ignore
+                routeNameRef.current = navigationRef.getCurrentRoute().name;
+                console.log('mytag routeNameRef ============= in onStateChange', routeNameRef)
+              }}
+            >
               <StatusBar backgroundColor="white" barStyle="dark-content" />
               <Stack.Navigator>
                 {screens.map(screenItem => {
@@ -160,7 +176,7 @@ const App = () => {
                     <Stack.Screen
                       key={screenItem.name}
                       name={screenItem.name}
-                      options={{ ...screenItem.options }}
+                      options={{ ...screenItem.options, orientation: "portrait" }}
                       component={screenItem.component}
                     />
                   );
