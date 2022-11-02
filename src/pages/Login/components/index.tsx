@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Modal } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Modal, KeyboardTypeOptions } from 'react-native';
 import i18n from 'i18n-js';
 import { SelectModalList, SelectItem } from '../../../types/types';
 import { Env } from '../../../config';
@@ -48,35 +48,47 @@ export const SettingBtn: React.FC<{ navigation: any }> = ({ navigation }) => {
   );
 };
 
-export const InputBox: React.FC<{ placeholder: string; onChangeText?: (text: string) => void }> = ({
+export const InputBox: React.FC<{
+  placeholder: string;
+  keyboardType?: KeyboardTypeOptions;
+  maxLength?: number;
+  value?: string;
+  onChangeText?: (text: string) => void
+}> = ({
   placeholder,
+  keyboardType,
+  maxLength,
+  value,
   onChangeText,
 }) => {
-  const inputBoxStyle = StyleSheet.create({
-    inputBox: {
-      marginHorizontal: 30,
-      marginBottom: 14,
-    },
-    inputBoxInput: {
-      fontSize: 16,
-      backgroundColor: '#F4F4F4',
-      borderRadius: 6,
-      paddingLeft: 16,
-      paddingVertical: 12,
+    const inputBoxStyle = StyleSheet.create({
+      inputBox: {
+        marginHorizontal: 30,
+        marginBottom: 14,
+      },
+      inputBoxInput: {
+        fontSize: 16,
+        backgroundColor: '#F4F4F4',
+        borderRadius: 6,
+        paddingLeft: 16,
+        paddingVertical: 12,
 
-    },
-  });
-  console.log('mytag input box has rerender', placeholder);
-  return (
-    <View style={[inputBoxStyle.inputBox]}>
-      <TextInput
-        style={inputBoxStyle.inputBoxInput}
-        placeholder={placeholder}
-        onChangeText={onChangeText ? onChangeText : () => { }}
-      />
-    </View>
-  );
-};
+      },
+    });
+    console.log('mytag input box has rerender', placeholder);
+    return (
+      <View style={[inputBoxStyle.inputBox]}>
+        <TextInput
+          style={inputBoxStyle.inputBoxInput}
+          placeholder={placeholder}
+          keyboardType={keyboardType}
+          maxLength={maxLength}
+          value={value}
+          onChangeText={onChangeText ? onChangeText : () => { }}
+        />
+      </View>
+    );
+  };
 
 export const SelectBox: React.FC<{
   placeholder: string;
@@ -282,6 +294,9 @@ export const EnvChooseButton: React.FC<{ envValue: Env; onChoose: (env: number) 
     onPress: onPressRadioButton,
   }]
   const [radioButtons, setRadioButtons] = useState(radioButtonsData)
+  useEffect(() => {
+    setRadioButtons(radioButtonsData)
+  }, [envValue])
 
   function onPressRadioButton(value: any) {
     const selectedRadio = radioButtonsData.find(item => item.selected === true)
@@ -290,7 +305,6 @@ export const EnvChooseButton: React.FC<{ envValue: Env; onChoose: (env: number) 
   }
 
   function onPressRadioButtonGroup(radioButtonsArray: any) {
-    console.log('mytag radioButtonsArray', radioButtonsArray)
     setRadioButtons(radioButtonsArray);
   }
   return (

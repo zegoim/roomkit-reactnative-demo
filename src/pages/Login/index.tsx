@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Keyboard, StatusBar, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 
 import i18n from 'i18n-js';
 import Toast from 'react-native-toast-message';
@@ -61,11 +61,12 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   // init select list
   useState(() => initList());
   useEffect(() => {
-  }, [])
+    console.log('mytag roomkitstate.env in useEffect', roomkitstate.env)
+  }, [roomkitstate.env])
   // @ts-ignore
   const { setSpinner } = useContext(LoadingContext)
 
-  const setRoomIDFun = useCallback((text: string) => setRoomID(text), []);
+  const setRoomIDFun = useCallback((text: string) => setRoomID(text.replace(/[^0-9]/g, ''),), []);
   const setUserNameFun = useCallback((text: string) => setUserName(text), []);
   const setClassTypeFun = useCallback((selectedItem: any) => {
     setClassType(selectedItem.value);
@@ -116,40 +117,50 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
-      <SettingBtn navigation={navigation} />
-      <Logo />
-      <InputBoxMemo
-        placeholder={i18n.t('roomkit_quick_join_input_id')}
-        onChangeText={setRoomIDFun}
-      />
-      <InputBoxMemo
-        placeholder={i18n.t('roomkit_quick_join_input_nickname')}
-        onChangeText={setUserNameFun}
-      />
-      <SelectBoxMemo
-        placeholder={i18n.t('roomkit_quick_join_select_room_type')}
-        list={classTypeList}
-        onSelected={setClassTypeFun}
-      />
-      <SelectBoxMemo
-        placeholder={i18n.t('roomkit_quick_join_select_role')}
-        list={roleTypeList}
-        onSelected={setRoleTypeFun}
-      />
-      <Text style={styles.joinClass} onPress={joinClassRoom}>
-        {i18n.t('roomkit_quick_join_room')}
-      </Text>
-      <Text style={styles.createClass} onPress={createRoom}>
-        {i18n.t('roomkit_create_room')}
-      </Text>
-      <Footer>
-        <View>
-          <EnvTitle />
-          <EnvChooseButton envValue={roomkitstate.env} onChoose={roomkitAction.setEnv} />
-        </View>
-      </Footer>
-    </View>
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss()
+    }}>
+      <View style={styles.container} >
+
+        <SettingBtn navigation={navigation} />
+        <Logo />
+        <InputBoxMemo
+          placeholder={i18n.t('roomkit_quick_join_input_id')}
+          onChangeText={setRoomIDFun}
+          keyboardType='numeric'
+          maxLength={12}
+          value={roomID}
+        />
+        <InputBoxMemo
+          placeholder={i18n.t('roomkit_quick_join_input_nickname')}
+          maxLength={20}
+          onChangeText={setUserNameFun}
+          value={userName}
+        />
+        <SelectBoxMemo
+          placeholder={i18n.t('roomkit_quick_join_select_room_type')}
+          list={classTypeList}
+          onSelected={setClassTypeFun}
+        />
+        <SelectBoxMemo
+          placeholder={i18n.t('roomkit_quick_join_select_role')}
+          list={roleTypeList}
+          onSelected={setRoleTypeFun}
+        />
+        <Text style={styles.joinClass} onPress={joinClassRoom}>
+          {i18n.t('roomkit_quick_join_room')}
+        </Text>
+        <Text style={styles.createClass} onPress={createRoom}>
+          {i18n.t('roomkit_create_room')}
+        </Text>
+        <Footer>
+          <View>
+            <EnvTitle />
+            <EnvChooseButton envValue={roomkitstate.env} onChoose={roomkitAction.setEnv} />
+          </View>
+        </Footer>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
