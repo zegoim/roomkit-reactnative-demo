@@ -5,7 +5,8 @@ import ZegoRoomkitSdk, {
     setRoomParameterConfig,
     ZegoBeautifyMode,
     ZegoPreviewVideoMirrorMode,
-    ZegoVideoFitMode
+    ZegoVideoFitMode,
+    ZegoRoomEvent
 } from 'zego_roomkit_reactnative_sdk';
 import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
@@ -115,9 +116,15 @@ export async function getDeviceID() {
 }
 
 function callbackRegister() {
+    ZegoRoomkitSdk.instance().off('inRoomEventNotify')
+    ZegoRoomkitSdk.instance().off('memberJoinRoom')
+    ZegoRoomkitSdk.instance().off('memberLeaveRoom')
+    ZegoRoomkitSdk.instance().off('buttonEvent')
+
     ZegoRoomkitSdk.instance().on('inRoomEventNotify', function (event, roomId) {
-        console.log('mytag roomkit callback event', event)
-        console.log('mytag roomkit callback roomId', roomId)
+        if (event === ZegoRoomEvent.ZegoRoomEventMemberKickedOut) {
+            Toast.show({ text1: i18n.t('roomkit_room_kickout'), type: 'error' });
+        }
     });
     ZegoRoomkitSdk.instance().on('memberJoinRoom', (args) => {
         console.log('mytag roomkit callback memberJoinRoom', args);
