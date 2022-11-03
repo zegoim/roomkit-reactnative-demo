@@ -42,7 +42,7 @@ export const ajax = (url: string, options: ajaxOptions) => {
   axiosOptions = {
     headers: {...options.headers},
     method: options.method || 'get',
-    timeout: 30 * 1000,
+    timeout: 8 * 1000,
     baseURL: !!options.isEduService ? EduServiceDomain : RoomkitServiceDomain,
   };
 
