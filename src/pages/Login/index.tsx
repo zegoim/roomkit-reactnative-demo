@@ -20,6 +20,7 @@ import {
 
 import { LoadingContext } from "../../App"
 import { joinRoom } from '../../api/roomkitApi';
+import { getRoomInfoApi } from '../../api/requestApi';
 
 enum RoleType {
   Student = 2,
@@ -88,18 +89,41 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
     if (!roleType) {
       return Toast.show({ text1: i18n.t('roomkit_quick_join_select_role'), type: 'error' });
     }
-    const routeParam = {
-      roomID,
-      userName,
-      role: roleType,
-      classType,
-      userID: getUid(userName),
-      pid: getPid(classType, roomkitstate.env, false),
-      roomkitstate
-    };
-    // navigation.push('Classroom', routeParam);
-    joinRoom(routeParam)
+    setSpinner(true)
+    try {
+      const routeParam = {
+        roomID,
+        userName,
+        role: roleType,
+        classType,
+        userID: getUid(userName),
+        pid: getPid(classType, roomkitstate.env, false),
+        roomkitstate,
+        subject: roomID
+
+      };
+      const classDetail = await getClassDetail({ roomID: roomID, pid: getPid(classType, roomkitstate.env, false), userID: getUid(userName) })
+      if (classDetail && classDetail.data) routeParam.subject = classDetail.data.subject
+      setSpinner(false)
+      joinRoom(routeParam)
+    } catch (error) {
+      setSpinner(false)
+    }
   };
+
+  async function getClassDetail({ roomID, pid, userID }: any) {
+    try {
+      const query = {
+        uid: userID,
+        room_id: roomID,
+        pid,
+      };
+      const classDetail = await getRoomInfoApi(query);
+      return classDetail;
+    } catch (error) {
+      return null;
+    }
+  }
 
   const createRoom = useCallback(async () => {
     console.log('mytag before');

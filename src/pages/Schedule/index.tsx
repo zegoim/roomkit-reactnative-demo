@@ -42,7 +42,7 @@ const getClassRoomList = ({ deviceID, userID, token }: any) => {
 const createClassRoom = ({ userID, userName, className, classType, pid, token, deviceID }: any) => {
   const query = {
     uid: userID,
-    subject: userName + '创建的' + className,
+    subject: userName +  i18n.t('belong') + className.toLowerCase(),
     room_type: classType,
     begin_timestamp: new Date().getTime() + 1000 * 60,
     duration: 30,
@@ -232,41 +232,45 @@ const App: React.FC<{
   };
 
   const joinClassRoom = async (classItem: ClassInfo) => {
-    console.log('mytag classItem', classItem);
-    const routeParam = {
-      roomID: classItem.room_id ,
-      userName,
-      role: classItem.user_role,
-      classType: classItem.room_type,
-      userID: userID,
-      pid: getPid(classItem.room_type, roomkitstate.env, false),
-      roomkitstate,
-      subject: ""
-    };
+    setSpinner(true)
+    try {
+      console.log('mytag classItem', classItem);
+      const routeParam = {
+        roomID: classItem.room_id,
+        userName,
+        role: classItem.user_role,
+        classType: classItem.room_type,
+        userID: userID,
+        pid: getPid(classItem.room_type, roomkitstate.env, false),
+        roomkitstate,
+        subject: classItem.room_id
+      };
 
-    console.log('mytag routeParam', routeParam)
-    // navigation.push('Classroom', routeParam);
-    const classDetail = await getClassDetail({ roomID: classItem.room_id, pid: getPid(classItem.room_type, roomkitstate.env, false), userID })
-    if (classDetail && classDetail.data) routeParam.subject = classDetail.data.subject
-    joinRoom(routeParam)
+      console.log('mytag routeParam', routeParam)
+      // navigation.push('Classroom', routeParam);
+      const classDetail = await getClassDetail({ roomID: classItem.room_id, pid: getPid(classItem.room_type, roomkitstate.env, false), userID })
+      if (classDetail && classDetail.data) routeParam.subject = classDetail.data.subject
+      setSpinner(false)
+      joinRoom(routeParam)
+    } catch (error) {
+      setSpinner(false)
+    }
   };
 
   async function getClassDetail({ roomID, pid, userID }: any) {
-    // const { roomID, pid } = route.params;
     try {
       const query = {
         uid: userID,
         room_id: roomID,
         pid,
       };
-      console.log('mytag query', query);
       const classDetail = await getRoomInfoApi(query);
-      console.log('mytag classDetail', classDetail)
       return classDetail;
     } catch (error) {
       return null;
     }
   }
+
   return (
     <View style={{ backgroundColor: '#F6F6F6', flex: 1 }}>
       <ScheduleHeader navigation={navigation}>

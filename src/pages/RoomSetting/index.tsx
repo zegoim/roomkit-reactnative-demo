@@ -48,7 +48,7 @@ const SwitchButtonMemo = memo(SwitchButton);
 
 const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [roomkitstate, roomkitAction] = useRoomkit();
-  const { roomSettings, roomUIConfig, isAvatarHidden } = roomkitstate;
+  const { roomSettings, roomUIConfig, isAvatarShow } = roomkitstate;
 
   return (
     <ScrollView stickyHeaderIndices={[0]} style={{ backgroundColor: '#F5F5F5', flex: 1 }}>
@@ -98,7 +98,7 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
         getSwitch={roomkitAction.SetIsFixedInOutMessage}
         content={i18n.t('roomkit_show_in_out_room_msg')}
       />
-      <SwitchButtonMemo value={isAvatarHidden} getSwitch={roomkitAction.setIsAvatarHidden} content={i18n.t('roomkit_msg_avatar')} />
+      <SwitchButtonMemo value={isAvatarShow} getSwitch={roomkitAction.setIsAvatarShow} content={i18n.t('roomkit_msg_avatar')} />
       <SwitchButtonMemo
         value={roomUIConfig.isMemberLeaveRoomMessageHidden}
         getSwitch={roomkitAction.setIsMemberLeaveRoomMessageHidden}
