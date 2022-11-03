@@ -48,7 +48,7 @@ export interface RoomkitAction {
   setIsMoreHidden: (val: boolean) => void;
 
   // avatar
-  setIsAvatarHidden: (val: boolean) => void;
+  setIsAvatarShow: (val: boolean) => void;
 }
 export interface RoomkitInitState {
   count: number;
@@ -56,7 +56,7 @@ export interface RoomkitInitState {
   token: string;
   roomSettings: RoomSettings;
   roomUIConfig: RoomUIConfig;
-  isAvatarHidden: boolean;
+  isAvatarShow: boolean;
 }
 
 const initialState: RoomkitInitState = {
@@ -83,7 +83,7 @@ const initialState: RoomkitInitState = {
     isMicrophoneHidden: false,
     isMoreHidden: false,
   },
-  isAvatarHidden: false
+  isAvatarShow: false
 };
 
 function roomkitReducer(state: RoomkitInitState, action: { type: any; payload?: any }) {
@@ -109,10 +109,10 @@ function roomkitReducer(state: RoomkitInitState, action: { type: any; payload?: 
   } else if (action.type === 'updateToken') {
     const { token } = action.payload;
     _state.token = token;
-  } else if (action.type === "setIsAvatarHidden") {
+  } else if (action.type === "setIsAvatarShow") {
     const { key, val } = action.payload;
-    _state.isAvatarHidden = val;
-    storage.setItem('isAvatarHidden', JSON.stringify(val));
+    _state.isAvatarShow = val;
+    storage.setItem('isAvatarShow', JSON.stringify(val));
   }
 
   return _state;
@@ -130,8 +130,8 @@ const RoomkitHooks = () => {
     const rawRoomUIConfig = await storage.getItem('roomUIConfig');
     if (rawRoomUIConfig) Object.assign(_state.roomUIConfig, JSON.parse(rawRoomUIConfig));
 
-    const rawIsAvatarHidden = await storage.getItem('isAvatarHidden');
-    if (rawIsAvatarHidden) _state.isAvatarHidden = JSON.parse(rawIsAvatarHidden)
+    const rawIsAvatarShow = await storage.getItem('isAvatarShow');
+    if (rawIsAvatarShow) _state.isAvatarShow = JSON.parse(rawIsAvatarShow)
 
     const rawEvn = await storage.getItem('env');
     if (rawEvn) _state.env = JSON.parse(rawEvn)
@@ -214,8 +214,8 @@ const RoomkitHooks = () => {
   const setIsMoreHidden = (val: boolean) => {
     dispatch({ type: 'updateRoomUIConfig', payload: { key: 'isMoreHidden', val } });
   };
-  const setIsAvatarHidden = (val: boolean) => {
-    dispatch({ type: 'setIsAvatarHidden', payload: { key: 'isAvatarHidden', val } });
+  const setIsAvatarShow = (val: boolean) => {
+    dispatch({ type: 'setIsAvatarShow', payload: { key: 'isAvatarShow', val } });
   };
 
   return {
@@ -238,7 +238,7 @@ const RoomkitHooks = () => {
     setIsCameraHidden,
     setIsMicrophoneHidden,
     setIsMoreHidden,
-    setIsAvatarHidden
+    setIsAvatarShow
   };
 };
 
