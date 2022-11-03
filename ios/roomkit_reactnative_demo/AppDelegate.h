@@ -6,3 +6,7 @@
 @property (nonatomic, strong) UIWindow *window;
 
 @end
+
+@interface TLNavigationController : UINavigationController
+
+@end

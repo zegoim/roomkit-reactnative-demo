@@ -15,6 +15,7 @@
 #import <ReactCommon/RCTTurboModuleManager.h>
 
 #import <react/config/ReactNativeConfig.h>
+#import <Bugly/Bugly.h>
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
@@ -56,6 +57,10 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
+  
+  UINavigationController *nav = [[TLNavigationController alloc] initWithRootViewController:self.window.rootViewController];
+  self.window.rootViewController = nav;
+  
   [self.window makeKeyAndVisible];
   return YES;
 }
@@ -129,5 +134,73 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 }
 
 #endif
+
+
+- (void)configBugly {
+#ifndef DEBUG
+    BuglyConfig *config = [BuglyConfig new];
+    config.blockMonitorEnable = YES;
+    [Bugly startWithAppId:@"74ea7a20e0" config:config];
+#endif
+}
+
+@end
+
+
+
+
+@interface TLNavigationController ()<UIGestureRecognizerDelegate>
+
+@end
+
+@implementation TLNavigationController
+
+- (instancetype)initWithRootViewController:(UIViewController *)rootViewController {
+    self = [super initWithRootViewController:rootViewController];
+    if (self) {
+        [self configNavigation];
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    __weak TLNavigationController *weakSelf = self;
+    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.interactivePopGestureRecognizer.delegate = weakSelf;
+    }
+}
+
+- (void)configNavigation {
+//    UINavigationBar *navigationBar = self.navigationBar;
+//    [navigationBar setShadowImage:[UIImage new]];
+//    navigationBar.barTintColor = [UIColor whiteColor];
+    self.navigationBar.hidden = YES;
+}
+
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+  if (self.childViewControllers.count == 1 ||
+      self.visibleViewController == [self.viewControllers objectAtIndex:0]) {
+      return NO;
+  }
+  return YES;
+}
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+//返回直接支持的方向
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+//返回最优先显示的屏幕方向
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
 
 @end
