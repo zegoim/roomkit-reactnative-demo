@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Modal, Keyb
 import i18n from 'i18n-js';
 import { SelectModalList, SelectItem } from '../../../types/types';
 import { Env } from '../../../config';
-import { RadioButton } from 'react-native-paper';
 import RadioGroup from 'react-native-radio-buttons-group';
 
 
@@ -232,10 +231,11 @@ export const EnvTitle: React.FC<{}> = () => {
       marginBottom: 20,
     },
     line: {
-      borderTopColor: '#F1F1F1',
-      borderTopWidth: 1,
-      height: 0,
+      // borderTopColor: '#F1F1F1',
+      // borderTopWidth: 1,
+      height: 1,
       width: 113,
+      backgroundColor: "#F1F1F1"
     },
     text: { paddingHorizontal: 11, fontSize: 13, color: '#AFB6BE' },
     tips: {

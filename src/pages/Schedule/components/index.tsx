@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Image, Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {SelectModalList, SelectItem, ClassInfo} from '../../../types/types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SelectModalList, SelectItem, ClassInfo } from '../../../types/types';
 import i18n from 'i18n-js';
 
 export const ScheduleHeader: React.FC<{
   navigation: any;
   children: JSX.Element[];
-}> = ({children}) => {
+}> = ({ children }) => {
   const headerStyle = StyleSheet.create({
     container: {
       height: 44,
@@ -41,7 +41,7 @@ export const ScheduleHeader: React.FC<{
 export const ArrangeButton: React.FC<{
   list: SelectModalList;
   onSelected: (selectedItem: SelectItem, index: number) => void;
-}> = ({list, onSelected}) => {
+}> = ({ list, onSelected }) => {
   const headerStyle = StyleSheet.create({
     text: {
       fontSize: 16,
@@ -137,7 +137,7 @@ export const ScheduleItem: React.FC<{
   index: number;
   onShutdown: (classItem: ClassInfo) => void;
   onJoinClass: (classItem: ClassInfo) => void;
-}> = ({classItem, index, onShutdown, onJoinClass}) => {
+}> = ({ classItem, index, onShutdown, onJoinClass }) => {
   const itemStyle = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -172,15 +172,18 @@ export const ScheduleItem: React.FC<{
       justifyContent: 'space-between',
       alignItems: 'flex-end',
     },
-    addClassBtn: {
+    addClassBtnView: {
       width: 60,
       paddingVertical: 7,
-      fontSize: 13,
       borderRadius: 4,
       backgroundColor: '#2953FF',
+    },
+    addClassBtnText: {
       textAlign: 'center',
       color: 'white',
+      fontSize: 13,
     },
+
     shutdown: {
       position: 'absolute',
       right: 7,
@@ -200,23 +203,23 @@ export const ScheduleItem: React.FC<{
     <View style={itemStyle.container}>
       <View style={itemStyle.timeBox}>
         <Text style={itemStyle.time}>{getTime(classItem.begin_timestamp)}</Text>
-        <Text style={[itemStyle.time, {marginTop: 14}]}>{getTime(classItem.end_timestamp)}</Text>
+        <Text style={[itemStyle.time, { marginTop: 14 }]}>{getTime(classItem.end_timestamp)}</Text>
       </View>
       <View style={itemStyle.subjectBox}>
         <Text style={itemStyle.title}>{classItem.subject}</Text>
         <View style={itemStyle.addClassBar}>
-          <View style={{paddingBottom: 3, flexDirection: 'row'}}>
+          <View style={{ paddingBottom: 3, flexDirection: 'row' }}>
             <Text>{i18n.t('roomkit_room_id')} </Text>
             <Text>{classItem.room_id}</Text>
           </View>
-          <Text
-            style={itemStyle.addClassBtn}
-            onPress={() => {
-              onJoinClass(classItem);
-            }}>
-            {i18n.t('roomkit_room_join')}
-          </Text>
-          {/* </TouchableOpacity> */}
+          <TouchableOpacity onPress={() => {
+            onJoinClass(classItem);
+          }}>
+            <View style={itemStyle.addClassBtnView}>
+              <Text style={itemStyle.addClassBtnText}>{i18n.t('roomkit_room_join')}</Text>
+            </View>
+          </TouchableOpacity>
+
         </View>
       </View>
       <TouchableOpacity
@@ -226,7 +229,7 @@ export const ScheduleItem: React.FC<{
         style={itemStyle.shutdown}
         activeOpacity={1}>
         <Image
-          style={{width: 15, height: 15}}
+          style={{ width: 15, height: 15 }}
           source={require('../../../assets/image/shutdown.png')}
         />
       </TouchableOpacity>
@@ -240,7 +243,7 @@ export const DefaultView = () => {
       width: 120,
       height: 120,
     },
-    center: {alignItems: 'center', marginTop: 100},
+    center: { alignItems: 'center', marginTop: 100 },
   });
   return (
     <View style={styles.center}>

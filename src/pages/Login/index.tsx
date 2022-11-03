@@ -171,9 +171,12 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
           list={roleTypeList}
           onSelected={setRoleTypeFun}
         />
-        <Text style={styles.joinClass} onPress={joinClassRoom}>
-          {i18n.t('roomkit_quick_join_room')}
-        </Text>
+        <TouchableWithoutFeedback onPress={joinClassRoom}>
+          <View style={styles.joinClassView} >
+            <Text style={styles.joinClassText}>{i18n.t('roomkit_quick_join_room')}</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
         <Text style={styles.createClass} onPress={createRoom}>
           {i18n.t('roomkit_create_room')}
         </Text>
@@ -193,17 +196,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: '100%',
   },
-
-  joinClass: {
+  joinClassView: {
     backgroundColor: '#2953FF',
     borderRadius: 6,
     paddingVertical: 16,
     marginTop: 21,
     marginHorizontal: 30,
-    fontSize: 16,
+  },
+  joinClassText: {
     textAlign: 'center',
     color: '#FFFFFF',
+    fontSize: 16,
   },
+
   createClass: {
     textAlign: 'center',
     color: '#2953FF',
