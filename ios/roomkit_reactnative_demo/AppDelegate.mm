@@ -15,7 +15,7 @@
 #import <ReactCommon/RCTTurboModuleManager.h>
 
 #import <react/config/ReactNativeConfig.h>
-#import <Bugly/Bugly.h>
+#import "AppDelegate+Extension.h"
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
@@ -33,7 +33,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
-  [self configBugly];
+  [self performSelector:NSSelectorFromString(@"configBugly")];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
@@ -60,8 +60,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   
-  UINavigationController *nav = [[TLNavigationController alloc] initWithRootViewController:self.window.rootViewController];
-  self.window.rootViewController = nav;
+//  UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.window.rootViewController];
+//  self.window.rootViewController = nav;
   
   [self.window makeKeyAndVisible];
   return YES;
@@ -138,13 +138,6 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #endif
 
 
-- (void)configBugly {
-#ifndef DEBUG
-    BuglyConfig *config = [BuglyConfig new];
-    config.blockMonitorEnable = YES;
-    [Bugly startWithAppId:@"74ea7a20e0" config:config];
-#endif
-}
 
 @end
 
@@ -197,12 +190,14 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 }
 //返回直接支持的方向
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAll;
 }
 
 //返回最优先显示的屏幕方向
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
+
+
 
 @end
