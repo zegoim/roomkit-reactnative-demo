@@ -146,5 +146,6 @@
   "roomkit_msg_avatar": "消息头像",
   "roomkit_show_in_out_room_msg": "固定展示进退房消息",
   "server_budy": "服务繁忙，稍候请重试",
-  "log_in_again": "登录状态失效，请重新登录"
+  "log_in_again": "登录状态失效，请重新登录",
+  "belong": "创建的"
 }
