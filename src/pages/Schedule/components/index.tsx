@@ -38,7 +38,7 @@ export const ScheduleHeader: React.FC<{
   );
 };
 
-export const ArrangeButton: React.FC<{
+export const ClassTypesButton: React.FC<{
   list: SelectModalList;
   onSelected: (selectedItem: SelectItem, index: number) => void;
 }> = ({ list, onSelected }) => {

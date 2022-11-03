@@ -29,9 +29,7 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
         // setSpinner(true)
         // const { userID, roomID, pid, userName, role } = route.params;
         // 初始化
-
         callbackRegister();
-
         const roomService = ZegoRoomkitSdk.instance().inRoomService();
         const roomSetting = ZegoRoomkitSdk.instance().roomSettings();
 
@@ -43,8 +41,8 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
             });
         }
         // UI config
-        const { isMemberLeaveRoomMessageHidden , isBottomBarHiddenMode } = roomkitstate.roomUIConfig;
-        
+        const { isMemberLeaveRoomMessageHidden, isBottomBarHiddenMode } = roomkitstate.roomUIConfig;
+
         await roomService.setUIConfig({
             ...roomkitstate.roomUIConfig,
             isMemberJoinRoomMessageHidden: isMemberLeaveRoomMessageHidden,
@@ -108,6 +106,12 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
         console.log('mytag error in joinRoom', error);
         return error
     }
+}
+
+
+export async function getDeviceID() {
+    let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
+    return deviceID
 }
 
 function callbackRegister() {

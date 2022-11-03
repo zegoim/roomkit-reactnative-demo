@@ -19,7 +19,7 @@ import {
 } from './components/index';
 
 import { LoadingContext } from "../../App"
-import { joinRoom } from '../../api/roomkitApi';
+import { getDeviceID, joinRoom } from '../../api/roomkitApi';
 import { getRoomInfoApi } from '../../api/requestApi';
 
 enum RoleType {
@@ -128,8 +128,7 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   const createRoom = useCallback(async () => {
     console.log('mytag before');
 
-    let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
-    console.log('mytag deviceID in Login ', deviceID);
+    let deviceID = await getDeviceID();
     const userName_deviceID = String(getUid(deviceID));
     const userID = getUid(String(userName_deviceID));
     const routeParam = {
@@ -176,12 +175,11 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
             <Text style={styles.joinClassText}>{i18n.t('roomkit_quick_join_room')}</Text>
           </View>
         </TouchableWithoutFeedback>
-
         <Text style={styles.createClass} onPress={createRoom}>
           {i18n.t('roomkit_create_room')}
         </Text>
         <Footer>
-          <View>
+          <View style={{marginBottom: 10}}>
             <EnvTitle />
             <EnvChooseButton envValue={roomkitstate.env} onChoose={roomkitAction.setEnv} />
           </View>

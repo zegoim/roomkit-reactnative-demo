@@ -14,7 +14,7 @@ import { useRoomkit } from '../../context/roomkitContext';
 import { getPid } from '../../utils/utils';
 import { useFocusEffect } from '@react-navigation/native';
 import { SelectModalList, SelectItem, ClassInfo } from '../../types/types';
-import { DefaultView, ArrangeButton, ScheduleHeader, ScheduleItem } from './components';
+import { DefaultView, ClassTypesButton, ScheduleHeader, ScheduleItem } from './components';
 import Toast from 'react-native-toast-message';
 import { LoadingContext } from "../../App"
 import { joinRoom } from '../../api/roomkitApi';
@@ -276,7 +276,7 @@ const App: React.FC<{
       <ScheduleHeader navigation={navigation}>
         <Text onPress={goSetting}>{i18n.t('roomkit_setting')}</Text>
         <Text>{i18n.t('roomkit_main_page')}</Text>
-        <ArrangeButton onSelected={selectItem} list={ClassTypeList} />
+        <ClassTypesButton onSelected={selectItem} list={ClassTypeList} />
       </ScheduleHeader>
       <ScrollView
         style={{ backgroundColor: `${classList.length ? '#F6F6F6' : 'white'}` }}
