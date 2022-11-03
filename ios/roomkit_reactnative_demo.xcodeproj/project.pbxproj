@@ -168,7 +168,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				60F53B5CAB3726DBED23DA40 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -190,8 +190,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				45B2712D80E8621778EC2F4C /* [CP] Embed Pods Frameworks */,
+				DBF8DED00F714EACF6229B32 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -293,6 +293,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo/Pods-roomkit_reactnative_demo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		60F53B5CAB3726DBED23DA40 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -354,7 +371,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
+		DBF8DED00F714EACF6229B32 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -369,23 +386,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo/Pods-roomkit_reactnative_demo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {

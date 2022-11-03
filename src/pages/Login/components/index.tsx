@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Modal, KeyboardTypeOptions } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback, TextInput, Modal, KeyboardTypeOptions, SafeAreaView } from 'react-native';
 import i18n from 'i18n-js';
 import { SelectModalList, SelectItem } from '../../../types/types';
 import { Env } from '../../../config';
@@ -237,10 +237,10 @@ export const EnvTitle: React.FC<{}> = () => {
       width: 113,
       backgroundColor: "#F1F1F1"
     },
-    text: { paddingHorizontal: 11, fontSize: 13, color: '#AFB6BE' },
-    tips: {
-      width: 14,
-      height: 14,
+    text: {
+      marginLeft: 11,
+      fontSize: 13,
+      color: '#AFB6BE'
     },
   });
   return (
@@ -248,17 +248,88 @@ export const EnvTitle: React.FC<{}> = () => {
       <Text style={envStyles.line} />
       <Text style={envStyles.text}>
         {i18n.t('roomkit_quick_join_access_env')}{' '}
-        {/* <Image style={envStyles.tips} source={require('../../../assets/image/tips.png')} /> */}
       </Text>
+      <EnvTipsButton></EnvTipsButton>
       <Text style={envStyles.line} />
     </View>
   );
 };
 
-//     onChoose(value === i18n.t(ENV_VAL.CHINA) ? Env.MainLand : Env.OverSeas);
 
-//       label={i18n.t(ENV_VAL.CHINA)}
-//       value={i18n.t(ENV_VAL.CHINA)}
+const EnvTipsButton: React.FC<{
+}> = ({ }) => {
+  const headerStyle = StyleSheet.create({
+    text: {
+      fontSize: 16,
+      color: '#040404',
+      padding: 5,
+    },
+    rightTitle: {
+      color: '#2953FF',
+    },
+    tips: {
+      width: 14,
+      height: 14,
+      marginRight: 11,
+      marginTop: 2,
+      padding: 3
+    },
+  });
+  const [modalVisible, setModalVisible] = useState(false);
+  return (
+    <View>
+      <TouchableWithoutFeedback onPress={() => {
+        setModalVisible(true);
+      }} hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+        <Image style={headerStyle.tips} source={require('../../../assets/image/tips.png')} />
+      </TouchableWithoutFeedback>
+      <ClassTypeModal />
+    </View>
+  );
+
+  function ClassTypeModal() {
+    const modalStyle = StyleSheet.create({
+      modalContainer: {
+        flex: 1,
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+      },
+      modalView: {
+        position: 'relative',
+        bottom: 80,
+        left: 30,
+        right: 30,
+        borderRadius: 6,
+        overflow: "hidden"
+      },
+      modalRow: {
+        maxWidth: 330,
+        padding: 10,
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 14,
+        backgroundColor: 'rgba(1,1,1,0.8)',
+      },
+    });
+    
+    return (
+      <Modal animationType="none" transparent={true} visible={modalVisible}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "transparent" }}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+            style={modalStyle.modalContainer}>
+            <View style={[modalStyle.modalView]}>
+              <Text style={modalStyle.modalRow}>{i18n.t("roomkit_quick_join_access_env_tips")}</Text>
+            </View>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </Modal>
+    );
+  }
+};
 
 
 export const EnvChooseButton: React.FC<{ envValue: Env; onChoose: (env: number) => void }> = ({
