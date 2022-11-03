@@ -32,7 +32,7 @@ import Setting from './pages/Setting/index';
 import RoomSetting from './pages/RoomSetting';
 import CustomUI from './pages/CustomUI/index';
 import Schedule from './pages/Schedule/index';
-import Classroom from './pages/Classroom/index';
+// import Classroom from './pages/Classroom/index';
 import { toastConfig } from './utils/CustomToast';
 import { useState } from 'react';
 import { initRoomkit } from './api/roomkitApi';
@@ -93,13 +93,13 @@ const screens = [
     },
     component: Schedule,
   },
-  {
-    name: 'Classroom',
-    options: {
-      headerShown: false,
-    },
-    component: Classroom,
-  },
+  // {
+  //   name: 'Classroom',
+  //   options: {
+  //     headerShown: false,
+  //   },
+  //   component: Classroom,
+  // },
   {
     name: 'Setting',
     options: {
