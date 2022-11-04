@@ -96,3 +96,26 @@ roomkit-reactnative-demo
 
 
 
+
+
+### Q&A
+
+1. `yarn ios` 失败，可以通过启动 `/ios/roomkit_reactnative_demo.xcworkspace` 文件，在 xcode 中启动模拟器，查看详细报错。
+
+
+
+
+
+##### 几种`yarn ios ` 失败后的处理方式
+
+
+
+##### 遇到以下报错：
+
+![企业微信截图_610be5e5-e58c-4f7b-9a32-afd8e2c27361](docs/assets/企业微信截图_610be5e5-e58c-4f7b-9a32-afd8e2c27361.png)
+
+
+
+##### 处理方式：
+
+![image-20221104201611422](docs/assets/image-20221104201611422.png)
