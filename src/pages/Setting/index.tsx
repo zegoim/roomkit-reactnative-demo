@@ -49,7 +49,7 @@ const App: React.FC<{route: any; navigation: any}> = ({route, navigation}) => {
 
       <EnvSelectButton value={roomkitstate.env} list={EnvList} onSelected={selectEnv} />
 
-      <ArrowButtonMemo needArrow={false} rightContext={'v1.1.1'}>
+      <ArrowButtonMemo needArrow={false} rightContext={'v1.0.0'}>
         {i18n.t('roomkit_setting_version')}
       </ArrowButtonMemo>
       {/* <ArrowButtonMemo disabled={true} style={styles.mgt10}>
