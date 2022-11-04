@@ -52,10 +52,10 @@ const App: React.FC<{route: any; navigation: any}> = ({route, navigation}) => {
       <ArrowButtonMemo needArrow={false} rightContext={'v1.1.1'}>
         {i18n.t('roomkit_setting_version')}
       </ArrowButtonMemo>
-      <ArrowButtonMemo disabled={true} style={styles.mgt10}>
+      {/* <ArrowButtonMemo disabled={true} style={styles.mgt10}>
         {i18n.t('roomkit_feedback')}
       </ArrowButtonMemo>
-      <ArrowButtonMemo disabled={true}>{i18n.t('roomkit_setting_upload_log')}</ArrowButtonMemo>
+      <ArrowButtonMemo disabled={true}>{i18n.t('roomkit_setting_upload_log')}</ArrowButtonMemo> */}
       {/* <ArrowButtonMemo disabled={true} style={styles.mgt10} needArrow={false} isCenterLayout={true}>
         {i18n.t('roomkit_setting_cancel_account')}
       </ArrowButtonMemo> */}

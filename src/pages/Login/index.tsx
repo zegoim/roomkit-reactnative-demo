@@ -3,7 +3,6 @@ import { Button, Keyboard, StatusBar, StyleSheet, Text, TouchableWithoutFeedback
 
 import i18n from 'i18n-js';
 import Toast from 'react-native-toast-message';
-import ZegoRoomkitSdk from 'zego_roomkit_reactnative_sdk';
 import { SelectModalList } from '../../types/types';
 import { getUid, getPid } from '../../utils/utils';
 import { ClassType, SecretID } from '../../config';
