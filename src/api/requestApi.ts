@@ -42,7 +42,9 @@ export const ajax = (url: string, options: ajaxOptions) => {
           return resolve(res.data);
         }
         // Toast.fail(res.data.ret);
-        Toast.show({text1: `message:${res.data.ret.message}`, type: 'error'});
+        if(res.data.ret.code !== 20001){
+          Toast.show({text1: `message:${res.data.ret.message}`, type: 'error'});
+        }
         reject({
           res,
           handled: false,
