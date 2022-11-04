@@ -5,7 +5,7 @@ import i18n from 'i18n-js';
 import Toast from 'react-native-toast-message';
 import { SelectModalList } from '../../types/types';
 import { getUid, getPid } from '../../utils/utils';
-import { ClassType, SecretID } from '../../config';
+import { ClassType, SecretID, SecretSign } from '../../config';
 import { useRoomkit } from '../../context/roomkitContext';
 import {
   Logo,
@@ -59,10 +59,7 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [roleType, setRole] = useState(0);
   const [roomkitstate, roomkitAction] = useRoomkit();
   // init select list
-  useState(() => initList());
-  useEffect(() => {
-    console.log('roomkitstate.env in useEffect', roomkitstate.env)
-  }, [roomkitstate.env])
+  initList()
   // @ts-ignore
   const { setSpinner } = useContext(LoadingContext)
 
@@ -74,6 +71,9 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   const setRoleTypeFun = useCallback((selectedItem: any) => {
     setRole(selectedItem.value);
   }, []);
+  if(!SecretSign){
+    Toast.show({ text1: i18n.t('missing_config_info'), type: 'error' });
+  }
 
   const joinClassRoom = async () => {
     if (!roomID) {
@@ -96,12 +96,12 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
         role: roleType,
         classType,
         userID: getUid(userName),
-        pid: getPid(classType, roomkitstate.env, false),
+        pid: getPid(classType, roomkitstate.env),
         roomkitstate,
         subject: roomID
 
       };
-      const classDetail = await getClassDetail({ roomID: roomID, pid: getPid(classType, roomkitstate.env, false), userID: getUid(userName) })
+      const classDetail = await getClassDetail({ roomID: roomID, pid: getPid(classType, roomkitstate.env), userID: getUid(userName) })
       if (classDetail && classDetail.data) routeParam.subject = classDetail.data.subject
       setSpinner(false)
       joinRoom(routeParam)
@@ -178,7 +178,7 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
           {i18n.t('roomkit_create_room')}
         </Text>
         <Footer>
-          <View style={{marginBottom: 10}}>
+          <View style={{ marginBottom: 10 }}>
             <EnvTitle />
             <EnvChooseButton envValue={roomkitstate.env} onChoose={roomkitAction.setEnv} />
           </View>

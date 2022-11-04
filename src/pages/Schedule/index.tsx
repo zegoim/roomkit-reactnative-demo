@@ -116,7 +116,7 @@ const App: React.FC<{
   // @ts-ignore
   const { setSpinner } = useContext(LoadingContext)
 
-  useState(() => initList());
+  initList()
   useEffect(() => {
     getClassList();
   }, [])
@@ -181,7 +181,7 @@ const App: React.FC<{
         classType,
         token,
         deviceID,
-        pid: getPid(classType, roomkitstate.env, false),
+        pid: getPid(classType, roomkitstate.env),
       });
       setSpinner(false)
       return result;
@@ -241,14 +241,14 @@ const App: React.FC<{
         role: classItem.user_role,
         classType: classItem.room_type,
         userID: userID,
-        pid: getPid(classItem.room_type, roomkitstate.env, false),
+        pid: getPid(classItem.room_type, roomkitstate.env),
         roomkitstate,
         subject: classItem.room_id
       };
 
       console.log('routeParam', routeParam)
       // navigation.push('Classroom', routeParam);
-      const classDetail = await getClassDetail({ roomID: classItem.room_id, pid: getPid(classItem.room_type, roomkitstate.env, false), userID })
+      const classDetail = await getClassDetail({ roomID: classItem.room_id, pid: getPid(classItem.room_type, roomkitstate.env), userID })
       if (classDetail && classDetail.data) routeParam.subject = classDetail.data.subject
       setSpinner(false)
       joinRoom(routeParam)

@@ -147,5 +147,6 @@
   "roomkit_show_in_out_room_msg": "Fixed display of in-room and out-room messages",
   "server_busy": "Service is busy, please try again later",
   "log_in_again": "The login status is invalid, please log in again",
-  "belong": "'s "
+  "belong": "'s ",
+  "missing_config_info": "Missing configuration information, please complete the configuration"
 }
