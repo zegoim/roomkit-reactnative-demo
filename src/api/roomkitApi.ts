@@ -25,8 +25,6 @@ export async function initRoomkit() {
 
 export async function joinRoom({ userID, roomID, pid, userName, role, subject = "", roomkitstate }: any) {
     try {
-        // setSpinner(true)
-        // const { userID, roomID, pid, userName, role } = route.params;
         // 初始化
         callbackRegister();
         const roomService = ZegoRoomkitSdk.instance().inRoomService();
@@ -39,15 +37,16 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
                 customIconUrl: 'https://gss3.bdstatic.com/84oSdTum2Q5BphGlnYG/timg?wapp&quality=80&size=b150_150&subsize=20480&cut_x=0&cut_w=0&cut_y=0&cut_h=0&sec=1369815402&srctrace&di=9f46b42f94ad866a87f516bccc32bbbc&wh_rate=null&src=http%3A%2F%2Fimgsrc.baidu.com%2Fforum%2Fpic%2Fitem%2Fb1f204d162d9f2d398ed608fa6ec8a136227ccdd.jpg',
             });
         }
+
         // UI config
         const { isMemberLeaveRoomMessageHidden, isBottomBarHiddenMode } = roomkitstate.roomUIConfig;
-
         await roomService.setUIConfig({
             ...roomkitstate.roomUIConfig,
             isMemberJoinRoomMessageHidden: isMemberLeaveRoomMessageHidden,
             isMinimizeHidden: true,
             bottomBarHiddenMode: !isBottomBarHiddenMode ? 0 : 1,
         });
+
         // room button config
         const {
             isMicrophoneOnWhenJoiningRoom,
@@ -62,23 +61,10 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
         await roomSetting.setPreviewVideoMirrorMode(previewVideoMirrorMode ? ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeLeftRightSwap : ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeNone)
         await roomSetting.setVideoFitMode(videoFitMode ? ZegoVideoFitMode.ZegoVideoFill : ZegoVideoFitMode.ZegoVideoAspectFit)
 
-        // ZegoRoomkitSdk.instance().setAdvancedConfig({
-        //   domain: Domain,
-        // });
-
-        // setRoomParameter
-        // const classDetail = await getClassDetail({ roomID, pid, userID });
-
         let roomParameter: setRoomParameterConfig = {
             beginTimestamp: new Date().getTime(),
             subject: subject
         };
-
-        // let roomParameter = {
-        //     subject: classDetail && classDetail.subject,
-        //     beginTimestamp: new Date().getTime(),
-        // } as setRoomParameterConfig;
-
         await roomService.setRoomParameter(roomParameter);
 
         // joinRoomWithConfig
@@ -90,10 +76,9 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
             roomID,
             productID: pid,
             role,
-            token: token,
-        } as unknown as ZegoRoomkitJoinRoomConfig;
+            token,
+        } as ZegoRoomkitJoinRoomConfig;
 
-        console.log('before joinRoomWithConfig',)
         const joinRes = await roomService.joinRoomWithConfig(joinConfig);
         if (joinRes && !!joinRes.errorCode) {
             throw new Error(JSON.stringify(joinRes))
