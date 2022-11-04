@@ -38,7 +38,7 @@ export const SettingBtn: React.FC<{ navigation: any }> = ({ navigation }) => {
       <Text
         onPress={() => {
           navigation.push('Setting');
-          console.log('mytag touch setting');
+          console.log('touch setting');
         }}
         style={settingStyle.settingBtnText}>
         {i18n.t('roomkit_setting')}
@@ -74,7 +74,7 @@ export const InputBox: React.FC<{
 
       },
     });
-    console.log('mytag input box has rerender', placeholder);
+    console.log('input box has rerender', placeholder);
     return (
       <View style={[inputBoxStyle.inputBox]}>
         <TextInput
@@ -104,7 +104,7 @@ export const SelectBox: React.FC<{
   const [selectedVal, setSelectedVal] = useState(0);
   const [selectedContent, setSelectedContent] = useState('');
 
-  console.log('mytag list', list)
+  console.log('list', list)
 
   return (
     <View style={[seletBoxStyle.inputBox]}>
@@ -131,7 +131,7 @@ export const SelectBox: React.FC<{
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log('mytag touch input toggle');
+          console.log('touch input toggle');
           setModalVisible(!modalVisible);
         }}
         activeOpacity={1}
@@ -177,12 +177,12 @@ export const SelectBox: React.FC<{
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          console.log('mytag Modal has been closed.');
+          console.log('Modal has been closed.');
         }}>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-            console.log('mytag touch modal toggle');
+            console.log('touch modal toggle');
             setModalVisible(!modalVisible);
           }}
           style={modalStyle.modalContainer}>

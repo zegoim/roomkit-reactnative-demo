@@ -34,7 +34,7 @@ const SwitchButton: React.FC<{
       alignItems: 'center',
     },
   });
-  console.log('mytag re-render in custom ui', content);
+  console.log('re-render in custom ui', content);
 
   const onToggleSwitch = useCallback(() => {
     !!getSwitch && getSwitch(!value);

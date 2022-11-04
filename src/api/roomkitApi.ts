@@ -16,7 +16,7 @@ export async function initRoomkit() {
     try {
         await ZegoRoomkitSdk.instance().getDeviceID();
     } catch (error) {
-        console.log('mytag error in initRoomkit', error)
+        console.log('error in initRoomkit', error)
         await ZegoRoomkitSdk.init({
             secretID: SecretID,
         });
@@ -24,8 +24,6 @@ export async function initRoomkit() {
 }
 
 export async function joinRoom({ userID, roomID, pid, userName, role, subject = "", roomkitstate }: any) {
-
-    console.log('mytag roomkitstate', roomkitstate)
     try {
         // setSpinner(true)
         // const { userID, roomID, pid, userName, role } = route.params;
@@ -95,16 +93,16 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
             token: token,
         } as unknown as ZegoRoomkitJoinRoomConfig;
 
-        console.log('mytag before joinRoomWithConfig',)
+        console.log('before joinRoomWithConfig',)
         const joinRes = await roomService.joinRoomWithConfig(joinConfig);
         if (joinRes && !!joinRes.errorCode) {
             throw new Error(JSON.stringify(joinRes))
         }
         // setSpinner(false)
-        console.log('mytag done');
+        console.log('done');
     } catch (error) {
         Toast.show({ text1: i18n.t('roomkit_room_join_failed'), type: 'error' });
-        console.log('mytag error in joinRoom', error);
+        console.log('error in joinRoom', error);
         return error
     }
 }
@@ -113,6 +111,10 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
 export async function getDeviceID() {
     let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
     return deviceID
+}
+
+export async function getVersion() {
+    return await ZegoRoomkitSdk.instance().getVersion()
 }
 
 function callbackRegister() {
@@ -127,13 +129,13 @@ function callbackRegister() {
         }
     });
     ZegoRoomkitSdk.instance().on('memberJoinRoom', (args) => {
-        console.log('mytag roomkit callback memberJoinRoom', args);
+        console.log('roomkit callback memberJoinRoom', args);
     });
     ZegoRoomkitSdk.instance().on('memberLeaveRoom', () => {
-        console.log('mytag roomkit callback touch memberLeaveRoom');
+        console.log('roomkit callback touch memberLeaveRoom');
     });
 
     ZegoRoomkitSdk.instance().on('buttonEvent', function () {
-        console.log('mytag roomkit callback buttonEvent', arguments);
+        console.log('roomkit callback buttonEvent', arguments);
     });
 }

@@ -165,7 +165,7 @@ const App: React.FC<{
 
   const createClass = async (selectedItem: SelectItem) => {
     try {
-      console.log('mytag selectedItem', selectedItem);
+      console.log('selectedItem', selectedItem);
       setSpinner(true)
 
       const className = selectedItem.content;
@@ -173,7 +173,7 @@ const App: React.FC<{
       const token = roomkitstate.token
         ? roomkitstate.token
         : await roomkitAction.updateToken(deviceID);
-      console.log('mytag userName, userID', userName, userID);
+      console.log('userName, userID', userName, userID);
       const result = await createClassRoom({
         userID,
         userName,
@@ -211,7 +211,7 @@ const App: React.FC<{
         secret_id: SecretID,
         verify_type: 3,
       });
-      console.log('mytag result', result);
+      console.log('result', result);
       await getClassList();
       setSpinner(false)
       Toast.show({ text1: i18n.t('roomkit_room_delete_succeeded'), type: 'success' });
@@ -234,7 +234,7 @@ const App: React.FC<{
   const joinClassRoom = async (classItem: ClassInfo) => {
     setSpinner(true)
     try {
-      console.log('mytag classItem', classItem);
+      console.log('classItem', classItem);
       const routeParam = {
         roomID: classItem.room_id,
         userName,
@@ -246,7 +246,7 @@ const App: React.FC<{
         subject: classItem.room_id
       };
 
-      console.log('mytag routeParam', routeParam)
+      console.log('routeParam', routeParam)
       // navigation.push('Classroom', routeParam);
       const classDetail = await getClassDetail({ roomID: classItem.room_id, pid: getPid(classItem.room_type, roomkitstate.env, false), userID })
       if (classDetail && classDetail.data) routeParam.subject = classDetail.data.subject

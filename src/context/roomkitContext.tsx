@@ -137,16 +137,16 @@ const RoomkitHooks = () => {
     if (rawEvn) _state.env = JSON.parse(rawEvn)
 
 
-    // console.log('mytag _state', _state)
+    // console.log('_state', _state)
     // const asyncStorage = storage.getAsyncStorage()
     // // @ts-ignore
     // asyncStorage.getAllKeys((err, keys) => {
     //   // @ts-ignore
     //   asyncStorage.multiGet(keys, (err, stores) => {
     //     // @ts-ignore
-    //     console.log('mytag storage =========== keys', keys)
-    //     console.log('mytag storage =========== err', err)
-    //     console.log('mytag storage =========== stores', stores)
+    //     console.log('storage =========== keys', keys)
+    //     console.log('storage =========== err', err)
+    //     console.log('storage =========== stores', stores)
     //   });
     // });
 
@@ -154,14 +154,14 @@ const RoomkitHooks = () => {
   };
 
   const setEnv = (env: Env) => {
-    console.log('mytag env', env);
+    console.log('env', env);
     dispatch({ type: 'setEnv', payload: { env } });
   };
 
   const updateToken = async (deviceID: string) => {
-    console.log('mytag updateToken deviceID', deviceID)
+    console.log('updateToken deviceID', deviceID)
     const token = await getToken(deviceID);
-    console.log('mytag updateToken token', token)
+    console.log('updateToken token', token)
     dispatch({ type: 'updateToken', payload: { token } });
     return token;
   };

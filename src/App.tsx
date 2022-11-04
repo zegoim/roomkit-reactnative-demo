@@ -32,7 +32,6 @@ import Setting from './pages/Setting/index';
 import RoomSetting from './pages/RoomSetting';
 import CustomUI from './pages/CustomUI/index';
 import Schedule from './pages/Schedule/index';
-// import Classroom from './pages/Classroom/index';
 import { toastConfig } from './utils/CustomToast';
 import { useState } from 'react';
 import { initRoomkit } from './api/roomkitApi';
@@ -93,13 +92,6 @@ const screens = [
     },
     component: Schedule,
   },
-  // {
-  //   name: 'Classroom',
-  //   options: {
-  //     headerShown: false,
-  //   },
-  //   component: Classroom,
-  // },
   {
     name: 'Setting',
     options: {
@@ -114,13 +106,6 @@ const screens = [
     },
     component: CustomUI,
   },
-  // {
-  //   name: 'Details',
-  //   options: {
-  //     headerShown: false,
-  //   },
-  //   component: DetailsScreen,
-  // },
 ];
 
 
@@ -141,11 +126,10 @@ const App = () => {
 
 
   const handleLocalizationChange = (e: any) => {
-    console.log('mytag locallisze change e', e);
+    console.log('locallisze change e', e);
     setI18nConfig();
     forceUpdate();
   };
-
 
   return (
     <>
@@ -157,18 +141,7 @@ const App = () => {
               textContent={'Loading...'}
               textStyle={{ color: '#FFF' }}
             />
-            <NavigationContainer ref={navigationRef}
-              onReady={() => {
-                // @ts-ignore
-                routeNameRef.current = navigationRef.getCurrentRoute().name;
-                console.log('mytag routeNameRef ============= onReady', routeNameRef)
-              }}
-              onStateChange={async () => {
-                // @ts-ignore
-                routeNameRef.current = navigationRef.getCurrentRoute().name;
-                console.log('mytag routeNameRef ============= in onStateChange', routeNameRef)
-              }}
-            >
+            <NavigationContainer ref={navigationRef} >
               <StatusBar backgroundColor="white" barStyle="dark-content" />
               <Stack.Navigator>
                 {screens.map(screenItem => {

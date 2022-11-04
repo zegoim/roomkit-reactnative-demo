@@ -50,11 +50,9 @@ export const ArrowButton: React.FC<{
     },
   });
 
-  console.log('mytag re-render in setting com', children);
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log('mytag ');
         onPress && onPress();
       }}
       disabled={disabled}
@@ -138,12 +136,12 @@ export const EnvSelectButton: React.FC<{
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          console.log('mytag Modal has been closed.');
+          console.log('Modal has been closed.');
         }}>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-            console.log('mytag touch modal toggle');
+            console.log('touch modal toggle');
             setModalVisible(!modalVisible);
           }}
           style={modalStyle.modalContainer}>
@@ -225,7 +223,7 @@ export const LogoutComfirmButton: React.FC<{
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-            console.log('mytag touch modal toggle');
+            console.log('touch modal toggle');
             setModalVisible(!modalVisible);
           }}
           style={[modalStyle.modalContainer]}>
@@ -236,7 +234,7 @@ export const LogoutComfirmButton: React.FC<{
               </Text>
               <Text
                 onPress={() => {
-                  console.log('mytag touch confirm');
+                  console.log('touch confirm');
                 }}
                 style={[modalStyle.text, {color: '#F54326'}]}>
                 {i18n.t('setting_logout_btn_ok')}

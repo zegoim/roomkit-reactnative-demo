@@ -41,7 +41,7 @@ export const storage = {
     try {
       await AsyncStorage.setItem(key, val);
     } catch (error) {
-      console.log('mytag setItem error', error);
+      console.log('setItem error', error);
     }
   },
   async getItem(key: string) {
@@ -49,7 +49,7 @@ export const storage = {
       const value = await AsyncStorage.getItem(key);
       return value;
     } catch (error) {
-      console.log('mytag getItem error', error);
+      console.log('getItem error', error);
       return null;
     }
   },

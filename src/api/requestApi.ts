@@ -4,16 +4,6 @@ import {RoomkitServiceDomain, EduServiceDomain} from '../config';
 import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
 
-// import config from "./config";
-
-// const Toast = {
-//   fail(msg: string) {
-//     console.error('msg', msg);
-//   },
-//   info(msg: string) {
-//     console.log('mytag msg', msg);
-//   },
-// };
 interface ajaxOptions {
   baseURL?: string;
   version?: string;
@@ -47,7 +37,7 @@ export const ajax = (url: string, options: ajaxOptions) => {
   return new Promise<any>((resolve: any, reject: any) => {
     axios(url, axiosOptions)
       .then(async (res: AxiosResponse<any>) => {
-        console.log('mytag response', res.data);
+        console.log('response', res.data);
         if (res.data.ret.code === 0) {
           return resolve(res.data);
         }
@@ -59,11 +49,9 @@ export const ajax = (url: string, options: ajaxOptions) => {
         });
       })
       .catch(async (err: AxiosError) => {
-        console.log('mytag err', err);
-        // console.warn("err",err);
-        // console.log("url, axiosOptions",url, axiosOptions);
+        console.log('err', err);
+
         if (!err.response) {
-          
           Toast.show({text1: i18n.t('server_busy'), type: 'error'});
           reject({...err, handled: true});
           return;

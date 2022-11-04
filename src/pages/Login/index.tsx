@@ -61,7 +61,7 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   // init select list
   useState(() => initList());
   useEffect(() => {
-    console.log('mytag roomkitstate.env in useEffect', roomkitstate.env)
+    console.log('roomkitstate.env in useEffect', roomkitstate.env)
   }, [roomkitstate.env])
   // @ts-ignore
   const { setSpinner } = useContext(LoadingContext)
@@ -125,7 +125,7 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   }
 
   const createRoom = useCallback(async () => {
-    console.log('mytag before');
+    console.log('before');
 
     let deviceID = await getDeviceID();
     const userName_deviceID = String(getUid(deviceID));
