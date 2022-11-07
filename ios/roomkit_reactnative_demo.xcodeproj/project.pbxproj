@@ -12,7 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		66B2DD7D33A3AF7512C147F3 /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BEC400071BEF600228BC1B /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */; };
+		2154EA0DF5C597591F5EC2DD /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDE326C4297F5BEEC6B3BB42 /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		86794623290A70D000447D37 /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = 86794622290A70CF00447D37 /* bundle */; };
 		86E3B620290F7ADC0012425E /* Pods_roomkit_reactnative_demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */; };
@@ -27,10 +27,16 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = roomkit_reactnative_demo;
 		};
+		86794630290B7B0C00447D37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 86794627290B7B0C00447D37;
+			remoteInfo = roomkit_reactnative_demo_screen_share;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00BEC400071BEF600228BC1B /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356EE1AD99517003FC87E /* roomkit_reactnative_demoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = roomkit_reactnative_demoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* roomkit_reactnative_demoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = roomkit_reactnative_demoTests.m; sourceTree = "<group>"; };
@@ -43,14 +49,18 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = roomkit_reactnative_demo/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = roomkit_reactnative_demo/main.m; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-roomkit_reactnative_demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo.debug.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo/Pods-roomkit_reactnative_demo.debug.xcconfig"; sourceTree = "<group>"; };
+		406E17981192F20111FD9AC2 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.debug.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share/Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-roomkit_reactnative_demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo.release.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo/Pods-roomkit_reactnative_demo.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = roomkit_reactnative_demo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		865F3B9C2907E85A00397F41 /* roomkit_reactnative_demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = roomkit_reactnative_demo.entitlements; path = roomkit_reactnative_demo/roomkit_reactnative_demo.entitlements; sourceTree = "<group>"; };
 		86794622290A70CF00447D37 /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundle; sourceTree = "<group>"; };
 		86EB7EB8290E37580036BC2C /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig"; sourceTree = "<group>"; };
 		8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_roomkit_reactnative_demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		999020B75C0E587ECA2DAA2F /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.release.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share/Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.release.xcconfig"; sourceTree = "<group>"; };
+		B91A50CF97A9A99C8B10C1A5 /* Pods_roomkit_reactnative_demo_screen_share.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_roomkit_reactnative_demo_screen_share.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC26B65586520A0B99CF37BB /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C39C8CEF07ED4B8CB54D4770 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig"; path = "Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig"; sourceTree = "<group>"; };
+		CDE326C4297F5BEEC6B3BB42 /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -59,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66B2DD7D33A3AF7512C147F3 /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework in Frameworks */,
+				2154EA0DF5C597591F5EC2DD /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +78,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				86E3B620290F7ADC0012425E /* Pods_roomkit_reactnative_demo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86794625290B7B0C00447D37 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,7 +129,8 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				8BFA6ABBE4092CAE9E6C14AD /* Pods_roomkit_reactnative_demo.framework */,
-				00BEC400071BEF600228BC1B /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */,
+				B91A50CF97A9A99C8B10C1A5 /* Pods_roomkit_reactnative_demo_screen_share.framework */,
+				CDE326C4297F5BEEC6B3BB42 /* Pods_roomkit_reactnative_demo_roomkit_reactnative_demoTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -132,6 +150,7 @@
 				13B07FAE1A68108700A75B9A /* roomkit_reactnative_demo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* roomkit_reactnative_demoTests */,
+				8679462B290B7B0C00447D37 /* roomkit_reactnative_demo_screen_share */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -150,13 +169,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8679462B290B7B0C00447D37 /* roomkit_reactnative_demo_screen_share */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = roomkit_reactnative_demo_screen_share;
+			sourceTree = "<group>";
+		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				3B4392A12AC88292D35C810B /* Pods-roomkit_reactnative_demo.debug.xcconfig */,
 				5709B34CF0A7D63546082F79 /* Pods-roomkit_reactnative_demo.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig */,
+				406E17981192F20111FD9AC2 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.debug.xcconfig */,
+				999020B75C0E587ECA2DAA2F /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demo_screen_share.release.xcconfig */,
+				BC26B65586520A0B99CF37BB /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */,
+				C39C8CEF07ED4B8CB54D4770 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -168,12 +196,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "roomkit_reactnative_demoTests" */;
 			buildPhases = (
-				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				CABE8D23A96415226EB05E2B /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
 				C674949CF08D4F32C040C6AD /* [CP] Copy Pods Resources */,
+				E966030C9DFEF9C7D32B7F57 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -201,11 +229,28 @@
 			buildRules = (
 			);
 			dependencies = (
+				86794631290B7B0C00447D37 /* PBXTargetDependency */,
 			);
 			name = roomkit_reactnative_demo;
 			productName = roomkit_reactnative_demo;
 			productReference = 13B07F961A680F5B00A75B9A /* roomkit_reactnative_demo.app */;
 			productType = "com.apple.product-type.application";
+		};
+		86794627290B7B0C00447D37 /* roomkit_reactnative_demo_screen_share */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86794633290B7B0C00447D37 /* Build configuration list for PBXNativeTarget "roomkit_reactnative_demo_screen_share" */;
+			buildPhases = (
+				86794624290B7B0C00447D37 /* Sources */,
+				86794625290B7B0C00447D37 /* Frameworks */,
+				86794626290B7B0C00447D37 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = roomkit_reactnative_demo_screen_share;
+			productName = roomkit_reactnative_demo_screen_share;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -221,6 +266,9 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
+					};
+					86794627290B7B0C00447D37 = {
+						CreatedOnToolsVersion = 14.0;
 					};
 				};
 			};
@@ -239,6 +287,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* roomkit_reactnative_demo */,
 				00E356ED1AD99517003FC87E /* roomkit_reactnative_demoTests */,
+				86794627290B7B0C00447D37 /* roomkit_reactnative_demo_screen_share */,
 			);
 		};
 /* End PBXProject section */
@@ -259,6 +308,13 @@
 				86794623290A70D000447D37 /* bundle in Resources */,
 				86EB7EB9290E37580036BC2C /* Media.xcassets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86794626290B7B0C00447D37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,28 +371,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo/Pods-roomkit_reactnative_demo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -359,23 +393,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C674949CF08D4F32C040C6AD /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -391,6 +408,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CABE8D23A96415226EB05E2B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E966030C9DFEF9C7D32B7F57 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests/Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -433,6 +489,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		86794624290B7B0C00447D37 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -441,12 +504,17 @@
 			target = 13B07F861A680F5B00A75B9A /* roomkit_reactnative_demo */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
+		86794631290B7B0C00447D37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 86794627290B7B0C00447D37 /* roomkit_reactnative_demo_screen_share */;
+			targetProxy = 86794630290B7B0C00447D37 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */;
+			baseConfigurationReference = BC26B65586520A0B99CF37BB /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = B82BHJ5H89;
@@ -455,7 +523,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = roomkit_reactnative_demoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -474,13 +542,13 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig */;
+			baseConfigurationReference = C39C8CEF07ED4B8CB54D4770 /* Pods-roomkit_reactnative_demo-roomkit_reactnative_demoTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = B82BHJ5H89;
 				INFOPLIST_FILE = roomkit_reactnative_demoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -704,6 +772,78 @@
 			};
 			name = Release;
 		};
+		86794634290B7B0C00447D37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = roomkit_reactnative_demo_screen_share/roomkit_reactnative_demo_screen_share.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B82BHJ5H89;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = roomkit_reactnative_demo_screen_share/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = roomkit_reactnative_demo_screen_share;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "im.zego.RoomKitRNDemo.roomkit-reactnative-demo-screen-share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		86794635290B7B0C00447D37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = roomkit_reactnative_demo_screen_share/roomkit_reactnative_demo_screen_share.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B82BHJ5H89;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = roomkit_reactnative_demo_screen_share/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = roomkit_reactnative_demo_screen_share;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "im.zego.RoomKitRNDemo.roomkit-reactnative-demo-screen-share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -730,6 +870,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		86794633290B7B0C00447D37 /* Build configuration list for PBXNativeTarget "roomkit_reactnative_demo_screen_share" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86794634290B7B0C00447D37 /* Debug */,
+				86794635290B7B0C00447D37 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
