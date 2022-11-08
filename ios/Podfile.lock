@@ -322,6 +322,7 @@ PODS:
   - YYKit/no-arc (1.0.9)
   - ZegoRoomKit (2.1.0):
     - ZegoRoomKit/Default (= 2.1.0)
+  - ZegoRoomKit/Core (2.1.0)
   - ZegoRoomKit/Default (2.1.0)
 
 DEPENDENCIES:
@@ -364,6 +365,7 @@ DEPENDENCIES:
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+  - ZegoRoomKit/Core (= 2.1.0)
 
 SPEC REPOS:
   trunk:
@@ -503,6 +505,6 @@ SPEC CHECKSUMS:
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
   ZegoRoomKit: cb38368a59ebb0c19f351a85f986dac824437dcf
 
-PODFILE CHECKSUM: 5016508aa2be7628e2cd6b10abc1c6adf77d1353
+PODFILE CHECKSUM: be8f5afd5bc0f7e29813a4fdc408d9aefda19cf1
 
 COCOAPODS: 1.11.3

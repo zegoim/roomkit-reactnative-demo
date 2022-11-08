@@ -8,7 +8,6 @@
 
 #import "SampleHandler.h"
 #import <ZegoRoomKitCore/ZegoRoomKitCore.h>
-#import "ZegoAuthConstants.h"
 
 @interface SampleHandler ()<ZegoScreenShareServiceDelegate>
 
@@ -17,7 +16,7 @@
 
 - (void)broadcastStartedWithSetupInfo:(NSDictionary<NSString *,NSObject *> *)setupInfo {
     // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
-    [[ZegoScreenShareService sharedInstance] configWithAppGroup:kZegoRPAppGroup];
+    [[ZegoScreenShareService sharedInstance] configWithAppGroup:@"group.im.zego.RoomKitRNDemo"];
     [ZegoScreenShareService sharedInstance].delegate = self;
     [[ZegoScreenShareService sharedInstance] startBroadcast];
 }

@@ -1,8 +1,8 @@
 //
 //  SampleHandler.h
-//  RunnerScreenShare
+//  roomkit_reactnative_demo_screen_share
 //
-//  Created by zego on 2022/7/30.
+//  Created by liquan on .
 //
 
 #import <ReplayKit/ReplayKit.h>
