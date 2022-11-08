@@ -77,6 +77,8 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
             productID: pid,
             role,
             token,
+            kZegoRPAppGroup: "group.im.zego.RoomKitRNDemo",
+            kAppExtensionBundleID: "im.zego.RoomKitRNDemo.roomkit-reactnative-demo-screen-share"
         } as ZegoRoomkitJoinRoomConfig;
 
         const joinRes = await roomService.joinRoomWithConfig(joinConfig);
