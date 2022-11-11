@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import md5 from 'md5';
 import { productIdList, Env, ClassType, SecretID, SecretSign } from '../config';
 import { getSdkTokenApi, getRoomInfoApi } from '../api/requestApi';
+// @ts-ignore
+import { getRoomkitToken } from "@hailanglang/zego-token-generator"
 
 export function getUid(userName: string) {
   const sign = md5(userName).slice(-6);
@@ -13,6 +15,13 @@ export function getPid(classType: ClassType, env: Env,): Number {
 }
 
 export const getToken = async (deviceid: string) => {
+  
+  // get token by zego-token-generator
+  // const token = await getRoomkitToken({ deviceID: deviceid, secretID: SecretID, secretSign: SecretSign })
+  // console.log('mytag token getRoomkitToken', token)
+  // return token
+
+  // get token by md5 and axios 
   let time = Math.floor(new Date().getTime() / 1000) + 3600;
   let sign = SecretSign;
   const verifyType = 3;

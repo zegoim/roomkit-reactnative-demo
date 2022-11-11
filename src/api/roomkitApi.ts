@@ -1,12 +1,12 @@
 
 import { getToken } from '../utils/utils';
 import ZegoRoomkitSdk, {
-    ZegoRoomkitJoinRoomConfig,
     setRoomParameterConfig,
     ZegoBeautifyMode,
     ZegoPreviewVideoMirrorMode,
     ZegoVideoFitMode,
-    ZegoRoomEvent
+    ZegoRoomEvent,
+    ZegoJoinRoomConfig
 } from 'zego_roomkit_reactnative_sdk';
 import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
@@ -77,7 +77,9 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
             productID: pid,
             role,
             token,
-        } as ZegoRoomkitJoinRoomConfig;
+            kZegoRPAppGroup: "group.im.zego.RoomKitRNDemo",
+            kAppExtensionBundleID: "im.zego.RoomKitRNDemo.roomkit-reactnative-demo-screen-share"
+        } as ZegoJoinRoomConfig;
 
         const joinRes = await roomService.joinRoomWithConfig(joinConfig);
         if (joinRes && !!joinRes.errorCode) {
