@@ -1,3 +1,5 @@
+import { ClassType } from "../config";
+
 export interface SelectItem {
   content: string;
   value: number;
@@ -18,7 +20,7 @@ export interface ClassInfo {
   max_user_count: number;
   pid: number;
   room_id: string;
-  room_type: number;
+  room_type: ClassType;
   status: number;
   subject: string;
   user_role: number;
