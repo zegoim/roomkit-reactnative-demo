@@ -1,12 +1,10 @@
 
 import { getToken } from '../utils/utils';
 import ZegoRoomkitSdk, {
-    setRoomParameterConfig,
     ZegoBeautifyMode,
     ZegoPreviewVideoMirrorMode,
     ZegoVideoFitMode,
     ZegoRoomEvent,
-    ZegoJoinRoomConfig
 } from 'zego_roomkit_reactnative_sdk';
 import Toast from 'react-native-toast-message';
 import i18n from 'i18n-js';
@@ -61,9 +59,11 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
         await roomSetting.setPreviewVideoMirrorMode(previewVideoMirrorMode ? ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeLeftRightSwap : ZegoPreviewVideoMirrorMode.ZegoPreviewVideoMirrorModeNone)
         await roomSetting.setVideoFitMode(videoFitMode ? ZegoVideoFitMode.ZegoVideoFill : ZegoVideoFitMode.ZegoVideoAspectFit)
 
-        let roomParameter: setRoomParameterConfig = {
+        let roomParameter = {
             beginTimestamp: new Date().getTime(),
-            subject: subject
+            duration: 30,
+            subject: subject,
+            hostNickname: 'hostName',
         };
         await roomService.setRoomParameter(roomParameter);
 
@@ -71,15 +71,24 @@ export async function joinRoom({ userID, roomID, pid, userName, role, subject = 
         let deviceID = await ZegoRoomkitSdk.instance().getDeviceID();
         const token = await getToken(deviceID);
         let joinConfig = {
-            userName,
             userID,
+            // 用户名称（必填）。
+            userName,
+            // 房间 ID（必填）。
             roomID,
+            // 房间的 ProductID（必填）。
+            // 从 RoomKit 管理后台获取。
             productID: pid,
+            // 用户角色，有老师、学生、助教三种（必填）。
+            // 1：老师
+            // 2：学生
+            // 4：助教
             role,
+            // 通过调用 RoomKit REST API “get_sdk_token” 获取 （必填）。
             token,
             kZegoRPAppGroup: "group.im.zego.RoomKitRNDemo",
             kAppExtensionBundleID: "im.zego.RoomKitRNDemo.roomkit-reactnative-demo-screen-share"
-        } as ZegoJoinRoomConfig;
+        };
 
         const joinRes = await roomService.joinRoomWithConfig(joinConfig);
         if (joinRes && !!joinRes.errorCode) {

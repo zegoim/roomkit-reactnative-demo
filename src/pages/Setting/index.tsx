@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, View, Image, TouchableOpacity, Modal } from '
 import i18n from 'i18n-js';
 import NavigationHeader from '../../components/NavigationHeader';
 import { useRoomkit } from '../../context/roomkitContext';
-import { Env } from '../../config';
+import { Env } from '../../types/types';
 import { ArrowButton, EnvSelectButton, LogoutComfirmButton } from './components/index';
 import { SelectModalList, SelectItem } from '../../types/types';
 

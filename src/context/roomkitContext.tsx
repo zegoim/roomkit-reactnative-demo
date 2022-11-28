@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useReducer } from 'react';
 import { useEffect } from 'react';
-import { Env } from '../config';
+import { Env } from '../types/types';
 import { getToken, storage } from '../utils/utils';
 
 export interface RoomSettings {

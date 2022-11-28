@@ -3,9 +3,9 @@ import { Button, Keyboard, StatusBar, StyleSheet, Text, TouchableWithoutFeedback
 
 import i18n from 'i18n-js';
 import Toast from 'react-native-toast-message';
-import { SelectModalList } from '../../types/types';
+import { SelectModalList, ClassType } from '../../types/types';
 import { getUid, getPid } from '../../utils/utils';
-import { ClassType, SecretID, SecretSign } from '../../config';
+import { SecretID, SecretSign } from '../../config';
 import { useRoomkit } from '../../context/roomkitContext';
 import {
   Logo,
@@ -71,7 +71,7 @@ const App: React.FC<{ navigation: any }> = ({ navigation }) => {
   const setRoleTypeFun = useCallback((selectedItem: any) => {
     setRole(selectedItem.value);
   }, []);
-  if(!SecretSign){
+  if (!SecretSign) {
     Toast.show({ text1: i18n.t('missing_config_info'), type: 'error' });
   }
 

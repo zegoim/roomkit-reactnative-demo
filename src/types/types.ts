@@ -1,4 +1,3 @@
-import { ClassType } from "../config";
 
 export interface SelectItem {
   content: string;
@@ -24,4 +23,15 @@ export interface ClassInfo {
   status: number;
   subject: string;
   user_role: number;
+}
+
+export enum Env {
+  MainLand = 1,
+  OverSeas = 2,
+}
+
+export enum ClassType {
+  Class_1V1 = 3,
+  CLASS_SMALL = 1,
+  CLASS_LARGE = 5,
 }

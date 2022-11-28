@@ -8,12 +8,12 @@ import {
   RefreshControl,
 } from 'react-native';
 import i18n from 'i18n-js';
-import { ClassType, SecretID } from '../../config';
+import { SecretID } from '../../config';
 import { createClassRoomApi, deleteClassApi, getClassRoomListApi, getRoomInfoApi } from '../../api/requestApi';
 import { useRoomkit } from '../../context/roomkitContext';
 import { getPid } from '../../utils/utils';
 import { useFocusEffect } from '@react-navigation/native';
-import { SelectModalList, SelectItem, ClassInfo } from '../../types/types';
+import { SelectModalList, SelectItem, ClassInfo, ClassType } from '../../types/types';
 import { DefaultView, ClassTypesButton, ScheduleHeader, ScheduleItem } from './components';
 import Toast from 'react-native-toast-message';
 import { LoadingContext } from "../../App"
@@ -42,7 +42,7 @@ const getClassRoomList = ({ deviceID, userID, token }: any) => {
 const createClassRoom = ({ userID, userName, className, classType, pid, token, deviceID }: any) => {
   const query = {
     uid: userID,
-    subject: userName +  i18n.t('belong') + className.toLowerCase(),
+    subject: userName + i18n.t('belong') + className.toLowerCase(),
     room_type: classType,
     begin_timestamp: new Date().getTime() + 1000 * 60,
     duration: 30,

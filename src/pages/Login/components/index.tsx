@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback, TextInput, Modal, KeyboardTypeOptions, SafeAreaView } from 'react-native';
 import i18n from 'i18n-js';
 import { SelectModalList, SelectItem } from '../../../types/types';
-import { Env } from '../../../config';
+import { Env } from '../../../types/types';
 import RadioGroup from 'react-native-radio-buttons-group';
 
 
