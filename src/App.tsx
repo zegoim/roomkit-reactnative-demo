@@ -16,8 +16,8 @@
  * @format
  */
 
-import React, { useEffect, useReducer, useContext, createContext, useRef, } from 'react';
-import { I18nManager, StatusBar, SafeAreaView, View, Text } from 'react-native';
+import React, { useEffect, useReducer, createContext, useRef, } from 'react';
+import { I18nManager, StatusBar, SafeAreaView, LogBox } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
@@ -44,6 +44,7 @@ const translationGetters = {
   en: () => require('./assets/translations/en.json'),
 };
 
+LogBox.ignoreLogs([/Warning: Cannot update a component*/]); // Ignore log notification by message
 
 ErrorUtils.setGlobalHandler(error => {
   console.log('ErrorUtils发现了语法错误，避免了崩溃，具体报错信息：');
