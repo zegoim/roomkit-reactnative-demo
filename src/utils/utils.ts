@@ -4,7 +4,7 @@ import { productIdList, ProductID, SecretID, SecretSign } from '../config';
 import { Env, ClassType } from "../types/types"
 import { getSdkTokenApi, getRoomInfoApi } from '../api/requestApi';
 // @ts-ignore
-import { getRoomkitToken } from "@hailanglang/zego-token-generator"
+import { getRoomkitToken } from "zego-token-generator"
 
 export function getUid(userName: string) {
   const sign = md5(userName).slice(-6);
