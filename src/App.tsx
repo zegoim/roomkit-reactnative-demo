@@ -45,6 +45,8 @@ const translationGetters = {
 };
 
 LogBox.ignoreLogs([/Warning: Cannot update a component*/]); // Ignore log notification by message
+LogBox.ignoreLogs([/`new NativeEventEmitter()`*/]); // Ignore log notification by message
+// LogBox.ignoreLogs([/Possible Unhandled Promise Rejection*/]); // Ignore log notification by message
 
 ErrorUtils.setGlobalHandler(error => {
   console.log('ErrorUtils发现了语法错误，避免了崩溃，具体报错信息：');

@@ -230,7 +230,7 @@ PODS:
     - RCTTypeSafety
     - React
     - ReactCommon/turbomodule/core
-  - react-native-zego-roomkit (0.1.0):
+  - react-native-zego-roomkit (2.2.0):
     - LEEAlert (= 1.4.2)
     - Masonry (= 1.1.0)
     - MBProgressHUD (= 1.2.0)
@@ -482,7 +482,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 8134ee22182b8dd98dc0973db6266c398103ce6c
   React-logger: 1e7ac909607ee65fd5c4d8bea8c6e644f66b8843
   react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
-  react-native-zego-roomkit: e4e78369902ff63512408d6f5e301d2ce3b0741d
+  react-native-zego-roomkit: a273b67b0ad17e7ed6283a2240e94e45387e3e8a
   React-perflogger: 8e832d4e21fdfa613033c76d58d7e617341e804b
   React-RCTActionSheet: 9ca778182a9523991bff6381045885b6e808bb73
   React-RCTAnimation: 9ced26ad20b96e532ac791a8ab92a7b1ce2266b8
